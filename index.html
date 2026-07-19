@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Harrison Cheruiyot | Local Web Design & Digital Storefronts for SMEs</title>
+
+    <!-- SEO & SEM Essentials -->
+    <meta name="description" content="Premium landing pages, hybrid websites, and homepages built specifically for local SMEs and service hustlers. Convert more local visitors into paying customers instantly.">
+    <meta name="keywords" content="local landing page, SME web design, small business website, digital storefront, high-converting homepage, web developer Kenya">
+    <link rel="canonical" href="https://www.yourdomain.com">
+
+    <!-- Open Graph & Social Cards (Off-page SEO) -->
+    <meta property="og:title" content="Harrison Cheruiyot | Digital Storefronts for SMEs">
+    <meta property="og:description" content="Stop losing local customers. High-converting websites designed specifically for service hustlers and small businesses.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Schema Markup for Local Business & Services (Rich Snippets / SEM) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Harrison Cheruiyot Web Design",
+        "description": "Premium web design and development for local SMEs and service businesses.",
+        "url": "https://www.yourdomain.com",
+        "telephone": "+254702555093",
+        "priceRange": "KSH 15,000 - $7,500+",
+        "areaServed": ["Kenya", "East Africa", "Global"],
+        "serviceType": ["Landing Page Design", "Hybrid Website", "Dynamic Homepage", "Conversion Audit"]
+    }
+    </script>
+
+    <!-- Preconnects for Lightning Speed -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS RESET & BRAND VARIABLES --- */
+        :root {
+            --bg-dark: #060D1A;
+            --bg-card: #0B1A33;
+            --bg-hover: #102548;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            /* Brand Colors */
+            --primary-navy: #0A1D3A;
+            --secondary-red: #E63946;
+            --accent-lime: #84CC16;
+            --red-dark: #C53030;
+            --lime-light: #A3E635;
+            --whatsapp: #25D366;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --container-width: 1200px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        ul { list-style: none; }
+
+        img { display: block; max-width: 100%; height: auto; aspect-ratio: auto; }
+
+        .container { max-width: var(--container-width); margin: 0 auto; padding: 0 1.5rem; }
+        .section-title { font-family: var(--font-serif); font-size: 2.8rem; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.1; }
+        .section-subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 3rem auto; text-align: center; }
+        .text-lime { color: var(--accent-lime); }
+        .text-red { color: var(--secondary-red); }
+
+        /* --- PREMIUM BUTTONS --- */
+        .btn {
+            display: inline-block; padding: 1rem 2.5rem; border-radius: 50px; font-weight: 600; font-size: 1rem;
+            cursor: pointer; transition: var(--transition); border: 2px solid transparent; position: relative;
+            text-align: center; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .btn::after {
+            content: ''; position: absolute; inset: 0; border-radius: 50px; opacity: 0; transition: var(--transition);
+            background: rgba(255,255,255,0.1);
+        }
+        .btn:hover::after { opacity: 1; }
+        .btn:active { transform: scale(0.95); }
+
+        .btn-primary { background: var(--secondary-red); color: white; border-color: var(--secondary-red); box-shadow: 0 8px 30px rgba(230, 57, 70, 0.25); }
+        .btn-primary:hover { background: var(--red-dark); border-color: var(--red-dark); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(230, 57, 70, 0.4); }
+
+        .btn-lime { background: var(--accent-lime); color: #0A0F1E; border-color: var(--accent-lime); box-shadow: 0 8px 30px rgba(132, 204, 22, 0.25); font-weight: 700; }
+        .btn-lime:hover { background: var(--lime-light); border-color: var(--lime-light); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(132, 204, 22, 0.4); }
+
+        .btn-secondary { background: transparent; color: var(--text-main); border-color: rgba(255,255,255,0.15); }
+        .btn-secondary:hover { border-color: var(--secondary-red); background: rgba(230, 57, 70, 0.1); transform: translateY(-2px); }
+
+        /* --- HEADER --- */
+        header { padding: 1.5rem 0; position: sticky; top: 0; z-index: 1000; background: rgba(6, 13, 26, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 700; letter-spacing: -1px; background: linear-gradient(135deg, var(--secondary-red), var(--accent-lime)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+        .nav-links a { font-size: 0.95rem; font-weight: 500; color: var(--text-muted); }
+        .nav-links a:hover { color: var(--text-main); }
+        .nav-links .btn { padding: 0.7rem 1.8rem; }
+
+        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; background: none; border: none; padding: 5px; }
+        .hamburger span { display: block; width: 28px; height: 2px; background: var(--text-main); transition: var(--transition); }
+
+        @media (max-width: 992px) {
+            .nav-links { position: fixed; top: 80px; left: 0; right: 0; background: rgba(6, 13, 26, 0.98); flex-direction: column; padding: 2rem 0; gap: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); transform: translateY(-150%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 999; backdrop-filter: blur(12px); }
+            .nav-links.active { transform: translateY(0); }
+            .hamburger { display: flex; z-index: 1001; }
+            .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+            .hamburger.active span:nth-child(2) { opacity: 0; }
+            .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        }
+
+        /* --- HERO --- */
+        .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 6rem 0; position: relative; background: radial-gradient(circle at 10% 20%, rgba(230, 57, 70, 0.08) 0%, rgba(132, 204, 22, 0.04) 60%, transparent 100%); }
+        .hero h1 { font-family: var(--font-serif); font-size: clamp(2.8rem, 10vw, 5.2rem); line-height: 1.05; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+        .hero p { color: var(--text-muted); font-size: clamp(1.1rem, 2vw, 1.3rem); max-width: 700px; margin: 0 auto 3rem auto; font-weight: 400; }
+        .hero .cta-group { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; }
+        .hero .stats { display: flex; justify-content: center; gap: 3.5rem; margin-top: 5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2.5rem; }
+        .hero .stats span { display: block; font-size: 0.95rem; color: var(--text-muted); margin-top: 0.3rem; }
+        .hero .stats strong { display: block; font-size: 2.5rem; font-weight: 700; color: var(--accent-lime); font-family: var(--font-serif); }
+
+        /* --- PROJECTS --- */
+        .projects { padding: 7rem 0; }
+        .projects-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+        @media (min-width: 768px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .projects-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        .project-card { background: var(--bg-card); border-radius: 20px; overflow: hidden; transition: var(--transition); border: 1px solid rgba(255,255,255,0.05); position: relative; will-change: transform; display: flex; flex-direction: column; }
+        .project-card:hover { transform: translateY(-12px) scale(1.01); border-color: var(--secondary-red); box-shadow: 0 20px 40px rgba(230, 57, 70, 0.15); }
+        .project-img { width: 100%; height: 240px; object-fit: cover; border-bottom: 1px solid rgba(255,255,255,0.05); transition: var(--transition); }
+        .project-card:hover .project-img { opacity: 0.9; }
+        .project-info { padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .project-info h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .project-info p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .project-link { display: inline-block; color: var(--secondary-red); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: auto; }
+        .project-link:hover { color: var(--accent-lime); }
+
+        /* --- SERVICES --- */
+        .services { padding: 7rem 0; background: rgba(255,255,255,0.02); }
+        .services-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; text-align: center; }
+        @media (min-width: 768px) { .services-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } }
+        .service-card { padding: 3rem 2rem; border-radius: 16px; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); transition: var(--transition); border-top: 4px solid var(--secondary-red); }
+        .service-card:hover { border-color: var(--secondary-red); background: var(--bg-hover); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(230, 57, 70, 0.08); }
+        .service-icon { font-size: 3.5rem; margin-bottom: 1.2rem; display: block; }
+        .service-card h4 { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.8rem; }
+        .service-card p { color: var(--text-muted); font-size: 0.95rem; }
+        .service-card .highlight-lime { color: var(--accent-lime); font-weight: 600; display: block; margin-top: 0.5rem; }
+
+        /* --- PRICING --- */
+        .pricing { padding: 7rem 0; }
+        .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto; align-items: stretch; }
+        @media (min-width: 992px) { .pricing-grid { grid-template-columns: repeat(3, 1fr); } }
+        .pricing-card { background: var(--bg-card); border-radius: 24px; padding: 3rem 2rem; border: 1px solid rgba(255,255,255,0.05); text-align: center; position: relative; transition: var(--transition); display: flex; flex-direction: column; }
+        .pricing-card:hover { transform: translateY(-10px); border-color: var(--text-muted); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        .pricing-card.popular { border: 2px solid var(--accent-lime); background: var(--bg-hover); }
+        .pricing-card.popular::before { content: "🔥 Most Popular"; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--accent-lime); color: #0A0F1E; padding: 0.3rem 1.5rem; border-radius: 50px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+        .pricing-card .price { font-size: 3.5rem; font-weight: 700; font-family: var(--font-serif); color: var(--text-main); margin: 1.5rem 0 0.5rem; }
+        .pricing-card .price span { font-size: 1rem; color: var(--text-muted); font-family: var(--font-sans); font-weight: 400; }
+        .pricing-features { list-style: none; margin: 2rem 0; text-align: left; flex-grow: 1; }
+        .pricing-features li { padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); font-size: 0.95rem; }
+        .pricing-features li:last-child { border-bottom: none; }
+        .pricing-features li::before { content: "✓ "; color: var(--accent-lime); font-weight: 700; }
+
+        /* --- ABOUT & CREDIBILITY --- */
+        .credibility { padding: 7rem 0; }
+        .about-grid { display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center; }
+        @media (min-width: 992px) { .about-grid { grid-template-columns: 1fr 1fr; } }
+        .about-img { border-radius: 24px; width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover; border: 2px solid rgba(230, 57, 70, 0.25); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .about-text h2 { font-family: var(--font-serif); font-size: 2.8rem; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+        .about-text p { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1.05rem; }
+        .tech-stack { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .tech-badge { background: var(--bg-card); padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.85rem; font-weight: 500; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.05); }
+
+        /* --- TESTIMONIALS --- */
+        .testimonials { padding: 7rem 0; text-align: center; }
+        .testimonial-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; text-align: left; }
+        @media (min-width: 768px) { .testimonial-grid { grid-template-columns: 1fr 1fr; } }
+        .testimonial-card { background: var(--bg-card); padding: 2.5rem; border-radius: 20px; border-left: 4px solid var(--accent-lime); transition: var(--transition); }
+        .testimonial-card:hover { background: var(--bg-hover); }
+        .testimonial-card p { font-style: italic; color: var(--text-muted); margin-bottom: 2rem; font-size: 1.05rem; line-height: 1.8; }
+        .testimonial-author { display: flex; align-items: center; gap: 1.2rem; }
+        .testimonial-author img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid var(--secondary-red); }
+        .testimonial-author strong { font-weight: 600; display: block; }
+        .testimonial-author span { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* --- CONTACT --- */
+        .contact { padding: 7rem 0; background: #040A16; position: relative; border-top: 1px solid rgba(255,255,255,0.05); }
+        .contact-grid { display: grid; grid-template-columns: 1fr; gap: 4rem; }
+        @media (min-width: 1024px) { .contact-grid { grid-template-columns: 1fr 1.2fr; } }
+        .contact-info h2 { font-size: 3rem; font-family: var(--font-serif); margin-bottom: 1.5rem; letter-spacing: -0.02em; line-height: 1.1; }
+        .contact-info p { color: var(--text-muted); max-width: 400px; font-size: 1.05rem; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.8rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
+        .form-group input, .form-group select { width: 100%; padding: 1.1rem 1.5rem; background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: var(--text-main); font-family: inherit; transition: var(--transition); font-size: 1rem; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--secondary-red); box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.1); background: #141F38; }
+
+        /* --- FOOTER --- */
+        footer { background: #02040A; padding: 4rem 0 2rem; border-top: 1px solid rgba(255,255,255,0.03); }
+        .footer-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 3rem; }
+        @media (min-width: 768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } }
+        .footer-col h4 { margin-bottom: 1.5rem; color: var(--text-main); font-size: 1.1rem; }
+        .footer-col a, .footer-col p { color: var(--text-muted); font-size: 0.95rem; display: block; margin-bottom: 0.8rem; transition: var(--transition); }
+        .footer-col a:hover { color: var(--secondary-red); padding-left: 5px; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+
+        /* --- FLOATING WHATSAPP --- */
+        .whatsapp-float { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; background: var(--whatsapp); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4); transition: var(--transition); animation: pulse-wa 2.5s infinite; will-change: transform; }
+        .whatsapp-float:hover { transform: scale(1.15) rotate(-5deg); }
+        .whatsapp-float svg { width: 36px; height: 36px; fill: white; }
+        @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); } 70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
+
+        /* --- ANIMATIONS & UTILITIES --- */
+        .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform, opacity; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) { .fade-up { opacity: 1; transform: none; } }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 1.2rem; }
+            .hero .stats { gap: 1.5rem; flex-wrap: wrap; }
+            .hero .stats strong { font-size: 2rem; }
+            .section-title, .about-text h2, .contact-info h2 { font-size: 2.2rem; }
+            .pricing-card { padding: 2rem 1.5rem; }
+            .pricing-card .price { font-size: 2.8rem; }
+            .whatsapp-float { width: 56px; height: 56px; bottom: 1.5rem; right: 1.5rem; }
+            .whatsapp-float svg { width: 28px; height: 28px; }
+        }
+
+        .loader { display: none; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; margin: 0 auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .btn.loading .loader { display: block; }
+        .btn.loading .btn-text { display: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">Digital Maestros.</a>
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#work">Work</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact" class="btn btn-primary">Let's Talk</a></li>
+                </ul>
+            </nav>
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section class="hero container fade-up">
+            <h1>Local digital storefronts that <span class="text-lime">turn visitors into paying customers.</span></h1>
+            <p>High-converting landing pages, hybrid websites, and dynamic homepages designed exclusively for ambitious local SMEs and service hustlers of all ages.</p>
+            <div class="cta-group">
+                <a href="#pricing" class="btn btn-lime">🔍 View Pricing</a>
+                <a href="#work" class="btn btn-secondary">Recent Work</a>
+            </div>
+            <div class="stats">
+                <div><strong>70+</strong><span>Local Sites Built</span></div>
+                <div><strong>5+</strong><span>Years Crafting</span></div>
+                <div><strong>100%</strong><span>Client Satisfaction</span></div>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO WITH OPTIMIZED IMAGES -->
+        <section id="work" class="projects container fade-up">
+            <h2 class="section-title">Portfolio</h2>
+            <p class="section-subtitle">Solutions that drive tangible local growth and revenue.</p>
+            <div class="projects-grid">
+
+                <article class="project-card">
+                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format,compress&fit=crop&w=600&q=80"
+                         alt="Contractor project booking dashboard layout"
+                         class="project-img"
+                         loading="lazy"
+                         decoding="async"
+                         width="600"
+                         height="400">
+                    <div class="project-info">
+                        <h3>Contractor Booking Site</h3>
+                        <p>Hybrid site + automated scheduling</p>
+                        <a href="https://sogoo-and-beyond-contractors.netlify.app/" target="_blank" rel="noopener noreferrer" class="project-link">View Project &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format,compress&fit=crop&w=600&q=80"
+                         alt="Premium hair and beauty salon interior setup"
+                         class="project-img"
+                         loading="lazy"
+                         decoding="async"
+                         width="600"
+                         height="400">
+                    <div class="project-info">
+                        <h3>Salon Booking Website</h3>
+                        <p>Lead capture + direct WhatsApp & SMS booking widget</p>
+                        <a href="https://royalvelvet-nails-and-spa.netlify.app/" target="_blank" rel="noopener noreferrer" class="project-link">View Project &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format,compress&fit=crop&w=600&q=80"
+                         alt="Veterinarian examining a clean local pet clinic environment"
+                         class="project-img"
+                         loading="lazy"
+                         decoding="async"
+                         width="600"
+                         height="400">
+                    <div class="project-info">
+                        <h3>Local Vet Landing Page</h3>
+                        <p>Dynamic homepage + client trust building</p>
+                        <a href="https://local-vet-clinic.netlify.app/" target="_blank" rel="noopener noreferrer" class="project-link">View Project &rarr;</a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section id="services" class="services fade-up">
+            <div class="container">
+                <h2 class="section-title">Tailored for Service SMEs</h2>
+                <p class="section-subtitle">No fluff. Just digital tools that bring local customers through your door.</p>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <span class="service-icon" role="img" aria-label="Phone">📞</span>
+                        <h4>High-Conversion Landing Pages</h4>
+                        <p>Instant lead magnets built for local service hustlers.</p>
+                        <span class="highlight-lime">Get calls in under 24 hours.</span>
+                    </div>
+                    <div class="service-card">
+                        <span class="service-icon" role="img" aria-label="Cart">🛒</span>
+                        <h4>Hybrid Storefront Sites</h4>
+                        <p>The perfect blend of brand storytelling & seamless booking.</p>
+                        <span class="highlight-lime">Automate your reservations.</span>
+                    </div>
+                    <div class="service-card">
+                        <span class="service-icon" role="img" aria-label="House">🏠</span>
+                        <h4>Dynamic Authority Homepages</h4>
+                        <p>Your brand's premium digital face. Build instant trust.</p>
+                        <span class="highlight-lime">Establish local dominance.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRICING -->
+        <section id="pricing" class="pricing container fade-up">
+            <h2 class="section-title" style="text-align: center;">Transparent Pricing</h2>
+            <p class="section-subtitle">Choose the plan that scales your local business. No hidden fees.</p>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter Lead Gen</h3>
+                    <div class="price">From Ksh15,000 <span>/ project</span></div>
+                    <ul class="pricing-features">
+                        <li>High-converting Landing Page</li>
+                        <li>Mobile-First Design</li>
+                        <li>Call-to-Action Buttons</li>
+                        <li>Basic SEO Setup</li>
+                        <li>5 Revisions</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-secondary" style="width:100%;">Start Here</a>
+                </div>
+
+                <div class="pricing-card popular">
+                    <h3>Hybrid Business Site</h3>
+                    <div class="price">From KSH 35,000 <span>/ project</span></div>
+                    <ul class="pricing-features">
+                        <li>Full Hybrid Website (Home Page + Landing Page)</li>
+                        <li>Online Booking / E-commerce / M-pesa Integration</li>
+                        <li>Advanced Brand Storytelling</li>
+                        <li>Social Media Integration</li>
+                        <li>10 Revisions + Custom Domain</li>
+                        <li>Google Maps integration</li>
+                        <li>Google Business Profile setup/ Optimization</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-lime" style="width:100%;">Get Most Popular</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Premium Authority</h3>
+                    <div class="price">From KSH 55,000+ <span>/ project</span></div>
+                    <ul class="pricing-features">
+                        <li>Multi-page Dynamic Homepage</li>
+                        <li>Custom UI/UX Architecture</li>
+                        <li>Advanced Conversion Optimization</li>
+                        <li>Custom Client Dashboard</li>
+                        <li>Unlimited Revisions + Priority Support + Custom Domain</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary" style="width:100%;">Let's Scale</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="credibility container fade-up">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h2>Built for the <span class="text-lime">Local Hustle</span></h2>
+                    <p>Specializing strictly in the local service space. I understand the gritty reality of running an SME. You don't need a flashy abstract art site; you need a digital machine that generates local leads, bookings, and foot traffic while you sleep.</p>
+                    <p><strong style="color: var(--secondary-red);">Industry Cred:</strong> Webflow Expert, Google Analytics Certified, Awwwards Nominee.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">HTML5</span>
+                        <span class="tech-badge">CSS3</span>
+                        <span class="tech-badge">TAILWIND</span>
+                        <span class="tech-badge">JAVASCRIPT</span>
+                        <span class="tech-badge">REACT</span>
+                    </div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format,compress&fit=crop&w=800&q=80"
+                     alt="Sleek coding interface on monitors inside a dark digital design studio workspace"
+                     class="about-img"
+                     loading="lazy"
+                     decoding="async"
+                     width="600"
+                     height="400">
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS -->
+        <section class="testimonials container fade-up">
+            <h2 class="section-title">Our Impact</h2>
+            <p class="section-subtitle">How we've helped local businesses thrive.</p>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p>"The lead gen page built for my auto-shop generated 10 new bookings in week one. It's my best-performing sales rep."</p>
+                    <div class="testimonial-author">
+                        <div><strong>David M.</strong><span>Local Auto Mechanic</span></div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p>"Our new hybrid site allowed our salon to take bookings 24/7. We saw a 40% increase in monthly retention immediately."</p>
+                    <div class="testimonial-author">
+                        <div><strong>Sarah J.</strong><span>Owner, Premium Nail Spa</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="contact fade-up">
+            <div class="container contact-grid">
+                <div class="contact-info">
+                    <h2>Ready to <span class="text-lime">scale your local business</span> today?</h2>
+                    <p>Stop losing leads. Tell me about your services, and I'll craft a tailored roadmap to get you paying customers in under 30 mins.</p>
+                    <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 2rem;">
+                        <div><strong style="color: var(--text-main);">Direct Email:</strong><br><span style="color: var(--text-muted);">harrisoncheruiyot04@gmail.com</span></div>
+                        <div><strong style="color: var(--text-main);">Working Hours:</strong><br><span style="color: var(--text-muted);">Mon-Sat: 8:00 AM - 6:00 PM</span></div>
+                    </div>
+                </div>
+
+                <form id="contactForm" novalidate>
+                    <input type="text" name="_gotcha" style="display:none;" autocomplete="off">
+
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="e.g. John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="budget">Your Budget Range</label>
+                        <select id="budget">
+                            <option value="">Select a budget...</option>
+                            <option value="15,000-35,000">KSH 15,000 - KSH 35,500</option>
+                            <option value="35,500-55,500">KSH 35,500 - KSH 55,000</option>
+                            <option value="55000+">KSH 55,000+ (Premium)</option>
+                        </select>
+                    </div>
+                    <div class="form-btn-wrap">
+                        <button type="submit" class="btn btn-lime" style="width: 100%; flex: 1; display: flex; justify-content: center; align-items: center; gap: 0.8rem;">
+                            <span class="btn-text">⚡ Book My Free 15-Min Audit</span>
+                            <span class="loader"></span>
+                        </button>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1.5rem; text-align: center;">*Get immediate feedback on your current site and a roadmap to double your local leads.</p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Harrison Cheruiyot</h4>
+                    <p>Digital storefronts built explicitly for local SMEs and ambitious service hustlers.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Navigation</h4>
+                    <a href="#work">Work</a><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#about">About</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect for Growth</h4>
+                    <a href="#">LinkedIn</a><a href="#">GitHub</a><a href="#">Dribbble</a>
+                </div>
+            </div>
+            <div class="footer-bottom">&copy; 2026 Harrison Cheruiyot. Built for local hustlers.</div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/254702555093" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M12.031 2C6.525 2 2 6.56 2 12.109c0 2.09.603 4.038 1.635 5.735L2.018 21.98l4.365-1.291a10.05 10.05 0 005.648 1.656c5.505 0 10.031-4.559 10.031-10.108S17.535 2 12.031 2zm0 18.278c-1.731 0-3.414-.516-4.861-1.488l-.35-.207-2.696.797.719-2.623-.227-.344a8.64 8.64 0 01-1.501-4.806c0-4.81 3.934-8.74 8.787-8.74 4.853 0 8.787 3.93 8.787 8.74 0 4.81-3.934 8.74-8.787 8.74z"/><path d="M16.377 13.277c-.301-.15-1.781-.876-2.057-.976-.275-.1-.475-.15-.676.15-.2.3-.783.976-.959 1.176-.176.2-.352.225-.653.075-.3-.15-1.267-.467-2.414-1.487-.892-.794-1.494-1.773-1.67-2.072-.176-.3-.019-.461.132-.611.135-.135.302-.352.452-.527.15-.176.2-.3.3-.501.1-.2.05-.375-.025-.525-.075-.15-.676-1.624-.926-2.225-.244-.587-.494-.501-.676-.501-.175-.001-.376-.002-.577-.002s-.525.075-.801.375c-.275.3-1.05 1.026-1.05 2.504s1.075 2.902 1.225 3.103c.15.2 2.094 3.192 5.073 4.478.709.307 1.262.49 1.694.627.711.227 1.359.195 1.869.119.571-.085 1.759-.72 2.007-1.415.248-.695.248-1.292.174-1.415-.075-.123-.275-.2-.576-.35z"/></svg>
+    </a>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+
+            const toggleMenu = () => {
+                const isActive = hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+                hamburger.setAttribute('aria-expanded', isActive);
+            };
+
+            hamburger.addEventListener('click', toggleMenu);
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navLinks.classList.contains('active')) toggleMenu();
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !navLinks.contains(e.target) && navLinks.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
+
+            const fadeElements = document.querySelectorAll('.fade-up');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { root: null, rootMargin: '0px', threshold: 0.1 });
+            fadeElements.forEach(el => observer.observe(el));
+
+            const form = document.getElementById('contactForm');
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const honeyPot = form.querySelector('[name="_gotcha"]');
+                if (honeyPot.value) {
+                    console.warn("Bot detected.");
+                    return;
+                }
+
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const budget = document.getElementById('budget').value;
+
+                if (!name || name.length < 2) {
+                    alert("Please enter your full name.");
+                    document.getElementById('name').focus();
+                    return;
+                }
+                if (!email || !email.includes('@') || !email.includes('.')) {
+                    alert("Please enter a valid email address.");
+                    document.getElementById('email').focus();
+                    return;
+                }
+
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+
+                setTimeout(() => {
+                    try {
+                        const subject = encodeURIComponent(`Local SME Inquiry from ${name}`);
+                        const body = encodeURIComponent(
+                            `Name: ${name}\nEmail: ${email}\nBudget: ${budget || 'Not specified'}\n\nWants to scale their local business.`
+                        );
+
+                        const mailtoLink = `mailto:harrisoncheruiyot04@gmail.com?subject=${subject}&body=${body}`;
+                        window.location.href = mailtoLink;
+
+                        submitBtn.classList.remove('loading');
+                        submitBtn.innerHTML = '<span class="btn-text">✅ Sent! Check Inbox</span>';
+
+                        setTimeout(() => {
+                            submitBtn.innerHTML = '<span class="btn-text">⚡ Book My Free 15-Min Audit</span>';
+                            submitBtn.disabled = false;
+                        }, 4000);
+
+                        form.reset();
+                    } catch (error) {
+                        alert("Something went wrong. Please email me directly at: harrisoncheruiyot04@gmail.com");
+                        submitBtn.classList.remove('loading');
+                        submitBtn.disabled = false;
+                    }
+                }, 800);
+            });
+        });
+    </script>
+</body>
+</html>
