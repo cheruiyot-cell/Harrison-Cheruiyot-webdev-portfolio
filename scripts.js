@@ -1,578 +1,463 @@
 /**
- * Harrison Cheruiyot - Portfolio Application Script
- * Premium Web Development for SMEs
- * Dependencies: None (Vanilla JS)
- * Version: 2.0.0
+ * Harrison Cheruiyot – Premium Portfolio
+ * Senior Web Developer | Nairobi, Kenya
+ * Production-ready JavaScript: Accessibility, Animations, Interactivity
+ * Version 1.0.0
  */
-(function() {
-    'use strict';
 
-    // ============================================
-    // CONFIGURATION
-    // ============================================
-    const CONFIG = {
-        TOAST_DURATION: 4000,
-        MOBILE_BREAKPOINT: 768,
-        FORM_ENDPOINT: 'https://formspree.io/f/yourFormID', // Replace with your actual Formspree endpoint
-        ANIMATION_OFFSET: '0px 0px -80px 0px',
-        ANIMATION_THRESHOLD: 0.15,
-        DEBOUNCE_DELAY: 250
-    };
-
-    // ============================================
-    // UTILITY FUNCTIONS
-    // ============================================
-    const Utils = {
-        /**
-         * Debounce function to limit rapid function calls
-         */
-        debounce: function(func, delay) {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), delay);
-            };
-        },
-
-        /**
-         * Check if device is mobile based on breakpoint
-         */
-        isMobile: function() {
-            return window.innerWidth <= CONFIG.MOBILE_BREAKPOINT;
-        },
-
-        /**
-         * Get element with error handling
-         */
-        getElement: function(selector, context = document) {
-            const element = context.querySelector(selector);
-            if (!element && selector.startsWith('#')) {
-                console.warn(`Element ${selector} not found`);
-            }
-            return element;
-        },
-
-        /**
-         * Get all elements with error handling
-         */
-        getElements: function(selector, context = document) {
-            return context.querySelectorAll(selector);
-        }
-    };
-
-    // ============================================
-    // MOBILE MENU CONTROLLER
-    // ============================================
-    const MobileMenu = {
-        menuToggle: null,
-        navLinks: null,
-        navList: null,
-
-        /**
-         * Initialize mobile menu functionality
-         */
-        init: function() {
-            this.menuToggle = Utils.getElement('#menu-toggle');
-            this.navLinks = Utils.getElement('#primary-navigation');
-            
-            if (!this.menuToggle || !this.navLinks) {
-                console.warn('Mobile menu elements not found. Skipping initialization.');
-                return;
-            }
-
-            this.navList = Utils.getElement('.nav-links', this.navLinks);
-            if (!this.navList) return;
-
-            this.setupEventListeners();
-        },
-
-        /**
-         * Set up all event listeners for mobile menu
-         */
-        setupEventListeners: function() {
-            // Close menu when a navigation link is clicked
-            const navLinks = Utils.getElements('a', this.navList);
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => this.closeMenu());
-            });
-
-            // Close menu on Escape key press
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && this.menuToggle.checked) {
-                    this.closeMenu();
-                }
-            });
-
-            // Close menu when clicking overlay
-            const overlay = Utils.getElement('.nav-overlay');
-            if (overlay) {
-                overlay.addEventListener('click', () => this.closeMenu());
-            }
-
-            // Close menu on window resize (debounced)
-            const handleResize = Utils.debounce(() => {
-                if (!Utils.isMobile() && this.menuToggle.checked) {
-                    this.closeMenu();
-                }
-            }, CONFIG.DEBOUNCE_DELAY);
-
-            window.addEventListener('resize', handleResize);
-
-            // Prevent body scroll when menu is open
-            this.menuToggle.addEventListener('change', () => {
-                document.body.style.overflow = this.menuToggle.checked ? 'hidden' : '';
-            });
-        },
-
-        /**
-         * Close mobile menu
-         */
-        closeMenu: function() {
-            if (this.menuToggle) {
-                this.menuToggle.checked = false;
-                document.body.style.overflow = '';
-            }
-        }
-    };
-
-    // ============================================
-    // SCROLL ANIMATIONS CONTROLLER
-    // ============================================
-    const ScrollAnimations = {
-        fadeElements: null,
-        observer: null,
-
-        /**
-         * Initialize scroll animations using Intersection Observer
-         */
-        init: function() {
-            this.fadeElements = Utils.getElements('.fade-up');
-            
-            if (this.fadeElements.length === 0) {
-                return;
-            }
-
-            if (!('IntersectionObserver' in window)) {
-                // Fallback: show all elements immediately
-                this.fadeElements.forEach(el => {
-                    el.style.opacity = '1';
-                    el.style.transform = 'none';
-                });
-                return;
-            }
-
-            this.setupObserver();
-        },
-
-        /**
-         * Set up Intersection Observer for scroll animations
-         */
-        setupObserver: function() {
-            const options = {
-                root: null,
-                rootMargin: CONFIG.ANIMATION_OFFSET,
-                threshold: CONFIG.ANIMATION_THRESHOLD
-            };
-
-            this.observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        this.animateElement(entry.target);
-                        this.observer.unobserve(entry.target);
-                    }
-                });
-            }, options);
-
-            // Set initial states and observe elements
-            this.fadeElements.forEach((el, index) => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(30px)';
-                el.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                
-                // Add staggered delay for multiple elements
-                if (index > 0) {
-                    el.style.transitionDelay = `${index * 0.1}s`;
-                }
-                
-                this.observer.observe(el);
-            });
-        },
-
-        /**
-         * Animate a single element into view
-         */
-        animateElement: function(element) {
-            requestAnimationFrame(() => {
-                element.style.opacity = '1';
-                element.style.transform = 'translateY(0)';
-            });
-        }
-    };
-
-    // ============================================
-    // CONTACT FORM CONTROLLER
-    // ============================================
-    const ContactForm = {
-        form: null,
-        submitBtn: null,
-        btnText: null,
-        loader: null,
-        originalText: 'Schedule Your Free Strategy Call',
-        isSubmitting: false,
-
-        /**
-         * Initialize contact form functionality
-         */
-        init: function() {
-            this.form = Utils.getElement('#contactForm');
-            if (!this.form) {
-                console.warn('Contact form not found. Skipping initialization.');
-                return;
-            }
-
-            this.submitBtn = Utils.getElement('button[type="submit"]', this.form);
-            this.btnText = this.submitBtn ? Utils.getElement('.btn-text', this.submitBtn) : null;
-            this.loader = this.submitBtn ? Utils.getElement('.loader', this.submitBtn) : null;
-            
-            if (this.btnText) {
-                this.originalText = this.btnText.textContent || this.originalText;
-            }
-
-            this.setupEventListeners();
-        },
-
-        /**
-         * Set up form event listeners
-         */
-        setupEventListeners: function() {
-            // Form submission
-            this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-
-            // Real-time field validation
-            const requiredFields = Utils.getElements('[required]', this.form);
-            requiredFields.forEach(field => {
-                field.addEventListener('input', () => {
-                    field.classList.remove('field-error');
-                });
-
-                field.addEventListener('blur', () => {
-                    this.validateField(field);
-                });
-            });
-        },
-
-        /**
-         * Handle form submission
-         */
-        handleSubmit: function(e) {
-            e.preventDefault();
-
-            // Prevent double submission
-            if (this.isSubmitting) return;
-
-            // Honeypot check
-            const gotcha = Utils.getElement('[name="_gotcha"]', this.form);
-            if (gotcha && gotcha.value.trim() !== '') {
-                console.warn('Honeypot triggered - possible spam');
-                return;
-            }
-
-            // Validate all fields
-            if (!this.validateForm()) {
-                this.showToast('Please fill in all required fields correctly.', 'error');
-                return;
-            }
-
-            // Submit the form
-            this.submitForm();
-        },
-
-        /**
-         * Validate a single field
-         */
-        validateField: function(field) {
-            if (!field.value.trim()) {
-                field.classList.add('field-error');
-                return false;
-            }
-
-            // Email validation
-            if (field.type === 'email') {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(field.value.trim())) {
-                    field.classList.add('field-error');
-                    return false;
-                }
-            }
-
-            field.classList.remove('field-error');
-            return true;
-        },
-
-        /**
-         * Validate all required fields
-         */
-        validateForm: function() {
-            let isValid = true;
-            const requiredFields = Utils.getElements('[required]', this.form);
-
-            requiredFields.forEach(field => {
-                if (!this.validateField(field)) {
-                    isValid = false;
-                }
-            });
-
-            return isValid;
-        },
-
-        /**
-         * Submit form data to endpoint
-         */
-        submitForm: function() {
-            this.isSubmitting = true;
-            this.setLoadingState(true);
-
-            const formData = new FormData(this.form);
-
-            fetch(CONFIG.FORM_ENDPOINT, {
-                method: 'POST',
-                headers: { 
-                    'Accept': 'application/json' 
-                },
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Server responded with ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(() => {
-                this.showToast('Message sent successfully! I\'ll get back to you within 24 hours.', 'success');
-                this.form.reset();
-                this.removeFieldErrors();
-            })
-            .catch(error => {
-                console.error('Form submission error:', error);
-                this.showToast('Error sending message. Please email me directly at harrison@cheruiyot.dev', 'error');
-            })
-            .finally(() => {
-                this.setLoadingState(false);
-                this.isSubmitting = false;
-            });
-        },
-
-        /**
-         * Set loading state for submit button
-         */
-        setLoadingState: function(isLoading) {
-            if (this.submitBtn) {
-                this.submitBtn.disabled = isLoading;
-            }
-            if (this.btnText) {
-                this.btnText.textContent = isLoading ? 'Sending...' : this.originalText;
-            }
-            if (this.loader) {
-                this.loader.style.display = isLoading ? 'inline-block' : 'none';
-            }
-        },
-
-        /**
-         * Remove all field error classes
-         */
-        removeFieldErrors: function() {
-            const errorFields = Utils.getElements('.field-error', this.form);
-            errorFields.forEach(field => field.classList.remove('field-error'));
-        },
-
-        /**
-         * Show toast notification
-         */
-        showToast: function(message, type = 'success') {
-            // Remove existing toast
-            const existingToast = Utils.getElement('.form-toast');
-            if (existingToast) {
-                existingToast.remove();
-            }
-
-            // Create new toast
-            const toast = document.createElement('div');
-            toast.className = `form-toast form-toast-${type}`;
-            toast.setAttribute('role', 'alert');
-            toast.setAttribute('aria-live', 'polite');
-            toast.textContent = message;
-
-            // Add icon based on type
-            const icon = type === 'success' ? '✓' : '✕';
-            toast.setAttribute('data-icon', icon);
-
-            document.body.appendChild(toast);
-
-            // Trigger animation
-            requestAnimationFrame(() => {
-                toast.classList.add('form-toast-visible');
-            });
-
-            // Remove after duration
-            setTimeout(() => {
-                toast.classList.remove('form-toast-visible');
-                toast.classList.add('form-toast-hiding');
-                setTimeout(() => {
-                    if (toast.parentNode) {
-                        toast.remove();
-                    }
-                }, 300);
-            }, CONFIG.TOAST_DURATION);
-        }
-    };
-
-    // ============================================
-    // SMOOTH SCROLL CONTROLLER
-    // ============================================
-    const SmoothScroll = {
-        /**
-         * Initialize smooth scrolling for anchor links
-         */
-        init: function() {
-            const anchorLinks = Utils.getElements('a[href^="#"]');
-            
-            anchorLinks.forEach(anchor => {
-                anchor.addEventListener('click', (e) => this.handleSmoothScroll(e, anchor));
-            });
-        },
-
-        /**
-         * Handle smooth scroll when anchor link is clicked
-         */
-        handleSmoothScroll: function(e, anchor) {
-            const targetId = anchor.getAttribute('href');
-            
-            // Skip if href is just "#" or empty
-            if (!targetId || targetId === '#') return;
-
-            const targetElement = Utils.getElement(targetId);
-            if (!targetElement) return;
-
-            e.preventDefault();
-
-            const headerHeight = Utils.getElement('.site-header')?.offsetHeight || 80;
-            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-            const offsetPosition = targetPosition - headerHeight - 20;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-
-            // Update URL hash without jumping
-            if (history.pushState) {
-                history.pushState(null, null, targetId);
-            }
-        }
-    };
-
-    // ============================================
-    // FOOTER YEAR UPDATER
-    // ============================================
-    const FooterYear = {
-        /**
-         * Update copyright year in footer
-         */
-        init: function() {
-            const yearSpan = Utils.getElement('#currentYear');
-            if (yearSpan) {
-                const currentYear = new Date().getFullYear();
-                yearSpan.textContent = currentYear;
-            }
-        }
-    };
-
-    // ============================================
-    // PERFORMANCE OPTIMIZATIONS
-    // ============================================
-    const PerformanceOptimizer = {
-        /**
-         * Initialize performance optimizations
-         */
-        init: function() {
-            this.lazyLoadImages();
-            this.handleReducedMotion();
-        },
-
-        /**
-         * Add native lazy loading to images that don't have it
-         */
-        lazyLoadImages: function() {
-            if ('loading' in HTMLImageElement.prototype) {
-                // Native lazy loading is supported
-                const images = Utils.getElements('img:not([loading])');
-                images.forEach(img => {
-                    img.setAttribute('loading', 'lazy');
-                });
-            }
-        },
-
-        /**
-         * Handle users who prefer reduced motion
-         */
-        handleReducedMotion: function() {
-            const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-            
-            if (mediaQuery.matches) {
-                this.disableAnimations();
-            }
-
-            mediaQuery.addEventListener('change', (e) => {
-                if (e.matches) {
-                    this.disableAnimations();
-                }
-            });
-        },
-
-        /**
-         * Disable all animations
-         */
-        disableAnimations: function() {
-            const fadeElements = Utils.getElements('.fade-up');
-            fadeElements.forEach(el => {
-                el.style.opacity = '1';
-                el.style.transform = 'none';
-                el.style.transition = 'none';
-            });
-
-            document.documentElement.style.scrollBehavior = 'auto';
-        }
-    };
-
-    // ============================================
-    // INITIALIZATION
-    // ============================================
-    function init() {
-        MobileMenu.init();
-        ScrollAnimations.init();
-        ContactForm.init();
-        SmoothScroll.init();
-        FooterYear.init();
-        PerformanceOptimizer.init();
-
-        // Log initialization
-        console.log(
-            '%c🚀 Harrison Cheruiyot Portfolio %cReady',
-            'color: #84CC16; font-weight: bold; font-size: 1.1em;',
-            'color: #94A3B8;'
-        );
-        console.log(
-            '%c💡 Tip: Check out the source code on GitHub!',
-            'color: #2563EB; font-style: italic;'
-        );
+(function () {
+  'use strict';
+
+  // ---------- DOM READY ----------
+  document.addEventListener('DOMContentLoaded', function () {
+    // Initialize all modules
+    initCurrentYear();
+    initMobileMenu();
+    initSmoothScroll();
+    initScrollAnimations();
+    initActiveNavHighlight();
+    initFormValidation();
+    initParallaxHeroEffect();
+    initCounterAnimation();
+    initWhatsAppPulse();
+    initAccessibilityEnhancements();
+  });
+
+  // ---------- 1. DYNAMIC COPYRIGHT YEAR ----------
+  function initCurrentYear() {
+    const yearSpan = document.getElementById('currentYear');
+    if (yearSpan) {
+      yearSpan.textContent = new Date().getFullYear();
+    }
+  }
+
+  // ---------- 2. MOBILE MENU (Accessible & Robust) ----------
+  function initMobileMenu() {
+    const toggleCheckbox = document.getElementById('menu-toggle');
+    const navOverlay = document.querySelector('.nav-overlay');
+    const navLinks = document.querySelectorAll('#primary-navigation .nav-links a');
+    const hamburgerLabel = document.querySelector('.hamburger');
+
+    if (!toggleCheckbox || !hamburgerLabel) return;
+
+    // Update ARIA expanded attribute on toggle
+    function updateAriaExpanded() {
+      const isExpanded = toggleCheckbox.checked;
+      if (hamburgerLabel) {
+        hamburgerLabel.setAttribute('aria-expanded', isExpanded);
+      }
+      // Prevent body scroll when menu open
+      document.body.style.overflow = isExpanded ? 'hidden' : '';
     }
 
-    // Start the application when DOM is fully loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        // DOM is already loaded
-        init();
+    toggleCheckbox.addEventListener('change', updateAriaExpanded);
+
+    // Close menu when a nav link is clicked
+    navLinks.forEach(link => {
+      link.addEventListener('click', function () {
+        if (toggleCheckbox.checked) {
+          toggleCheckbox.checked = false;
+          updateAriaExpanded();
+        }
+      });
+    });
+
+    // Close menu when overlay is clicked (label triggers checkbox)
+    if (navOverlay) {
+      navOverlay.addEventListener('click', function (e) {
+        // The label toggles the checkbox, so we just ensure state is updated
+        setTimeout(updateAriaExpanded, 50);
+      });
     }
+
+    // Close menu on Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && toggleCheckbox.checked) {
+        toggleCheckbox.checked = false;
+        updateAriaExpanded();
+        // Return focus to hamburger
+        if (hamburgerLabel) hamburgerLabel.focus();
+      }
+    });
+
+    // Initialize ARIA
+    updateAriaExpanded();
+  }
+
+  // ---------- 3. SMOOTH SCROLL (with offset for sticky header) ----------
+  function initSmoothScroll() {
+    const header = document.querySelector('.site-header');
+    const headerHeight = header ? header.offsetHeight : 76;
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        if (targetId === '#' || targetId === '') return;
+
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - headerHeight - 16;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+
+          // Set focus to target for accessibility
+          targetElement.setAttribute('tabindex', '-1');
+          targetElement.focus({ preventScroll: true });
+        }
+      });
+    });
+  }
+
+  // ---------- 4. SCROLL-TRIGGERED ANIMATIONS (Intersection Observer) ----------
+  function initScrollAnimations() {
+    const animatedElements = document.querySelectorAll(
+      '.fade-up, .project-card, .service-card, .pricing-card, .step, .about-image, .about-content'
+    );
+
+    if (!('IntersectionObserver' in window)) {
+      // Fallback: show all elements immediately
+      animatedElements.forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      });
+      return;
+    }
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -60px 0px',
+      threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          // Add stagger effect for cards inside grids
+          if (entry.target.classList.contains('project-card') ||
+              entry.target.classList.contains('service-card') ||
+              entry.target.classList.contains('pricing-card')) {
+            entry.target.style.transitionDelay = '0.1s';
+          }
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    animatedElements.forEach(el => {
+      // Preserve initial animation state
+      el.classList.add('will-animate');
+      observer.observe(el);
+    });
+  }
+
+  // ---------- 5. ACTIVE NAVIGATION HIGHLIGHT ON SCROLL ----------
+  function initActiveNavHighlight() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a:not(.btn)');
+    const header = document.querySelector('.site-header');
+    const headerHeight = header ? header.offsetHeight + 30 : 100;
+
+    if (sections.length === 0 || navLinks.length === 0) return;
+
+    function highlightNavigation() {
+      let currentSectionId = '';
+      const scrollPosition = window.scrollY + headerHeight;
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          currentSectionId = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active-nav');
+        const linkHref = link.getAttribute('href');
+        if (linkHref && linkHref.substring(1) === currentSectionId) {
+          link.classList.add('active-nav');
+        }
+      });
+
+      // If at bottom of page, highlight last section
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+        navLinks.forEach(link => link.classList.remove('active-nav'));
+        const lastLink = navLinks[navLinks.length - 1];
+        if (lastLink && lastLink.getAttribute('href') !== '#contact') {
+          // keep last visible
+        }
+      }
+    }
+
+    window.addEventListener('scroll', highlightNavigation, { passive: true });
+    highlightNavigation(); // initial call
+  }
+
+  // ---------- 6. FORM VALIDATION & ACCESSIBLE ERROR HANDLING ----------
+  function initFormValidation() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const messageInput = document.getElementById('message');
+    const submitButton = form.querySelector('.btn-submit');
+
+    // Real-time validation feedback
+    const inputs = [nameInput, emailInput, messageInput].filter(Boolean);
+
+    inputs.forEach(input => {
+      input.addEventListener('input', function () {
+        validateField(input);
+      });
+
+      input.addEventListener('blur', function () {
+        validateField(input, true);
+      });
+    });
+
+    function validateField(field, showError = false) {
+      const formGroup = field.closest('.form-group');
+      if (!formGroup) return true;
+
+      // Remove existing error message
+      const existingError = formGroup.querySelector('.field-error');
+      if (existingError) existingError.remove();
+
+      let isValid = true;
+      let errorMessage = '';
+
+      if (field.hasAttribute('required') && field.value.trim() === '') {
+        isValid = false;
+        errorMessage = 'This field is required.';
+      } else if (field.type === 'email' && field.value.trim() !== '') {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(field.value.trim())) {
+          isValid = false;
+          errorMessage = 'Please enter a valid email address.';
+        }
+      }
+
+      // Toggle error class and message
+      if (!isValid && (showError || field.dataset.touched === 'true')) {
+        formGroup.classList.add('has-error');
+        field.setAttribute('aria-invalid', 'true');
+        const errorSpan = document.createElement('span');
+        errorSpan.className = 'field-error';
+        errorSpan.setAttribute('role', 'alert');
+        errorSpan.textContent = errorMessage;
+        formGroup.appendChild(errorSpan);
+      } else {
+        formGroup.classList.remove('has-error');
+        field.removeAttribute('aria-invalid');
+      }
+
+      if (showError) {
+        field.dataset.touched = 'true';
+      }
+
+      return isValid;
+    }
+
+    // Form submission
+    form.addEventListener('submit', function (e) {
+      let formValid = true;
+
+      inputs.forEach(input => {
+        const valid = validateField(input, true);
+        if (!valid) formValid = false;
+      });
+
+      if (!formValid) {
+        e.preventDefault();
+        // Focus first invalid field
+        const firstInvalid = form.querySelector('.has-error input, .has-error textarea');
+        if (firstInvalid) firstInvalid.focus();
+
+        // Announce error to screen readers
+        const alertDiv = document.createElement('div');
+        alertDiv.setAttribute('role', 'alert');
+        alertDiv.className = 'sr-only';
+        alertDiv.textContent = 'Please correct the errors in the form before submitting.';
+        form.prepend(alertDiv);
+        setTimeout(() => alertDiv.remove(), 3000);
+      } else {
+        // Show loading state
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = 'Sending...';
+          submitButton.setAttribute('aria-busy', 'true');
+        }
+        // Form will submit normally to Formspree
+      }
+    });
+  }
+
+  // ---------- 7. HERO PARALLAX / SUBTLE MOVEMENT ----------
+  function initParallaxHeroEffect() {
+    const hero = document.querySelector('.hero');
+    if (!hero || window.innerWidth < 768) return;
+
+    let ticking = false;
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          const scrollY = window.scrollY;
+          const heroHeight = hero.offsetHeight;
+
+          if (scrollY < heroHeight) {
+            const translateY = scrollY * 0.15;
+            const opacity = 1 - scrollY / (heroHeight * 1.2);
+            hero.style.transform = `translateY(${translateY}px)`;
+            hero.style.opacity = Math.max(opacity, 0.7);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  // ---------- 8. COUNTER ANIMATION FOR ABOUT STATS ----------
+  function initCounterAnimation() {
+    const stats = document.querySelectorAll('.about-stats strong');
+    if (stats.length === 0) return;
+
+    const observerOptions = {
+      threshold: 0.6,
+      rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    const aboutSection = document.querySelector('.about');
+    if (aboutSection) observer.observe(aboutSection);
+
+    function animateCounters() {
+      stats.forEach(stat => {
+        const text = stat.textContent || '';
+        const numericValue = parseInt(text.replace(/[^0-9]/g, ''), 10);
+        const suffix = text.includes('+') ? '+' : (text.includes('%') ? '%' : '');
+
+        if (isNaN(numericValue)) return;
+
+        let startValue = 0;
+        const duration = 1800;
+        const startTime = performance.now();
+
+        function updateCounter(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // Ease out cubic
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = Math.floor(eased * numericValue);
+
+          stat.textContent = current + suffix;
+
+          if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+          } else {
+            stat.textContent = numericValue + suffix;
+          }
+        }
+
+        requestAnimationFrame(updateCounter);
+      });
+    }
+  }
+
+  // ---------- 9. WHATSAPP BUTTON SUBTLE PULSE ----------
+  function initWhatsAppPulse() {
+    const whatsappBtn = document.querySelector('.whatsapp-float');
+    if (!whatsappBtn) return;
+
+    // Add a gentle pulse that stops on hover/focus
+    whatsappBtn.addEventListener('mouseenter', function () {
+      this.style.animationPlayState = 'paused';
+    });
+
+    whatsappBtn.addEventListener('mouseleave', function () {
+      this.style.animationPlayState = 'running';
+    });
+
+    whatsappBtn.addEventListener('focus', function () {
+      this.style.animationPlayState = 'paused';
+    });
+
+    whatsappBtn.addEventListener('blur', function () {
+      this.style.animationPlayState = 'running';
+    });
+  }
+
+  // ---------- 10. ACCESSIBILITY ENHANCEMENTS ----------
+  function initAccessibilityEnhancements() {
+    // Ensure all interactive elements are keyboard accessible
+    const allButtons = document.querySelectorAll('.btn, .project-link, .hamburger');
+    allButtons.forEach(btn => {
+      if (!btn.getAttribute('role') && btn.tagName !== 'BUTTON' && btn.tagName !== 'A' && btn.tagName !== 'LABEL') {
+        btn.setAttribute('role', 'button');
+      }
+      if (btn.tagName !== 'A' && btn.tagName !== 'BUTTON' && btn.tagName !== 'LABEL' && !btn.hasAttribute('tabindex')) {
+        btn.setAttribute('tabindex', '0');
+      }
+    });
+
+    // Add skip-to-content link (in case it's missing)
+    if (!document.querySelector('.skip-to-content')) {
+      const skipLink = document.createElement('a');
+      skipLink.href = '#work';
+      skipLink.className = 'skip-to-content';
+      skipLink.textContent = 'Skip to main content';
+      document.body.prepend(skipLink);
+    }
+
+    // Enhance form field accessibility
+    document.querySelectorAll('.form-group input, .form-group textarea, .form-group select').forEach(field => {
+      const label = field.closest('.form-group')?.querySelector('label');
+      if (label && !field.getAttribute('aria-labelledby') && !field.getAttribute('aria-label')) {
+        const labelId = label.getAttribute('for') || (label.textContent.trim().replace(/\s+/g, '-').toLowerCase());
+        if (labelId) {
+          field.setAttribute('aria-labelledby', labelId);
+        }
+      }
+    });
+  }
+
+  // ---------- UTILITY: Throttle function (if needed elsewhere) ----------
+  function throttle(func, limit) {
+    let inThrottle;
+    return function (...args) {
+      if (!inThrottle) {
+        func.apply(this, args);
+        inThrottle = true;
+        setTimeout(() => (inThrottle = false), limit);
+      }
+    };
+  }
+
+  // ---------- SERVICE WORKER REGISTRATION (optional for PWA) ----------
+  // Uncomment if you have a service worker file
+  // if ('serviceWorker' in navigator) {
+  //   window.addEventListener('load', () => {
+  //     navigator.serviceWorker.register('/sw.js').then(registration => {
+  //       console.log('SW registered:', registration.scope);
+  //     }).catch(err => console.log('SW registration failed:', err));
+  //   });
+  // }
 
 })();
