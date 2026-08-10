@@ -399,9 +399,16 @@
           </div>
           <a href="https://wa.me/254702555093" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="margin-top: 1.5rem;">Chat Directly on WhatsApp</a>
         </div>
-        <form id="contactForm" class="contact-form" action="https://formspree.io/f/your-form-id" method="POST" novalidate>
+
+        <!-- UPDATED FORM WITH FORMSPREE INTEGRATION -->
+        <form id="contactForm" class="contact-form" action="https://formspree.io/f/mjybylyr" method="POST" novalidate>
           <!-- Honeypot -->
           <input type="text" name="_gotcha" style="display:none;" tabindex="-1" autocomplete="off" />
+          
+          <!-- Hidden fields for better email delivery -->
+          <input type="hidden" name="_subject" value="New website enquiry from HarrisonCheruiyot.dev" />
+          <input type="hidden" name="_next" value="https://www.harrisoncheruiyot.dev/thank-you" />
+          
           <div class="form-group">
             <label for="name">Full Name *</label>
             <input type="text" id="name" name="name" required placeholder="e.g. Jane Muthoni" />

@@ -18,6 +18,7 @@
   --gray-50: #F8F9FC;
   --gray-100: #EDF1F7;
   --gray-200: #D9DFE8;
+  --gray-300: #C5CDD8;
   --gray-600: #4A5568;
   --gray-800: #1A202C;
   --true-black: #0B0C0E;
@@ -79,7 +80,6 @@ a {
   transition: color var(--transition-fast);
 }
 
-/* ✅ FIX: Ensure all interactive elements have visible focus states */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -228,11 +228,11 @@ h3 {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 1000; /* ✅ FIX: Increased to ensure header stays above all content */
-  background: rgba(255, 255, 255, 0.95); /* ✅ FIX: Increased opacity for better readability */
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(10, 37, 64, 0.08); /* ✅ FIX: Slightly more visible border */
+  border-bottom: 1px solid rgba(10, 37, 64, 0.08);
   transition: background var(--transition-smooth);
 }
 
@@ -249,14 +249,13 @@ h3 {
   font-weight: 800;
   color: var(--primary-blue);
   letter-spacing: -0.02em;
-  z-index: 210; /* ✅ FIX: Ensure logo stays above mobile menu */
+  z-index: 210;
   position: relative;
 }
 .logo-dot {
   color: var(--gold-accent);
 }
 
-/* ✅ FIX: Added menu toggle checkbox styles */
 .menu-toggle {
   position: absolute;
   opacity: 0;
@@ -371,7 +370,7 @@ h3 {
 .project-image-wrapper {
   overflow: hidden;
   height: 240px;
-  background: var(--gray-100); /* ✅ FIX: Added background for image loading states */
+  background: var(--gray-100);
 }
 .project-image-wrapper img {
   width: 100%;
@@ -601,6 +600,79 @@ h3 {
   font-weight: 700;
 }
 
+/* ==============================================
+   TESTIMONIALS – FULLY STYLED SECTION
+   ============================================== */
+.testimonials {
+  padding: 4rem 0 5rem 0;
+  background: var(--white);
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.testimonial-card {
+  background: var(--gray-50);
+  padding: 2rem 2rem 1.8rem 2rem;
+  border-radius: var(--radius-lg);
+  border-left: 5px solid var(--gold-accent);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-smooth);
+  margin: 0;
+  position: relative;
+}
+.testimonial-card::before {
+  content: '"';
+  position: absolute;
+  top: -10px;
+  left: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 4rem;
+  color: var(--gold-light);
+  opacity: 0.4;
+  line-height: 1;
+}
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-left-color: var(--purple-accent);
+}
+
+.testimonial-card p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--gray-800);
+  margin-bottom: 1.2rem;
+  position: relative;
+  z-index: 1;
+  font-style: italic;
+}
+
+.testimonial-card footer {
+  border-top: 1px solid var(--gray-200);
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+.testimonial-card cite {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--primary-blue);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.testimonial-card cite::before {
+  content: "—";
+  color: var(--gold-accent);
+  font-weight: 700;
+}
+
 /* ---------- ABOUT ---------- */
 .about {
   padding: 4rem 0 5rem 0;
@@ -614,7 +686,7 @@ h3 {
 }
 
 .about-image {
-  background: var(--gray-100); /* ✅ FIX: Added loading state background */
+  background: var(--gray-100);
   border-radius: var(--radius-lg);
 }
 .about-image img {
@@ -650,6 +722,79 @@ h3 {
   color: var(--gold-accent);
 }
 
+/* ==============================================
+   FAQ – FULLY STYLED SECTION
+   ============================================== */
+.faq {
+  padding: 4rem 0 5rem 0;
+  background: var(--primary-blue-surface);
+  border-radius: var(--radius-xl);
+  margin: 2rem 0;
+}
+
+.faq-grid {
+  max-width: 800px;
+  margin: 1.5rem auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-100);
+  transition: all var(--transition-smooth);
+  overflow: hidden;
+}
+.faq-item:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--gold-light);
+}
+
+.faq-item summary {
+  padding: 1.2rem 1.8rem;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--primary-blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  list-style: none;
+  position: relative;
+  transition: color var(--transition-fast);
+  user-select: none;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::after {
+  content: "+";
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--gold-accent);
+  transition: transform var(--transition-smooth);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+}
+.faq-item summary:hover {
+  color: var(--gold-accent);
+}
+
+.faq-item p {
+  padding: 0 1.8rem 1.2rem 1.8rem;
+  color: var(--gray-600);
+  font-size: 0.98rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
 /* ---------- CONTACT ---------- */
 .contact {
   padding: 4rem 0 5rem 0;
@@ -672,7 +817,7 @@ h3 {
 }
 
 .contact-info p {
-  opacity: 0.95; /* ✅ FIX: Increased opacity for better readability */
+  opacity: 0.95;
   margin-bottom: 1.8rem;
 }
 
@@ -684,14 +829,14 @@ h3 {
 }
 
 .contact-item {
-  color: var(--white); /* ✅ FIX: Ensured contact items are visible */
+  color: var(--white);
 }
 .contact-item a {
   color: var(--gold-light);
   font-weight: 500;
 }
 .contact-item a:hover {
-  color: var(--white); /* ✅ FIX: Better hover contrast */
+  color: var(--white);
   text-decoration: underline;
 }
 
@@ -726,7 +871,7 @@ h3 {
   font-size: 0.95rem;
   transition: border var(--transition-fast), box-shadow var(--transition-fast);
   background: var(--gray-50);
-  color: var(--gray-800); /* ✅ FIX: Explicit text color */
+  color: var(--gray-800);
 }
 
 .form-group input:focus,
@@ -811,7 +956,7 @@ h3 {
   align-items: center;
   justify-content: center;
   box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35);
-  z-index: 150; /* ✅ FIX: Increased z-index to stay above most content but below navigation */
+  z-index: 150;
   transition: transform var(--transition-bounce);
 }
 .whatsapp-float:hover {
@@ -820,16 +965,15 @@ h3 {
 }
 
 /* ---------- ANIMATIONS ---------- */
-/* ✅ FIX: Added will-change for better animation performance */
 .fade-up {
-  opacity: 1; /* ✅ FIX: Start with opacity 1 to prevent invisible content on load */
+  opacity: 1;
   transform: translateY(0);
   animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   will-change: transform, opacity;
 }
 
 @keyframes fadeUp {
-  from { /* ✅ FIX: Properly define from state */
+  from {
     opacity: 0;
     transform: translateY(24px);
   }
@@ -839,7 +983,7 @@ h3 {
   }
 }
 
-/* ---------- MOBILE MENU (COMPLETELY REWRITTEN FOR VISIBILITY) ---------- */
+/* ---------- MOBILE MENU ---------- */
 .menu-toggle,
 .nav-overlay {
   display: none;
@@ -851,7 +995,6 @@ h3 {
     padding-right: 20px;
   }
 
-  /* ✅ FIX: Completely redesigned hamburger menu for visibility */
   .menu-toggle {
     display: block;
     position: absolute;
@@ -878,27 +1021,25 @@ h3 {
   }
   .hamburger-line {
     display: block;
-    height: 2.5px; /* ✅ FIX: Slightly thicker for better visibility */
+    height: 2.5px;
     background: var(--primary-blue);
     border-radius: 4px;
     transition: all 0.3s ease;
     width: 100%;
   }
 
-  /* ✅ FIX: Proper hamburger animation targeting */
   #menu-toggle:checked ~ .header-inner .hamburger .hamburger-line:nth-child(1) {
     transform: rotate(45deg) translate(5px, 5px);
-    background: var(--white); /* ✅ FIX: White when menu is open */
+    background: var(--white);
   }
   #menu-toggle:checked ~ .header-inner .hamburger .hamburger-line:nth-child(2) {
     opacity: 0;
   }
   #menu-toggle:checked ~ .header-inner .hamburger .hamburger-line:nth-child(3) {
     transform: rotate(-45deg) translate(5px, -5px);
-    background: var(--white); /* ✅ FIX: White when menu is open */
+    background: var(--white);
   }
 
-  /* Overlay */
   .nav-overlay {
     display: block;
     position: fixed;
@@ -906,7 +1047,7 @@ h3 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(10, 37, 64, 0.9); /* ✅ FIX: Darker overlay for better contrast */
+    background: rgba(10, 37, 64, 0.9);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     z-index: 195;
@@ -919,14 +1060,13 @@ h3 {
     visibility: visible;
   }
 
-  /* Navigation – VISIBLE AND INTERACTIVE */
   #primary-navigation {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
-    background: rgba(10, 37, 64, 0.95); /* ✅ FIX: Added visible background */
+    background: rgba(10, 37, 64, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     padding: 0;
@@ -934,20 +1074,18 @@ h3 {
     align-items: center;
     justify-content: center;
     z-index: 200;
-    opacity: 0; /* ✅ FIX: Using opacity for smooth transition */
-    visibility: hidden; /* ✅ FIX: Properly hidden by default */
+    opacity: 0;
+    visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     pointer-events: none;
   }
 
-  /* Show menu when checked – fully visible and interactive */
   #menu-toggle:checked ~ #primary-navigation {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
   }
 
-  /* Menu links – clearly visible with high contrast */
   .nav-links {
     flex-direction: column;
     align-items: center;
@@ -955,17 +1093,17 @@ h3 {
     gap: 2.5rem;
     width: 100%;
     padding: 2rem;
-    opacity: 1; /* ✅ FIX: Explicitly set opacity */
-    visibility: visible; /* ✅ FIX: Explicitly set visibility */
+    opacity: 1;
+    visibility: visible;
   }
   .nav-links a:not(.btn) {
     font-size: 1.8rem;
-    color: var(--white); /* ✅ FIX: White text for maximum contrast */
+    color: var(--white);
     font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* ✅ FIX: Text shadow for better readability */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
   .nav-links a:not(.btn)::after {
-    background: var(--gold-accent); /* ✅ FIX: Gold underline for better visibility */
+    background: var(--gold-accent);
   }
   .nav-links a:not(.btn):hover {
     color: var(--gold-light);
@@ -977,10 +1115,9 @@ h3 {
     background: var(--gold-accent);
     color: var(--primary-blue);
     font-weight: 700;
-    box-shadow: 0 4px 12px rgba(201, 164, 62, 0.3); /* ✅ FIX: Added glow effect */
+    box-shadow: 0 4px 12px rgba(201, 164, 62, 0.3);
   }
 
-  /* ✅ FIX: Ensure logo is visible when menu is open */
   #menu-toggle:checked ~ .header-inner .logo {
     color: var(--white);
   }
@@ -988,21 +1125,21 @@ h3 {
     color: var(--gold-accent);
   }
 
-  /* Responsive layout tweaks */
   .hero {
     padding: 3rem 0 3.5rem;
   }
   .projects-grid,
   .services-grid,
   .process-steps,
-  .pricing-grid {
+  .pricing-grid,
+  .testimonials-grid {
     grid-template-columns: 1fr;
   }
   .about-grid {
-    grid-template-columns: 1fr; /* ✅ FIX: Stack about section on mobile */
+    grid-template-columns: 1fr;
   }
   .contact-grid {
-    grid-template-columns: 1fr; /* ✅ FIX: Stack contact section on mobile */
+    grid-template-columns: 1fr;
   }
   .footer-grid {
     grid-template-columns: 1fr;
@@ -1024,7 +1161,7 @@ h3 {
   }
 }
 
-/* ✅ FIX: Reduced motion preference support */
+/* ---------- REDUCED MOTION ---------- */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1033,193 +1170,5 @@ h3 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-}
-/* Premium Animation Keyframes */
-@keyframes revealUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes revealText {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideDown {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInFromRight {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-  20%, 40%, 60%, 80% { transform: translateX(4px); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes floatUp {
-  from {
-    transform: translateY(100vh) rotate(0deg);
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  to {
-    transform: translateY(-100px) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-@keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-2px, 2px);
-  }
-  40% {
-    transform: translate(-2px, -2px);
-  }
-  60% {
-    transform: translate(2px, 2px);
-  }
-  80% {
-    transform: translate(2px, -2px);
-  }
-  100% {
-    transform: translate(0);
-  }
-}
-
-/* Cursor Glow */
-.cursor-glow {
-  position: fixed;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(201, 164, 62, 0.15) 0%, transparent 70%);
-  transition: transform 0.3s ease, background 0.3s ease;
-}
-
-/* Scroll Progress Bar */
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, var(--gold-accent), var(--purple-accent));
-  transform-origin: 0 50%;
-  transform: scaleX(0);
-  z-index: 9998;
-  transition: transform 0.1s linear;
-}
-
-/* Gold Particles */
-.gold-particle {
-  position: absolute;
-  bottom: 0;
-  background: var(--gold-accent);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Loading Spinner */
-.loading-spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 0.8s linear infinite;
-  margin-right: 8px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* WhatsApp Ripple */
-.whatsapp-ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  animation: ripple 0.6s linear;
-  pointer-events: none;
-}
-
-@keyframes ripple {
-  from {
-    transform: scale(0);
-    opacity: 1;
-  }
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
-}
-
-/* Form Success State */
-.form-group.has-success input,
-.form-group.has-success textarea,
-.form-group.has-success select {
-  border-color: #48bb78;
-  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
-}
-
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
-  .cursor-glow,
-  .gold-particle,
-  .scroll-progress {
-    display: none;
   }
 }
