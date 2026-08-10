@@ -189,15 +189,25 @@ img {
     align-items: center;
 }
 
+/* --- FIXED LOGO (invisible text issue resolved) --- */
 .logo {
     font-family: var(--font-serif);
     font-size: 1.8rem;
     font-weight: 800;
     letter-spacing: -0.03em;
+    color: var(--text-main); /* Solid fallback color */
     background: linear-gradient(135deg, var(--primary-blue), var(--accent-lime));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+/* Fallback for browsers that don't support background-clip: text */
+@supports not (background-clip: text) {
+    .logo {
+        -webkit-text-fill-color: initial;
+        color: var(--primary-blue);
+    }
 }
 
 .nav-links {
