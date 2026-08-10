@@ -29,7 +29,7 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
   
-  <!-- Stylesheet -->
+  <!-- External Stylesheet -->
   <link rel="stylesheet" href="styles.css" />
   
   <!-- JSON-LD Structured Data -->
@@ -58,23 +58,26 @@
   </script>
 </head>
 <body>
-  <!-- Skip Link (Fixed: proper ID for CSS targeting) -->
+  <!-- Skip Link -->
   <a id="skip-link" href="#main-content">Skip to main content</a>
 
+  <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <a href="#" class="logo" aria-label="Harrison Cheruiyot Home">Harrison<span class="logo-dot">.</span>Dev</a>
       
-      <input type="checkbox" id="menu-toggle" class="menu-toggle" hidden />
-      
+      <!-- Mobile Menu Toggle -->
+      <input type="checkbox" id="menu-toggle" class="menu-toggle" />
       <label for="menu-toggle" class="hamburger" aria-label="Toggle navigation menu" aria-controls="primary-navigation" aria-expanded="false">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
       </label>
-
+      
+      <!-- Mobile Menu Overlay -->
       <label for="menu-toggle" class="nav-overlay" aria-hidden="true"></label>
 
+      <!-- Navigation -->
       <nav id="primary-navigation" aria-label="Main navigation">
         <ul class="nav-links" role="list">
           <li><a href="#work">Portfolio</a></li>
@@ -106,7 +109,7 @@
       </div>
     </section>
 
-    <!-- Portfolio / Work Section -->
+    <!-- Portfolio Section -->
     <section id="work" class="projects container fade-up" aria-labelledby="work-title">
       <h2 id="work-title" class="section-title">Proven Results for Kenyan Brands</h2>
       <p class="section-subtitle">From gyms to logistics, every project is built to increase enquiries and revenue. Real solutions for real Nairobi businesses.</p>
@@ -365,6 +368,7 @@
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
@@ -394,9 +398,10 @@
 
   <!-- WhatsApp Floating Button -->
   <a href="https://wa.me/254702555093" target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="Chat on WhatsApp">
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12.031 2C6.525 2 2 6.56 2 12.109c0 2.09.603 4.038 1.635 5.735L2.018 21.98l4.365-1.291a10.05 10.05 0 005.648 1.656c5.505 0 10.031-4.559 10.031-10.108S17.535 2 12.031 2zm0 18.278c-1.731 0-3.414-.516-4.861-1.488l-.35-.207-2.696.797.719-2.623-.227-.344a8.64 8.64 0 01-1.501-4.806c0-4.81 3.934-8.74 8.787-8.74 4.853 0 8.787 3.93 8.787 8.74 0 4.81-3.934 8.74-8.787 8.74z"/></svg>
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M12.031 2C6.525 2 2 6.56 2 12.109c0 2.09.603 4.038 1.635 5.735L2.018 21.98l4.365-1.291a10.05 10.05 0 005.648 1.656c5.505 0 10.031-4.559 10.031-10.108S17.535 2 12.031 2zm0 18.278c-1.731 0-3.414-.516-4.861-1.488l-.35-.207-2.696.797.719-2.623-.227-.344a8.64 8.64 0 01-1.501-4.806c0-4.81 3.934-8.74 8.787-8.74 4.853 0 8.787 3.93 8.787 8.74 0 4.81-3.934 8.74-8.787 8.74z"/></svg>
   </a>
 
+  <!-- External JavaScript -->
   <script src="scripts.js" defer></script>
 </body>
 </html>
