@@ -29,10 +29,10 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
   
-  <!-- Stylesheet (inline critical CSS for production readiness, main file linked) -->
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css" />
   
-  <!-- JSON-LD Structured Data for Local Business / Person -->
+  <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -58,6 +58,9 @@
   </script>
 </head>
 <body>
+  <!-- Skip Link (Fixed: proper ID for CSS targeting) -->
+  <a id="skip-link" href="#main-content">Skip to main content</a>
+
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <a href="#" class="logo" aria-label="Harrison Cheruiyot Home">Harrison<span class="logo-dot">.</span>Dev</a>
@@ -85,7 +88,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <!-- Hero Section -->
     <section class="hero container fade-up" aria-labelledby="hero-title">
       <div class="hero-content">
@@ -103,7 +106,7 @@
       </div>
     </section>
 
-    <!-- Portfolio / Work Section (with your live projects) -->
+    <!-- Portfolio / Work Section -->
     <section id="work" class="projects container fade-up" aria-labelledby="work-title">
       <h2 id="work-title" class="section-title">Proven Results for Kenyan Brands</h2>
       <p class="section-subtitle">From gyms to logistics, every project is built to increase enquiries and revenue. Real solutions for real Nairobi businesses.</p>

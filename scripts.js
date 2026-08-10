@@ -2,7 +2,7 @@
  * Harrison Cheruiyot – Premium Portfolio
  * Senior Web Developer | Nairobi, Kenya
  * Production-ready JavaScript: Accessibility, Animations, Interactivity
- * Version 1.0.0
+ * Version 1.1.0
  */
 
 (function () {
@@ -10,7 +10,6 @@
 
   // ---------- DOM READY ----------
   document.addEventListener('DOMContentLoaded', function () {
-    // Initialize all modules
     initCurrentYear();
     initMobileMenu();
     initSmoothScroll();
@@ -31,7 +30,7 @@
     }
   }
 
-  // ---------- 2. MOBILE MENU (Accessible & Robust) ----------
+  // ---------- 2. MOBILE MENU (Accessible & Drawer) ----------
   function initMobileMenu() {
     const toggleCheckbox = document.getElementById('menu-toggle');
     const navOverlay = document.querySelector('.nav-overlay');
@@ -40,48 +39,50 @@
 
     if (!toggleCheckbox || !hamburgerLabel) return;
 
-    // Update ARIA expanded attribute on toggle
-    function updateAriaExpanded() {
+    function updateAriaAndBody() {
       const isExpanded = toggleCheckbox.checked;
-      if (hamburgerLabel) {
-        hamburgerLabel.setAttribute('aria-expanded', isExpanded);
-      }
-      // Prevent body scroll when menu open
+      hamburgerLabel.setAttribute('aria-expanded', isExpanded);
       document.body.style.overflow = isExpanded ? 'hidden' : '';
+      
+      // Focus management: if open, focus the first nav link
+      if (isExpanded && navLinks.length > 0) {
+        setTimeout(() => navLinks[0].focus(), 100);
+      }
     }
 
-    toggleCheckbox.addEventListener('change', updateAriaExpanded);
+    toggleCheckbox.addEventListener('change', updateAriaAndBody);
 
     // Close menu when a nav link is clicked
     navLinks.forEach(link => {
       link.addEventListener('click', function () {
         if (toggleCheckbox.checked) {
           toggleCheckbox.checked = false;
-          updateAriaExpanded();
+          updateAriaAndBody();
+          hamburgerLabel.focus();
         }
       });
     });
-
-    // Close menu when overlay is clicked (label triggers checkbox)
-    if (navOverlay) {
-      navOverlay.addEventListener('click', function (e) {
-        // The label toggles the checkbox, so we just ensure state is updated
-        setTimeout(updateAriaExpanded, 50);
-      });
-    }
 
     // Close menu on Escape key
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && toggleCheckbox.checked) {
         toggleCheckbox.checked = false;
-        updateAriaExpanded();
-        // Return focus to hamburger
-        if (hamburgerLabel) hamburgerLabel.focus();
+        updateAriaAndBody();
+        hamburgerLabel.focus();
       }
     });
 
-    // Initialize ARIA
-    updateAriaExpanded();
+    // Fix: Ensure overlay click doesn't double-toggle by using a delay
+    if (navOverlay) {
+      navOverlay.addEventListener('click', function (e) {
+        if (toggleCheckbox.checked) {
+          toggleCheckbox.checked = false;
+          updateAriaAndBody();
+        }
+      });
+    }
+
+    updateAriaAndBody();
   }
 
   // ---------- 3. SMOOTH SCROLL (with offset for sticky header) ----------
@@ -105,7 +106,6 @@
             behavior: 'smooth'
           });
 
-          // Set focus to target for accessibility
           targetElement.setAttribute('tabindex', '-1');
           targetElement.focus({ preventScroll: true });
         }
@@ -113,14 +113,13 @@
     });
   }
 
-  // ---------- 4. SCROLL-TRIGGERED ANIMATIONS (Intersection Observer) ----------
+  // ---------- 4. SCROLL-TRIGGERED ANIMATIONS ----------
   function initScrollAnimations() {
     const animatedElements = document.querySelectorAll(
       '.fade-up, .project-card, .service-card, .pricing-card, .step, .about-image, .about-content'
     );
 
     if (!('IntersectionObserver' in window)) {
-      // Fallback: show all elements immediately
       animatedElements.forEach(el => {
         el.style.opacity = '1';
         el.style.transform = 'translateY(0)';
@@ -138,7 +137,6 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
-          // Add stagger effect for cards inside grids
           if (entry.target.classList.contains('project-card') ||
               entry.target.classList.contains('service-card') ||
               entry.target.classList.contains('pricing-card')) {
@@ -150,13 +148,12 @@
     }, observerOptions);
 
     animatedElements.forEach(el => {
-      // Preserve initial animation state
       el.classList.add('will-animate');
       observer.observe(el);
     });
   }
 
-  // ---------- 5. ACTIVE NAVIGATION HIGHLIGHT ON SCROLL ----------
+  // ---------- 5. ACTIVE NAVIGATION HIGHLIGHT ----------
   function initActiveNavHighlight() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-links a:not(.btn)');
@@ -185,22 +182,13 @@
           link.classList.add('active-nav');
         }
       });
-
-      // If at bottom of page, highlight last section
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-        navLinks.forEach(link => link.classList.remove('active-nav'));
-        const lastLink = navLinks[navLinks.length - 1];
-        if (lastLink && lastLink.getAttribute('href') !== '#contact') {
-          // keep last visible
-        }
-      }
     }
 
     window.addEventListener('scroll', highlightNavigation, { passive: true });
-    highlightNavigation(); // initial call
+    highlightNavigation(); 
   }
 
-  // ---------- 6. FORM VALIDATION & ACCESSIBLE ERROR HANDLING ----------
+  // ---------- 6. FORM VALIDATION ----------
   function initFormValidation() {
     const form = document.getElementById('contactForm');
     if (!form) return;
@@ -210,14 +198,12 @@
     const messageInput = document.getElementById('message');
     const submitButton = form.querySelector('.btn-submit');
 
-    // Real-time validation feedback
     const inputs = [nameInput, emailInput, messageInput].filter(Boolean);
 
     inputs.forEach(input => {
       input.addEventListener('input', function () {
         validateField(input);
       });
-
       input.addEventListener('blur', function () {
         validateField(input, true);
       });
@@ -227,7 +213,6 @@
       const formGroup = field.closest('.form-group');
       if (!formGroup) return true;
 
-      // Remove existing error message
       const existingError = formGroup.querySelector('.field-error');
       if (existingError) existingError.remove();
 
@@ -245,7 +230,6 @@
         }
       }
 
-      // Toggle error class and message
       if (!isValid && (showError || field.dataset.touched === 'true')) {
         formGroup.classList.add('has-error');
         field.setAttribute('aria-invalid', 'true');
@@ -266,7 +250,6 @@
       return isValid;
     }
 
-    // Form submission
     form.addEventListener('submit', function (e) {
       let formValid = true;
 
@@ -277,11 +260,9 @@
 
       if (!formValid) {
         e.preventDefault();
-        // Focus first invalid field
         const firstInvalid = form.querySelector('.has-error input, .has-error textarea');
         if (firstInvalid) firstInvalid.focus();
 
-        // Announce error to screen readers
         const alertDiv = document.createElement('div');
         alertDiv.setAttribute('role', 'alert');
         alertDiv.className = 'sr-only';
@@ -289,24 +270,21 @@
         form.prepend(alertDiv);
         setTimeout(() => alertDiv.remove(), 3000);
       } else {
-        // Show loading state
         if (submitButton) {
           submitButton.disabled = true;
           submitButton.textContent = 'Sending...';
           submitButton.setAttribute('aria-busy', 'true');
         }
-        // Form will submit normally to Formspree
       }
     });
   }
 
-  // ---------- 7. HERO PARALLAX / SUBTLE MOVEMENT ----------
+  // ---------- 7. HERO PARALLAX ----------
   function initParallaxHeroEffect() {
     const hero = document.querySelector('.hero');
     if (!hero || window.innerWidth < 768) return;
 
     let ticking = false;
-
     window.addEventListener('scroll', function () {
       if (!ticking) {
         window.requestAnimationFrame(function () {
@@ -326,7 +304,7 @@
     }, { passive: true });
   }
 
-  // ---------- 8. COUNTER ANIMATION FOR ABOUT STATS ----------
+  // ---------- 8. COUNTER ANIMATION ----------
   function initCounterAnimation() {
     const stats = document.querySelectorAll('.about-stats strong');
     if (stats.length === 0) return;
@@ -363,7 +341,6 @@
         function updateCounter(currentTime) {
           const elapsed = currentTime - startTime;
           const progress = Math.min(elapsed / duration, 1);
-          // Ease out cubic
           const eased = 1 - Math.pow(1 - progress, 3);
           const current = Math.floor(eased * numericValue);
 
@@ -381,24 +358,20 @@
     }
   }
 
-  // ---------- 9. WHATSAPP BUTTON SUBTLE PULSE ----------
+  // ---------- 9. WHATSAPP BUTTON PULSE ----------
   function initWhatsAppPulse() {
     const whatsappBtn = document.querySelector('.whatsapp-float');
     if (!whatsappBtn) return;
 
-    // Add a gentle pulse that stops on hover/focus
     whatsappBtn.addEventListener('mouseenter', function () {
       this.style.animationPlayState = 'paused';
     });
-
     whatsappBtn.addEventListener('mouseleave', function () {
       this.style.animationPlayState = 'running';
     });
-
     whatsappBtn.addEventListener('focus', function () {
       this.style.animationPlayState = 'paused';
     });
-
     whatsappBtn.addEventListener('blur', function () {
       this.style.animationPlayState = 'running';
     });
@@ -406,7 +379,6 @@
 
   // ---------- 10. ACCESSIBILITY ENHANCEMENTS ----------
   function initAccessibilityEnhancements() {
-    // Ensure all interactive elements are keyboard accessible
     const allButtons = document.querySelectorAll('.btn, .project-link, .hamburger');
     allButtons.forEach(btn => {
       if (!btn.getAttribute('role') && btn.tagName !== 'BUTTON' && btn.tagName !== 'A' && btn.tagName !== 'LABEL') {
@@ -417,16 +389,6 @@
       }
     });
 
-    // Add skip-to-content link (in case it's missing)
-    if (!document.querySelector('.skip-to-content')) {
-      const skipLink = document.createElement('a');
-      skipLink.href = '#work';
-      skipLink.className = 'skip-to-content';
-      skipLink.textContent = 'Skip to main content';
-      document.body.prepend(skipLink);
-    }
-
-    // Enhance form field accessibility
     document.querySelectorAll('.form-group input, .form-group textarea, .form-group select').forEach(field => {
       const label = field.closest('.form-group')?.querySelector('label');
       if (label && !field.getAttribute('aria-labelledby') && !field.getAttribute('aria-label')) {
@@ -437,27 +399,5 @@
       }
     });
   }
-
-  // ---------- UTILITY: Throttle function (if needed elsewhere) ----------
-  function throttle(func, limit) {
-    let inThrottle;
-    return function (...args) {
-      if (!inThrottle) {
-        func.apply(this, args);
-        inThrottle = true;
-        setTimeout(() => (inThrottle = false), limit);
-      }
-    };
-  }
-
-  // ---------- SERVICE WORKER REGISTRATION (optional for PWA) ----------
-  // Uncomment if you have a service worker file
-  // if ('serviceWorker' in navigator) {
-  //   window.addEventListener('load', () => {
-  //     navigator.serviceWorker.register('/sw.js').then(registration => {
-  //       console.log('SW registered:', registration.scope);
-  //     }).catch(err => console.log('SW registration failed:', err));
-  //   });
-  // }
 
 })();
