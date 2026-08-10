@@ -1,6 +1,6 @@
 /**
  * Digital Maestros - Main Application Script
- * Version: 2.0.1
+ * Version: 2.0.2
  * Description: Handles mobile navigation, scroll animations, contact form with premium UX.
  * Author: Harrison Cheruiyot
  * Last Updated: 2026-08-10
@@ -21,7 +21,7 @@
         if (hamburger && navLinks) {
             /**
              * Toggle mobile menu state
-             * @param {boolean|null} force - true to close, false to open, null to toggle
+             * @param {boolean} force - true to open, false to close
              */
             const toggleMenu = function(force) {
                 const isCurrentlyActive = navLinks.classList.contains('active');
@@ -38,17 +38,37 @@
                     navLinks.classList.add('active');
                     hamburger.setAttribute('aria-expanded', 'true');
                     document.body.style.overflow = 'hidden'; // Prevent background scroll
+                    hamburger.setAttribute('aria-label', 'Close menu');
                 } else {
                     navLinks.classList.remove('active');
                     hamburger.setAttribute('aria-expanded', 'false');
                     document.body.style.overflow = ''; // Restore scroll
+                    hamburger.setAttribute('aria-label', 'Open menu');
                 }
             };
+
+            // Initialize ARIA attributes
+            hamburger.setAttribute('aria-expanded', 'false');
+            hamburger.setAttribute('aria-label', 'Open menu');
+            hamburger.setAttribute('role', 'button');
+            
+            // Ensure hamburger is tabbable
+            if (!hamburger.getAttribute('tabindex')) {
+                hamburger.setAttribute('tabindex', '0');
+            }
 
             // Click on hamburger
             hamburger.addEventListener('click', function(e) {
                 e.stopPropagation();
                 toggleMenu();
+            });
+
+            // Keyboard support for hamburger (Enter/Space)
+            hamburger.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleMenu();
+                }
             });
 
             // Close on nav link click
@@ -79,10 +99,14 @@
             });
 
             // Handle resize - close mobile menu on desktop
+            let resizeTimer;
             window.addEventListener('resize', function() {
-                if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-                    toggleMenu(false); // Close menu
-                }
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                        toggleMenu(false); // Close menu
+                    }
+                }, 250); // Debounce resize events
             });
         }
 
@@ -129,6 +153,9 @@
             const submitBtn = form.querySelector('button[type="submit"]');
             const btnText = submitBtn ? submitBtn.querySelector('.btn-text') : null;
             const loader = submitBtn ? submitBtn.querySelector('.loader') : null;
+            
+            // Store original button text
+            const originalBtnText = btnText ? btnText.textContent : 'Submit';
 
             // Validation patterns
             const validators = {
@@ -167,9 +194,13 @@
                 field.style.borderColor = '#E63946';
                 field.style.transition = 'border-color 0.3s ease';
                 
+                // Add error class for CSS styling
+                field.classList.add('field-error');
+                
                 // Remove error state after delay
                 setTimeout(function() {
                     field.style.borderColor = '';
+                    field.classList.remove('field-error');
                 }, 3000);
             };
 
@@ -181,6 +212,12 @@
                 let isValid = true;
                 const requiredFields = form.querySelectorAll('[required]');
                 
+                // Reset all field errors first
+                requiredFields.forEach(function(field) {
+                    field.style.borderColor = '';
+                    field.classList.remove('field-error');
+                });
+                
                 requiredFields.forEach(function(field) {
                     const value = field.value;
                     const fieldName = field.name || field.id;
@@ -189,7 +226,8 @@
                         showFieldError(field);
                         isValid = false;
                     } else if (validators[fieldName] && !validators[fieldName].test(value)) {
-                        alert(validators[fieldName].message);
+                        // Use a more elegant notification instead of alert
+                        showToast(validators[fieldName].message, 'error');
                         showFieldError(field);
                         field.focus();
                         isValid = false;
@@ -197,6 +235,47 @@
                 });
                 
                 return isValid;
+            };
+
+            /**
+             * Show toast notification
+             * @param {string} message - Message to display
+             * @param {string} type - 'error' or 'success'
+             */
+            const showToast = function(message, type) {
+                // Remove existing toasts
+                const existingToast = document.querySelector('.form-toast');
+                if (existingToast) {
+                    existingToast.remove();
+                }
+                
+                const toast = document.createElement('div');
+                toast.className = 'form-toast';
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'error' ? '#E63946' : '#10B981'};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 8px;
+                    font-weight: 500;
+                    z-index: 10000;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+                    animation: slideInRight 0.3s ease;
+                    max-width: 90vw;
+                `;
+                document.body.appendChild(toast);
+                
+                setTimeout(function() {
+                    toast.style.animation = 'slideOutRight 0.3s ease forwards';
+                    setTimeout(function() {
+                        if (toast.parentNode) {
+                            toast.remove();
+                        }
+                    }, 300);
+                }, 4000);
             };
 
             // Form submission handler
@@ -231,6 +310,7 @@
                     submitBtn.disabled = true;
                     submitBtn.style.opacity = '0.7';
                     submitBtn.style.cursor = 'not-allowed';
+                    submitBtn.setAttribute('aria-busy', 'true');
                 }
                 if (btnText) {
                     btnText.textContent = 'Sending Your Inquiry...';
@@ -267,6 +347,8 @@
                         if (loader) {
                             loader.style.display = 'none';
                         }
+                        
+                        showToast('Opening your email client...', 'success');
 
                         // Open email client
                         window.location.href = mailtoLink;
@@ -276,47 +358,49 @@
                             form.reset();
                             
                             // Reset button state
-                            if (submitBtn) {
-                                submitBtn.disabled = false;
-                                submitBtn.style.opacity = '1';
-                                submitBtn.style.cursor = 'pointer';
-                            }
-                            if (btnText) {
-                                btnText.textContent = 'Schedule Your Free Strategy Call';
-                            }
+                            resetSubmitButton();
                         }, 3000);
 
                     } catch (error) {
                         console.error('Form submission error:', error);
                         
                         // Show fallback message
-                        alert('Unable to open email client. Please email me directly at:\n\nharrisoncheruiyot04@gmail.com\n\nThank you!');
+                        showToast('Unable to open email client. Please email me directly at harrisoncheruiyot04@gmail.com', 'error');
                         
                         // Reset form state
                         form.reset();
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.style.opacity = '1';
-                            submitBtn.style.cursor = 'pointer';
-                        }
-                        if (btnText) {
-                            btnText.textContent = 'Schedule Your Free Strategy Call';
-                        }
-                        if (loader) {
-                            loader.style.display = 'none';
-                        }
+                        resetSubmitButton();
                     }
                 }, 1000);
 
             });
+            
+            /**
+             * Reset submit button to initial state
+             */
+            const resetSubmitButton = function() {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor = 'pointer';
+                    submitBtn.removeAttribute('aria-busy');
+                }
+                if (btnText) {
+                    btnText.textContent = originalBtnText;
+                }
+                if (loader) {
+                    loader.style.display = 'none';
+                }
+            };
 
             // Real-time validation feedback
             const formInputs = form.querySelectorAll('input, select, textarea');
             formInputs.forEach(function(input) {
                 // Clear error state on input
                 input.addEventListener('input', function() {
-                    if (this.style.borderColor === 'rgb(230, 57, 70)' || this.style.borderColor === '#E63946') {
+                    if (this.classList.contains('field-error')) {
                         this.style.borderColor = '';
+                        this.classList.remove('field-error');
                     }
                 });
 
@@ -324,6 +408,10 @@
                 input.addEventListener('blur', function() {
                     if (this.hasAttribute('required') && !this.value.trim()) {
                         this.style.borderColor = '#E63946';
+                        this.classList.add('field-error');
+                    } else if (this.hasAttribute('required') && this.value.trim()) {
+                        this.style.borderColor = '';
+                        this.classList.remove('field-error');
                     }
                 });
             });
@@ -363,6 +451,14 @@
                     } else {
                         window.location.hash = targetId;
                     }
+                    
+                    // Set focus to target for accessibility
+                    setTimeout(function() {
+                        if (targetElement && !targetElement.hasAttribute('tabindex')) {
+                            targetElement.setAttribute('tabindex', '-1');
+                        }
+                        targetElement.focus({ preventScroll: true });
+                    }, 100);
                 }
             });
         });
@@ -405,6 +501,13 @@
         // ============================================================
         const logo = document.querySelector('.logo');
         if (logo) {
+            // Make logo focusable for accessibility
+            if (!logo.getAttribute('tabindex') && logo.tagName !== 'A') {
+                logo.setAttribute('tabindex', '0');
+                logo.setAttribute('role', 'button');
+                logo.setAttribute('aria-label', 'Go to homepage');
+            }
+            
             logo.addEventListener('mouseenter', function() {
                 this.style.transform = 'scale(1.05)';
                 this.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
@@ -415,11 +518,22 @@
             });
             
             // Reset transform on click for mobile
-            logo.addEventListener('click', function() {
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 150);
+            logo.addEventListener('click', function(e) {
+                // Only apply animation if it's not a link (or if we want to override)
+                if (this.tagName !== 'A') {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                }
+            });
+            
+            // Keyboard support
+            logo.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
             });
         }
 
@@ -434,17 +548,59 @@
         // ============================================================
         // 8. PERFORMANCE: Service Worker Registration (if applicable)
         // ============================================================
-        if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
+        if ('serviceWorker' in navigator && window.location.hostname !== 'localhost' && window.location.protocol === 'https:') {
             window.addEventListener('load', function() {
                 // Uncomment when you have a service worker file
-                // navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                // navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                //     console.log('ServiceWorker registered:', registration.scope);
+                // }).catch(function(err) {
                 //     console.log('ServiceWorker registration failed:', err);
                 // });
             });
         }
 
         // ============================================================
-        // 9. ERROR HANDLING & LOGGING
+        // 9. ADD CSS ANIMATIONS FOR TOAST NOTIFICATIONS
+        // ============================================================
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+            
+            .field-error {
+                border-color: #E63946 !important;
+                box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.1) !important;
+            }
+            
+            @media (prefers-reduced-motion: reduce) {
+                .form-toast {
+                    animation: none !important;
+                }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
+        // ============================================================
+        // 10. ERROR HANDLING & LOGGING
         // ============================================================
         window.addEventListener('error', function(e) {
             // Log errors in production (could send to monitoring service)
@@ -459,7 +615,7 @@
         });
 
         // ============================================================
-        // 10. INITIALIZATION COMPLETE
+        // 11. INITIALIZATION COMPLETE
         // ============================================================
         console.log('%c🚀 Digital Maestros %cReady', 'font-weight: bold; color: #84CC16;', 'color: #94A3B8;');
         
