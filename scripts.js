@@ -2,7 +2,7 @@
  * Harrison Cheruiyot – Premium Portfolio
  * Senior Web Developer | Nairobi, Kenya
  * Production-ready JavaScript: Accessibility, Interactivity, Performance
- * Version 3.0.0 – Lightweight & Fast
+ * Version 3.1.0 – Lightweight & Fast
  */
 
 (function () {
@@ -20,6 +20,8 @@
     initAccessibilityEnhancements();
     initScrollProgressIndicator();
     initLazyLoadImages();
+    initFaqAccordion();
+    initStatCounters();
   });
 
   // ---------- 1. DYNAMIC COPYRIGHT YEAR ----------
@@ -30,7 +32,7 @@
     }
   }
 
-  // ---------- 2. MOBILE MENU (Lightweight) ----------
+  // ---------- 2. MOBILE MENU ----------
   function initMobileMenu() {
     const toggleCheckbox = document.getElementById('menu-toggle');
     const navOverlay = document.querySelector('.nav-overlay');
@@ -51,7 +53,6 @@
 
     toggleCheckbox.addEventListener('change', updateAriaAndBody);
 
-    // Close menu when a nav link is clicked
     navLinks.forEach(link => {
       link.addEventListener('click', function () {
         if (toggleCheckbox.checked) {
@@ -62,7 +63,6 @@
       });
     });
 
-    // Close menu on Escape key
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && toggleCheckbox.checked) {
         toggleCheckbox.checked = false;
@@ -83,7 +83,7 @@
     updateAriaAndBody();
   }
 
-  // ---------- 3. SMOOTH SCROLL (Lightweight) ----------
+  // ---------- 3. SMOOTH SCROLL ----------
   function initSmoothScroll() {
     const header = document.querySelector('.site-header');
     const headerHeight = header ? header.offsetHeight : 76;
@@ -111,7 +111,7 @@
     });
   }
 
-  // ---------- 4. SCROLL-TRIGGERED ANIMATIONS (Optimized) ----------
+  // ---------- 4. SCROLL-TRIGGERED ANIMATIONS ----------
   function initScrollAnimations() {
     const animatedElements = document.querySelectorAll(
       '.fade-up, .project-card, .service-card, .pricing-card, .step, .about-image, .about-content'
@@ -145,7 +145,7 @@
     });
   }
 
-  // ---------- 5. ACTIVE NAVIGATION HIGHLIGHT (Lightweight) ----------
+  // ---------- 5. ACTIVE NAVIGATION HIGHLIGHT ----------
   function initActiveNavHighlight() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-links a:not(.btn)');
@@ -189,7 +189,7 @@
     highlightNavigation();
   }
 
-  // ---------- 6. FORM VALIDATION (Lightweight) ----------
+  // ---------- 6. FORM VALIDATION ----------
   function initFormValidation() {
     const form = document.getElementById('contactForm');
     if (!form) return;
@@ -272,7 +272,7 @@
     });
   }
 
-  // ---------- 7. WHATSAPP BUTTON INTERACTIONS (Lightweight) ----------
+  // ---------- 7. WHATSAPP BUTTON INTERACTIONS ----------
   function initWhatsAppInteractions() {
     const whatsappBtn = document.querySelector('.whatsapp-float');
     if (!whatsappBtn) return;
@@ -294,7 +294,7 @@
     });
   }
 
-  // ---------- 8. ACCESSIBILITY ENHANCEMENTS (Lightweight) ----------
+  // ---------- 8. ACCESSIBILITY ENHANCEMENTS ----------
   function initAccessibilityEnhancements() {
     const allButtons = document.querySelectorAll('.btn, .project-link, .hamburger');
     allButtons.forEach(btn => {
@@ -314,11 +314,10 @@
     });
   }
 
-  // ---------- 9. SCROLL PROGRESS INDICATOR (Lightweight) ----------
+  // ---------- 9. SCROLL PROGRESS INDICATOR ----------
   function initScrollProgressIndicator() {
-    const progressBar = document.createElement('div');
-    progressBar.className = 'scroll-progress';
-    document.body.appendChild(progressBar);
+    const progressBar = document.querySelector('.scroll-progress');
+    if (!progressBar) return;
 
     let ticking = false;
 
@@ -326,7 +325,7 @@
       if (!ticking) {
         window.requestAnimationFrame(function () {
           const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const scrolled = (window.scrollY / windowHeight) * 100;
+          const scrolled = Math.min(100, (window.scrollY / windowHeight) * 100);
           progressBar.style.transform = `scaleX(${scrolled / 100})`;
           ticking = false;
         });
@@ -335,17 +334,15 @@
     }, { passive: true });
   }
 
-  // ---------- 10. LAZY LOAD IMAGES (Native + Fallback) ----------
+  // ---------- 10. LAZY LOAD IMAGES ----------
   function initLazyLoadImages() {
     const images = document.querySelectorAll('img[loading="lazy"]');
     
-    // Use native lazy loading with fallback
     if ('loading' in HTMLImageElement.prototype) {
       images.forEach(img => {
         img.loading = 'lazy';
       });
     } else {
-      // Fallback for older browsers using IntersectionObserver
       if ('IntersectionObserver' in window) {
         const imageObserver = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
@@ -362,13 +359,286 @@
         });
 
         images.forEach(img => {
-          // Store original src as data-src if not already set
           if (!img.hasAttribute('data-src') && img.src) {
             img.setAttribute('data-src', img.src);
             img.src = '';
           }
           imageObserver.observe(img);
         });
+      }
+    }
+  }
+
+  // ---------- 11. FAQ ACCORDION (Auto-close on outside click) ----------
+  function initFaqAccordion() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    if (!faqItems.length) return;
+
+    function closeAllAccordions(excludeItem = null) {
+      faqItems.forEach(item => {
+        if (item !== excludeItem && item.open) {
+          item.open = false;
+        }
+      });
+    }
+
+    faqItems.forEach(item => {
+      const summary = item.querySelector('summary');
+      if (!summary) return;
+
+      summary.addEventListener('click', function (e) {
+        // Toggle current accordion
+        const isOpen = item.open;
+        closeAllAccordions(item);
+        if (!isOpen) {
+          item.open = true;
+        }
+        e.preventDefault(); // Prevent default toggle behavior
+      });
+    });
+
+    // Close on click outside any FAQ
+    document.addEventListener('click', function (e) {
+      const isInsideFaq = e.target.closest('.faq-item');
+      if (!isInsideFaq) {
+        closeAllAccordions();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeAllAccordions();
+      }
+    });
+  }
+
+  // ---------- 12. ANIMATED STATISTICS COUNTERS (With Pulse & Confetti) ----------
+  function initStatCounters() {
+    const statNumbers = document.querySelectorAll('.stat-number');
+    if (!statNumbers.length || !('IntersectionObserver' in window)) return;
+
+    // Responsive confetti instance
+    const confetti = new ConfettiBurst({
+      colors: ['#00d4ff', '#ff6b6b', '#ffd93d', '#6bcb77', '#ff6bff', '#ff9f43']
+    });
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -80px 0px',
+      threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const item = entry.target.closest('.stat-item');
+          if (item) item.classList.add('is-visible');
+
+          const el = entry.target;
+          const target = parseInt(el.getAttribute('data-target') || el.textContent.replace(/,/g, ''), 10);
+          const duration = 1800;
+          const startTime = performance.now();
+
+          function animateCounter(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const currentValue = Math.floor(eased * target);
+            
+            el.textContent = currentValue.toLocaleString();
+            el.style.opacity = Math.min(1, eased * 1.5);
+
+            if (progress < 1) {
+              requestAnimationFrame(animateCounter);
+            } else {
+              el.textContent = target.toLocaleString();
+              el.style.opacity = '1';
+              
+              // Pulse + Confetti
+              el.classList.add('pulse-complete');
+              
+              const rect = el.getBoundingClientRect();
+              const x = rect.left + rect.width / 2;
+              const y = rect.top + rect.height / 2;
+              
+              const isMobile = window.innerWidth < 768;
+              const adjustedX = isMobile ? Math.min(x, window.innerWidth - 50) : x;
+              const adjustedY = isMobile ? Math.min(y, window.innerHeight - 50) : y;
+              
+              confetti.burst(adjustedX, adjustedY);
+
+              setTimeout(() => {
+                el.classList.remove('pulse-complete');
+              }, 2000);
+            }
+          }
+
+          requestAnimationFrame(animateCounter);
+          observer.unobserve(el);
+        }
+      });
+    }, observerOptions);
+
+    statNumbers.forEach(el => {
+      observer.observe(el);
+    });
+  }
+
+  // ---------- 13. RESPONSIVE CONFETTI BURST ENGINE ----------
+  class ConfettiBurst {
+    constructor(options = {}) {
+      this.canvas = document.createElement('canvas');
+      this.canvas.className = 'confetti-canvas';
+      document.body.appendChild(this.canvas);
+      this.ctx = this.canvas.getContext('2d');
+      this.particles = [];
+      this.animationId = null;
+      this.isActive = false;
+      this.colors = options.colors || [
+        '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff',
+        '#ff6bff', '#ff9f43', '#00d4ff', '#ff4757'
+      ];
+      this.onComplete = options.onComplete || null;
+      
+      this.updateResponsiveSettings();
+      window.addEventListener('resize', () => {
+        this.resize();
+        this.updateResponsiveSettings();
+      });
+    }
+
+    updateResponsiveSettings() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const screenArea = width * height;
+      const baseArea = 1920 * 1080;
+
+      this.scaleFactor = Math.max(0.3, Math.min(1.2, screenArea / baseArea));
+      this.particleCount = Math.floor(80 * this.scaleFactor);
+      this.duration = Math.max(800, Math.min(1800, 1200 * this.scaleFactor));
+      this.baseVelocity = 2 + 4 * this.scaleFactor;
+      this.baseSize = 4 + 6 * this.scaleFactor;
+      this.gravity = 0.08 + 0.04 * this.scaleFactor;
+      this.decayBase = 0.005 + 0.015 * this.scaleFactor;
+    }
+
+    resize() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    }
+
+    burst(x, y) {
+      if (this.isActive) return;
+      this.resize();
+      this.isActive = true;
+      this.canvas.classList.add('active');
+
+      const centerX = x || this.canvas.width / 2;
+      const centerY = y || this.canvas.height / 2;
+
+      const burstRadius = Math.min(
+        window.innerWidth * 0.3,
+        window.innerHeight * 0.25,
+        250
+      );
+
+      this.particles = [];
+
+      for (let i = 0; i < this.particleCount; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = this.baseVelocity * (0.5 + Math.random() * 0.5);
+        const color = this.colors[Math.floor(Math.random() * this.colors.length)];
+        
+        const spread = Math.random() * burstRadius * 0.2;
+        
+        this.particles.push({
+          x: centerX + (Math.random() - 0.5) * spread,
+          y: centerY + (Math.random() - 0.5) * spread,
+          vx: Math.cos(angle) * velocity * (0.8 + Math.random() * 0.4),
+          vy: Math.sin(angle) * velocity * (0.8 + Math.random() * 0.4) - 1.5,
+          size: this.baseSize * (0.6 + Math.random() * 0.8),
+          color: color,
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 12,
+          life: 1,
+          decay: this.decayBase * (0.8 + Math.random() * 0.4),
+          gravity: this.gravity * (0.8 + Math.random() * 0.4),
+          shape: Math.random() > 0.5 ? 'circle' : 'rect',
+          wobble: Math.random() * Math.PI * 2,
+          wobbleSpeed: 0.02 + Math.random() * 0.04
+        });
+      }
+
+      this.animate();
+    }
+
+    animate() {
+      if (!this.isActive) return;
+
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      let alive = false;
+
+      this.particles.forEach(p => {
+        p.wobble += p.wobbleSpeed;
+        p.vx += Math.sin(p.wobble) * 0.05;
+        p.vy += Math.cos(p.wobble) * 0.05;
+
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.gravity;
+        p.vx *= 0.99;
+        p.vy *= 0.99;
+        p.rotation += p.rotSpeed;
+        p.life -= p.decay;
+
+        if (p.life > 0) {
+          alive = true;
+          this.ctx.save();
+          this.ctx.translate(p.x, p.y);
+          this.ctx.rotate((p.rotation * Math.PI) / 180);
+          this.ctx.globalAlpha = p.life * Math.min(1, (p.life / 0.3));
+
+          if (p.shape === 'rect') {
+            this.ctx.fillStyle = p.color;
+            const w = p.size * 0.8;
+            const h = p.size * 0.4;
+            this.ctx.fillRect(-w / 2, -h / 2, w, h);
+          } else {
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+            this.ctx.fillStyle = p.color;
+            this.ctx.fill();
+          }
+          this.ctx.restore();
+        }
+      });
+
+      if (alive) {
+        this.animationId = requestAnimationFrame(() => this.animate());
+      } else {
+        this.cleanup();
+      }
+    }
+
+    cleanup() {
+      this.isActive = false;
+      this.canvas.classList.remove('active');
+      this.particles = [];
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+        this.animationId = null;
+      }
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      if (this.onComplete) this.onComplete();
+    }
+
+    destroy() {
+      this.cleanup();
+      if (this.canvas.parentNode) {
+        this.canvas.parentNode.removeChild(this.canvas);
       }
     }
   }
