@@ -275,13 +275,6 @@ h3 {
   padding: 0.65rem 1.6rem !important;
 }
 
-/* Mobile menu hidden by default */
-.menu-toggle,
-.hamburger,
-.nav-overlay {
-  display: none;
-}
-
 /* ---------- HERO ---------- */
 .hero {
   padding: 5rem 0 5rem 0;
@@ -807,22 +800,11 @@ h3 {
   }
 }
 
-/* ---------- RESPONSIVE DESIGN (FIXED MOBILE OVERLAY) ---------- */
-@media (max-width: 1024px) {
-  .about-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  .about-image img {
-    aspect-ratio: 16/9;
-    max-height: 400px;
-  }
-  .contact-grid {
-    grid-template-columns: 1fr;
-  }
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+/* ---------- MOBILE MENU (FIXED OPACITY) ---------- */
+.menu-toggle,
+.hamburger,
+.nav-overlay {
+  display: none;
 }
 
 @media (max-width: 768px) {
@@ -831,7 +813,7 @@ h3 {
     padding-right: 20px;
   }
 
-  /* --- Mobile Navigation (Full-Screen Overlay Fix) --- */
+  /* Hamburger */
   .hamburger {
     display: flex;
     flex-direction: column;
@@ -840,7 +822,7 @@ h3 {
     width: 30px;
     height: 30px;
     cursor: pointer;
-    z-index: 210; /* Above everything including the nav */
+    z-index: 210;
     position: relative;
   }
   .hamburger-line {
@@ -851,8 +833,7 @@ h3 {
     transition: all 0.3s ease;
     width: 100%;
   }
-  
-  /* Hamburger animation when checked */
+
   #menu-toggle:checked ~ .hamburger .hamburger-line:nth-child(1) {
     transform: rotate(45deg) translate(5px, 5px);
   }
@@ -863,7 +844,7 @@ h3 {
     transform: rotate(-45deg) translate(5px, -5px);
   }
 
-  /* Dark Overlay - same layer as nav */
+  /* Overlay */
   .nav-overlay {
     display: block;
     position: fixed;
@@ -883,33 +864,28 @@ h3 {
     visibility: visible;
   }
 
-  /* Navigation - Full screen, no side sliding */
+  /* Navigation – no opacity, no hidden */
   #primary-navigation {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
-    background: transparent; /* Let the overlay handle background */
+    background: transparent;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 200;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    pointer-events: none; /* Prevent clicks when hidden */
+    pointer-events: none; /* prevents clicks when hidden */
   }
-  
-  /* Show the menu only when checkbox is checked */
+
+  /* Show menu when checked – links stay fully visible */
   #menu-toggle:checked ~ #primary-navigation {
-    opacity: 1;
-    visibility: visible;
     pointer-events: auto;
   }
 
-  /* Center the links */
+  /* Menu links – always visible, no opacity fade */
   .nav-links {
     flex-direction: column;
     align-items: center;
@@ -922,19 +898,17 @@ h3 {
     font-size: 1.8rem;
     color: white;
     font-weight: 600;
-    width: auto;
   }
   .nav-links a:not(.btn)::after {
     background: white;
   }
   .nav-links .nav-cta {
     margin-top: 0.5rem;
-    width: auto;
     padding: 0.8rem 2.5rem;
     font-size: 1.1rem;
   }
 
-  /* --- Rest of Mobile Layout --- */
+  /* Responsive layout tweaks */
   .hero {
     padding: 3rem 0 3.5rem;
   }
