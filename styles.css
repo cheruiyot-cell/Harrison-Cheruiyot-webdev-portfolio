@@ -6,7 +6,7 @@
 /* ---------- CSS Custom Properties ---------- */
 :root {
   /* Primary Palette */
-  --primary-blue: #0A2540;       /* Deep navy – authority, trust */
+  --primary-blue: #0A2540;
   --primary-blue-light: #1B3A5C;
   --primary-blue-surface: #F0F4FA;
 
@@ -101,6 +101,22 @@ ul[role="list"] {
   margin-right: auto;
   padding-left: 24px;
   padding-right: 24px;
+}
+
+/* ---------- SKIP LINK (Option 3 Fix) ---------- */
+#skip-link {
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  padding: 0.8rem 1.5rem;
+  background: var(--primary-blue);
+  color: var(--white);
+  z-index: 999;
+  border-radius: var(--radius-sm);
+}
+#skip-link:focus {
+  top: 1rem;
+  left: 1rem;
 }
 
 /* ---------- TYPOGRAPHY ---------- */
@@ -826,7 +842,7 @@ h3 {
     padding-right: 20px;
   }
 
-  /* Mobile Navigation */
+  /* Mobile Navigation (Option 1 Fix) */
   .hamburger {
     display: flex;
     flex-direction: column;
@@ -836,6 +852,7 @@ h3 {
     height: 36px;
     cursor: pointer;
     z-index: 110;
+    position: relative;
   }
   .hamburger-line {
     display: block;
@@ -843,47 +860,54 @@ h3 {
     background: var(--primary-blue);
     border-radius: 4px;
     transition: all var(--transition-smooth);
-    transform-origin: left;
+    width: 100%;
   }
+  
+  /* Animate hamburger to X */
   #menu-toggle:checked ~ .hamburger .hamburger-line:nth-child(1) {
-    transform: rotate(45deg) translate(0px, -1px);
+    transform: rotate(45deg) translate(5px, 6px);
   }
   #menu-toggle:checked ~ .hamburger .hamburger-line:nth-child(2) {
     opacity: 0;
+    transform: scaleX(0);
   }
   #menu-toggle:checked ~ .hamburger .hamburger-line:nth-child(3) {
-    transform: rotate(-45deg) translate(1px, 0px);
+    transform: rotate(-45deg) translate(5px, -6px);
   }
 
+  /* Overlay: darkens the background content */
   .nav-overlay {
     display: block;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(10, 37, 64, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: 90;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 37, 64, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 95;
     opacity: 0;
     visibility: hidden;
-    transition: opacity var(--transition-smooth);
+    transition: opacity 0.3s ease, visibility 0.3s ease;
   }
   #menu-toggle:checked ~ .nav-overlay {
     opacity: 1;
     visibility: visible;
   }
 
+  /* Drawer Menu: slides in from right */
   #primary-navigation {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 280px;
+    width: 300px;
+    max-width: 85%;
     height: 100vh;
     background: var(--white);
-    box-shadow: var(--shadow-xl);
-    padding: 5rem 2rem 2rem;
-    transition: right var(--transition-smooth);
+    box-shadow: -8px 0 24px rgba(0,0,0,0.15);
+    padding: 5rem 2rem 2rem 2rem;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 100;
     overflow-y: auto;
   }
@@ -895,9 +919,16 @@ h3 {
     flex-direction: column;
     align-items: flex-start;
     gap: 1.8rem;
+    width: 100%;
   }
   .nav-links a {
     font-size: 1.1rem;
+    width: 100%;
+  }
+  .nav-links .nav-cta {
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: center;
   }
 
   .hero {
