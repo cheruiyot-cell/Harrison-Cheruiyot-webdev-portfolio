@@ -495,3 +495,29 @@
   }
 
 })();
+// Hero image lazy-load fallback for slow connections
+document.addEventListener('DOMContentLoaded', function() {
+  const heroImage = document.querySelector('.hero-image');
+  
+  if (heroImage && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Already loaded via fetchpriority, but ensure it's visible
+          heroImage.style.opacity = '1';
+          observer.unobserve(heroImage);
+        }
+      });
+    }, { rootMargin: '200px' });
+    
+    observer.observe(heroImage);
+  }
+});
+
+// Set current year in footer
+document.addEventListener('DOMContentLoaded', function() {
+  const yearElement = document.getElementById('currentYear');
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
+});

@@ -1087,3 +1087,51 @@ h3 {
     scroll-behavior: auto !important;
   }
 }
+/* ---------- HERO IMAGE ---------- */
+.hero-image-wrapper {
+  margin-bottom: 2rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--gray-50);
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: cover;
+  display: block;
+  aspect-ratio: 1200 / 800;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 480px) {
+  .hero-image-wrapper {
+    margin-bottom: 1.5rem;
+    border-radius: var(--radius-md);
+  }
+  
+  .hero-image {
+    aspect-ratio: 480 / 360;
+    max-height: 300px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .hero-image {
+    aspect-ratio: 800 / 600;
+    max-height: 400px;
+  }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-image {
+    aspect-ratio: auto;
+  }
+}
