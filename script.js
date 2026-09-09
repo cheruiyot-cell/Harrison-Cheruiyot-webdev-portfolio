@@ -1,6 +1,6 @@
 /**
  * Harrison Cheruiyot – Premium Portfolio
- * Version 5.1 – Enhanced Animations & Fixes
+ * Version 5.2 – Fixed stat counters to avoid unrealistic numbers
  */
 
 (function () {
@@ -10,12 +10,12 @@
     initCurrentYear();
     initMobileMenu();
     initSmoothScroll();
-    initScrollAnimations();       // now includes staggered reveal
+    initScrollAnimations();
     initActiveNavHighlight();
     initFaqCloseOnOutside();
-    initStatCounters();           // fixed selector
-    initMagneticButtons();        // new
-    initHeroEntrance();           // new
+    initStatCounters();           // fixed selector & animation guard
+    initMagneticButtons();
+    initHeroEntrance();
   });
 
   // ============ 1. DYNAMIC COPYRIGHT ============
@@ -102,12 +102,11 @@
       return;
     }
 
-    // Staggered children inside .stagger-parent
     const staggerParents = document.querySelectorAll('.stagger-parent');
     staggerParents.forEach(function (parent) {
       const children = parent.children;
       for (let i = 0; i < children.length; i++) {
-        children[i].style.transitionDelay = (i * 80) + 'ms'; // 80ms between each
+        children[i].style.transitionDelay = (i * 80) + 'ms';
       }
     });
 
@@ -191,7 +190,7 @@
     });
   }
 
-  // ============ 7. ANIMATED STATISTICS (fixed) ============
+  // ============ 7. ANIMATED STATISTICS (FIXED) ============
   function initStatCounters() {
     const statNumbers = document.querySelectorAll('.about-stat .number');
     if (!statNumbers.length || !('IntersectionObserver' in window)) return;
@@ -208,7 +207,14 @@
       { root: null, rootMargin: '0px 0px -80px 0px', threshold: 0.15 }
     );
 
-    statNumbers.forEach(function (el) { observer.observe(el); });
+    statNumbers.forEach(function (el) {
+      // Only animate if the text is purely numeric (allows decimals)
+      // This avoids mangling values like "23+", "4.9★", "3 days", "70%"
+      if (/^\d+(\.\d+)?$/.test(el.textContent.trim())) {
+        observer.observe(el);
+      }
+      // Otherwise, leave the static text untouched
+    });
   }
 
   function animateCounter(el) {
@@ -237,7 +243,7 @@
     requestAnimationFrame(update);
   }
 
-  // ============ 8. MAGNETIC BUTTONS (new) ============
+  // ============ 8. MAGNETIC BUTTONS ============
   function initMagneticButtons() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -245,7 +251,7 @@
     if (!magneticElements.length) return;
 
     magneticElements.forEach(function (btn) {
-      const strength = 0.3; // how far the button moves
+      const strength = 0.3;
 
       btn.addEventListener('mousemove', function (e) {
         const rect = btn.getBoundingClientRect();
@@ -260,16 +266,15 @@
     });
   }
 
-  // ============ 9. HERO ENTRANCE ANIMATION (new) ============
+  // ============ 9. HERO ENTRANCE ANIMATION ============
   function initHeroEntrance() {
     const hero = document.querySelector('.hero');
     if (!hero) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      hero.classList.add('hero-animate'); // if reduced, just show instantly
+      hero.classList.add('hero-animate');
       return;
     }
 
-    // Delay adding the class to allow initial render
     setTimeout(function () {
       hero.classList.add('hero-animate');
     }, 100);
