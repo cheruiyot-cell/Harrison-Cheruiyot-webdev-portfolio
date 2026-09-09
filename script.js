@@ -1,26 +1,23 @@
 /**
  * Harrison Cheruiyot – Premium Portfolio
  * Senior Web Developer | Nairobi, Kenya
- * Version 4.0.0 – Clean, Professional, Conversion-Focused
- * 
+ * Version 5.0.0 – Accessible, Optimized, Conversion-Focused
+ *
  * Features:
- * - Mobile menu with click-outside close
+ * - Mobile menu (button, ARIA, focus management)
  * - Smooth scrolling with offset
  * - Scroll-triggered animations
  * - Active navigation highlighting
  * - Form validation with inline errors
- * - FAQ accordion with auto-close
  * - Animated statistics counters
  * - Scroll progress indicator
  * - WhatsApp button interactions
+ * - FAQ accordion (native details, minimal JS)
  */
 
 (function () {
   'use strict';
 
-  // ==============================================
-  // DOM READY – Initialize all modules
-  // ==============================================
   document.addEventListener('DOMContentLoaded', function () {
     initCurrentYear();
     initMobileMenu();
@@ -30,8 +27,8 @@
     initFormValidation();
     initWhatsAppInteractions();
     initScrollProgressIndicator();
-    initFaqAccordion();
     initStatCounters();
+    initFaqCloseOnOutside();
   });
 
   // ==============================================
@@ -45,86 +42,55 @@
   }
 
   // ==============================================
-  // 2. MOBILE MENU (with click-outside close)
+  // 2. MOBILE MENU (accessible button)
   // ==============================================
   function initMobileMenu() {
     const toggle = document.getElementById('menu-toggle');
-    const overlay = document.querySelector('.nav-overlay');
-    const navLinks = document.querySelectorAll('#primary-navigation .nav-links a');
-    const hamburger = document.querySelector('.hamburger');
     const nav = document.getElementById('primary-navigation');
+    const overlay = document.getElementById('nav-overlay');
+    if (!toggle || !nav || !overlay) return;
 
-    // Exit if required elements are missing
-    if (!toggle || !hamburger || !nav) return;
+    let isOpen = false;
 
-    /**
-     * Update ARIA attributes and body scroll lock
-     * @param {boolean} isOpen - Whether the menu is open
-     */
-    function updateMenuState(isOpen) {
-      hamburger.setAttribute('aria-expanded', isOpen);
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-
-      // Focus first nav link when menu opens
-      if (isOpen && navLinks.length > 0) {
-        setTimeout(() => navLinks[0].focus(), 100);
-      }
+    function openMenu() {
+      isOpen = true;
+      toggle.setAttribute('aria-expanded', 'true');
+      nav.classList.add('active');
+      overlay.classList.add('active');
+      overlay.hidden = false;
+      document.body.style.overflow = 'hidden';
+      // Focus first link
+      const firstLink = nav.querySelector('a');
+      if (firstLink) firstLink.focus();
     }
 
-    // Toggle change event
-    toggle.addEventListener('change', function () {
-      updateMenuState(this.checked);
+    function closeMenu() {
+      isOpen = false;
+      toggle.setAttribute('aria-expanded', 'false');
+      nav.classList.remove('active');
+      overlay.classList.remove('active');
+      overlay.hidden = true;
+      document.body.style.overflow = '';
+      toggle.focus();
+    }
+
+    toggle.addEventListener('click', function () {
+      if (isOpen) closeMenu();
+      else openMenu();
     });
 
-    // Close menu when a navigation link is clicked
-    navLinks.forEach(function (link) {
-      link.addEventListener('click', function () {
-        if (toggle.checked) {
-          toggle.checked = false;
-          updateMenuState(false);
-          hamburger.focus();
-        }
-      });
-    });
-
-    // Close menu on Escape key
+    // Close on Escape
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && toggle.checked) {
-        toggle.checked = false;
-        updateMenuState(false);
-        hamburger.focus();
-      }
+      if (e.key === 'Escape' && isOpen) closeMenu();
     });
 
-    // Close menu when overlay is clicked
-    if (overlay) {
-      overlay.addEventListener('click', function () {
-        if (toggle.checked) {
-          toggle.checked = false;
-          updateMenuState(false);
-        }
-      });
-    }
+    // Close on overlay click
+    overlay.addEventListener('click', closeMenu);
 
-    /**
-     * Close menu when clicking outside the menu area
-     * Uses event delegation to detect clicks outside the nav and hamburger
-     */
-    document.addEventListener('click', function (e) {
-      if (!toggle.checked) return;
-
-      const isInsideNav = nav.contains(e.target);
-      const isHamburger = hamburger.contains(e.target);
-      const isToggle = e.target === toggle;
-
-      if (!isInsideNav && !isHamburger && !isToggle) {
-        toggle.checked = false;
-        updateMenuState(false);
-      }
+    // Close on nav link click
+    nav.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A') closeMenu();
     });
-
-    // Initialize menu state
-    updateMenuState(toggle.checked);
   }
 
   // ==============================================
@@ -150,7 +116,7 @@
             behavior: 'smooth'
           });
 
-          // Make focusable and set focus for accessibility
+          // Set focus for accessibility
           target.setAttribute('tabindex', '-1');
           target.focus({ preventScroll: true });
         }
@@ -159,18 +125,14 @@
   }
 
   // ==============================================
-  // 4. SCROLL-TRIGGERED ANIMATIONS (Intersection Observer)
+  // 4. SCROLL-TRIGGERED ANIMATIONS
   // ==============================================
   function initScrollAnimations() {
-    const elements = document.querySelectorAll(
-      '.fade-up, .project-card, .service-card, .pricing-card, .step, .benefit-item'
-    );
+    const elements = document.querySelectorAll('.fade-up, .project-card, .service-card, .pricing-card, .step, .benefit-item');
 
-    // Fallback for older browsers
     if (!('IntersectionObserver' in window)) {
       elements.forEach(function (el) {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
+        el.classList.add('is-visible');
       });
       return;
     }
@@ -216,7 +178,6 @@
       sections.forEach(function (section) {
         const top = section.offsetTop;
         const height = section.offsetHeight;
-
         if (scrollY >= top && scrollY < top + height) {
           currentId = section.getAttribute('id');
         }
@@ -231,25 +192,21 @@
       });
     }
 
-    window.addEventListener(
-      'scroll',
-      function () {
-        if (!ticking) {
-          window.requestAnimationFrame(function () {
-            highlightNav();
-            ticking = false;
-          });
-          ticking = true;
-        }
-      },
-      { passive: true }
-    );
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          highlightNav();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
 
     highlightNav();
   }
 
   // ==============================================
-  // 6. FORM VALIDATION (with inline errors)
+  // 6. FORM VALIDATION
   // ==============================================
   function initFormValidation() {
     const form = document.getElementById('contactForm');
@@ -262,38 +219,26 @@
 
     const inputs = [name, email, message].filter(Boolean);
 
-    // Validate on blur
     inputs.forEach(function (input) {
       input.addEventListener('blur', function () {
         validateField(input, true);
       });
     });
 
-    /**
-     * Validate a single form field
-     * @param {HTMLElement} field - The input/textarea element
-     * @param {boolean} showError - Whether to display error messages
-     * @returns {boolean} - Whether the field is valid
-     */
     function validateField(field, showError) {
       const group = field.closest('.form-group');
       if (!group) return true;
 
-      // Remove existing error
-      const existingError = group.querySelector('.field-error');
-      if (existingError) existingError.remove();
+      let errorSpan = group.querySelector('.field-error');
+      if (errorSpan) errorSpan.remove();
 
       let isValid = true;
       let errorMsg = '';
 
-      // Check required
       if (field.hasAttribute('required') && field.value.trim() === '') {
         isValid = false;
         errorMsg = 'This field is required.';
-      }
-
-      // Check email format
-      if (isValid && field.type === 'email' && field.value.trim() !== '') {
+      } else if (field.type === 'email' && field.value.trim() !== '') {
         const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!pattern.test(field.value.trim())) {
           isValid = false;
@@ -305,14 +250,19 @@
         group.classList.add('has-error');
         field.setAttribute('aria-invalid', 'true');
 
-        const errorSpan = document.createElement('span');
+        errorSpan = document.createElement('span');
         errorSpan.className = 'field-error';
         errorSpan.setAttribute('role', 'alert');
+        errorSpan.id = field.id + '-error';
         errorSpan.textContent = errorMsg;
         group.appendChild(errorSpan);
+
+        // Set aria-describedby
+        field.setAttribute('aria-describedby', errorSpan.id);
       } else {
         group.classList.remove('has-error');
         field.removeAttribute('aria-invalid');
+        field.removeAttribute('aria-describedby');
         if (field.value.trim() !== '') {
           group.classList.add('has-success');
         } else {
@@ -323,7 +273,6 @@
       return isValid;
     }
 
-    // Form submit handler
     form.addEventListener('submit', function (e) {
       let isValid = true;
 
@@ -372,63 +321,40 @@
 
     let ticking = false;
 
-    window.addEventListener(
-      'scroll',
-      function () {
-        if (!ticking) {
-          window.requestAnimationFrame(function () {
-            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrolled = Math.min(100, (window.scrollY / scrollHeight) * 100);
-            progress.style.transform = 'scaleX(' + scrolled / 100 + ')';
-            ticking = false;
-          });
-          ticking = true;
-        }
-      },
-      { passive: true }
-    );
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const scrolled = Math.min(100, (window.scrollY / scrollHeight) * 100);
+          progress.style.transform = 'scaleX(' + scrolled / 100 + ')';
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
   }
 
   // ==============================================
-  // 9. FAQ ACCORDION (auto-close others)
+  // 9. FAQ ACCORDION – Close others on click outside
+  // (native details handles open/close)
   // ==============================================
-  function initFaqAccordion() {
-    const items = document.querySelectorAll('.faq-item');
-    if (!items.length) return;
+  function initFaqCloseOnOutside() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    if (!faqItems.length) return;
 
-    function closeAll(exclude) {
-      items.forEach(function (item) {
-        if (item !== exclude && item.open) {
-          item.open = false;
-        }
-      });
-    }
-
-    items.forEach(function (item) {
-      const summary = item.querySelector('summary');
-      if (!summary) return;
-
-      summary.addEventListener('click', function (e) {
-        const isOpen = item.open;
-        closeAll(item);
-        if (!isOpen) {
-          item.open = true;
-        }
-        e.preventDefault();
-      });
-    });
-
-    // Close on click outside
     document.addEventListener('click', function (e) {
       if (!e.target.closest('.faq-item')) {
-        closeAll();
+        faqItems.forEach(function (item) {
+          item.open = false;
+        });
       }
     });
 
-    // Close on Escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        closeAll();
+        faqItems.forEach(function (item) {
+          item.open = false;
+        });
       }
     });
   }
@@ -461,10 +387,6 @@
     });
   }
 
-  /**
-   * Animate a counter from 0 to its target value
-   * @param {HTMLElement} el - The element containing the number
-   */
   function animateCounter(el) {
     const target = parseInt(el.getAttribute('data-target') || el.textContent.replace(/,/g, ''), 10);
     const duration = 1800;
@@ -493,31 +415,4 @@
 
     requestAnimationFrame(update);
   }
-
 })();
-// Hero image lazy-load fallback for slow connections
-document.addEventListener('DOMContentLoaded', function() {
-  const heroImage = document.querySelector('.hero-image');
-  
-  if (heroImage && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Already loaded via fetchpriority, but ensure it's visible
-          heroImage.style.opacity = '1';
-          observer.unobserve(heroImage);
-        }
-      });
-    }, { rootMargin: '200px' });
-    
-    observer.observe(heroImage);
-  }
-});
-
-// Set current year in footer
-document.addEventListener('DOMContentLoaded', function() {
-  const yearElement = document.getElementById('currentYear');
-  if (yearElement) {
-    yearElement.textContent = new Date().getFullYear();
-  }
-});
