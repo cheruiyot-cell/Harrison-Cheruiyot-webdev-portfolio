@@ -63,7 +63,7 @@ body {
   background-color: var(--white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Prevent horizontal scroll on whole page */
 }
 
 img {
@@ -90,6 +90,13 @@ textarea:focus-visible {
 
 ul[role="list"] {
   list-style: none;
+}
+
+/* Global overflow and word-break guards */
+p, h1, h2, h3, h4, li, blockquote, span {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .visually-hidden {
@@ -237,6 +244,8 @@ h3 {
   top: 0;
   z-index: 1000;
   background: rgba(255, 255, 255, 0.95);
+  /* Fallback for browsers without backdrop-filter */
+  background: #ffffff;
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid rgba(10, 37, 64, 0.08);
@@ -263,7 +272,7 @@ h3 {
   color: var(--gold-accent);
 }
 
-/* Mobile menu button (hamburger) */
+/* Mobile menu button (hamburger) – hidden by default (shown in media query) */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -320,7 +329,7 @@ h3 {
   padding: 0.65rem 1.6rem !important;
 }
 
-/* Overlay (mobile) */
+/* Overlay (mobile) – initially hidden */
 .nav-overlay {
   position: fixed;
   top: 0;
@@ -334,10 +343,6 @@ h3 {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.nav-overlay.active {
-  opacity: 1;
-  visibility: visible;
 }
 
 /* ---------- HERO ---------- */
@@ -494,6 +499,28 @@ h3 {
 .service-cta:hover {
   color: var(--primary-blue);
   gap: 0.6rem;
+}
+
+/* ---------- ABOUT (NEW) ---------- */
+.about {
+  padding: 4rem 0;
+}
+
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--gray-600);
+}
+
+.about-content p {
+  margin-bottom: 1.5rem;
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
 }
 
 /* ---------- PROCESS ---------- */
@@ -662,6 +689,7 @@ h3 {
   padding: 0.35rem 1.6rem;
   border-radius: 30px;
   letter-spacing: 0.03em;
+  white-space: nowrap; /* Prevent badge from breaking */
 }
 
 .price {
@@ -696,10 +724,12 @@ h3 {
   content: "✓";
   color: var(--gold-accent);
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .pricing-card .btn {
   width: 100%;
+  white-space: normal; /* Allow button text to wrap */
 }
 
 /* ---------- FAQ ---------- */
@@ -799,6 +829,7 @@ h3 {
   margin-bottom: 2rem;
 }
 
+/* ---------- CTA LIST ---------- */
 .cta-list {
   text-align: left;
   margin: 0 auto 2rem;
@@ -809,6 +840,7 @@ h3 {
 .cta-list li {
   margin-bottom: 0.5rem;
   font-size: 1rem;
+  word-break: break-word;
 }
 
 .final-cta .btn {
@@ -895,6 +927,11 @@ h3 {
   background: #20ba57;
 }
 
+/* ---------- MOBILE CALL BANNER (hidden by default) ---------- */
+.mobile-call-banner {
+  display: none;
+}
+
 /* ---------- ANIMATIONS ---------- */
 .fade-up {
   opacity: 0;
@@ -936,21 +973,19 @@ h3 {
   }
 }
 
+/* ---------- MOBILE MENU (JS toggles .active class) ---------- */
 @media (max-width: 768px) {
   .container {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
-  /* Mobile menu button visible */
+  /* Show hamburger */
   .hamburger {
     display: flex;
   }
 
-  .nav-links {
-    display: none;
-  }
-
+  /* Base mobile navigation panel */
   #primary-navigation {
     position: fixed;
     top: 0;
@@ -971,12 +1006,14 @@ h3 {
     pointer-events: none;
   }
 
+  /* When active (JS adds .active class) */
   #primary-navigation.active {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
   }
 
+  /* Navigation links container */
   #primary-navigation .nav-links {
     display: flex;
     flex-direction: column;
@@ -1009,7 +1046,18 @@ h3 {
     box-shadow: 0 4px 12px rgba(201, 164, 62, 0.3);
   }
 
-  /* When menu is open, change hamburger lines to X */
+  /* Overlay */
+  .nav-overlay {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Hamburger lines → X when active */
   .hamburger.active .hamburger-line:nth-child(1) {
     transform: rotate(45deg) translate(5px, 5px);
     background: var(--white);
@@ -1022,6 +1070,7 @@ h3 {
     background: var(--white);
   }
 
+  /* Grid adjustments */
   .services-grid,
   .process-steps,
   .pricing-grid,
@@ -1040,19 +1089,107 @@ h3 {
   }
 }
 
+/* ---------- EXTRA SMALL SCREENS (max-width: 480px) ---------- */
 @media (max-width: 480px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.7rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    margin: 1.2rem 0 1.8rem;
+  }
+
+  .hero-trust {
+    font-size: 0.8rem;
+    gap: 1rem;
+    padding: 0.7rem 1rem;
+  }
+
   .cta-group {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
   }
+
   .btn {
     width: 100%;
   }
+
   .btn-large {
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
+    font-size: 1.05rem;
   }
+
+  .services-grid,
+  .pricing-grid,
+  .testimonials-grid {
+    gap: 1.5rem;
+  }
+
+  .service-card,
+  .pricing-card,
+  .testimonial-card {
+    padding: 1.8rem 1.5rem;
+  }
+
+  .popular-badge {
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 0.3rem 1.2rem;
+  }
+
+  .price {
+    font-size: 2.2rem;
+  }
+
   .final-cta {
-    padding: 3rem 1.5rem;
+    padding: 2.5rem 1.2rem;
+  }
+
+  .final-cta p {
+    font-size: 1rem;
+  }
+
+  .footer-grid {
+    gap: 1.5rem;
+  }
+
+  .whatsapp-float {
+    width: 50px;
+    height: 50px;
+    bottom: 70px; /* Move up to avoid overlapping with mobile call banner */
+    right: 16px;
+  }
+
+  .mobile-call-banner {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    padding: 0.4rem;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+    z-index: 100;
   }
 }
 
@@ -1065,23 +1202,5 @@ h3 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-}
-
-/* ---------- MOBILE CALL BANNER ---------- */
-.mobile-call-banner {
-  display: none;
-}
-@media (max-width: 600px) {
-  .mobile-call-banner {
-    display: block;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--white);
-    padding: 0.5rem;
-    box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
-    z-index: 100;
   }
 }

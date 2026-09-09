@@ -1,18 +1,15 @@
 /**
  * Harrison Cheruiyot – Premium Portfolio
  * Senior Web Developer | Nairobi, Kenya
- * Version 5.0.0 – Accessible, Optimized, Conversion-Focused
+ * Version 5.0.1 – Accessible, Optimized, Conversion-Focused
  *
  * Features:
  * - Mobile menu (button, ARIA, focus management)
  * - Smooth scrolling with offset
  * - Scroll-triggered animations
  * - Active navigation highlighting
- * - Form validation with inline errors
- * - Animated statistics counters
- * - Scroll progress indicator
- * - WhatsApp button interactions
  * - FAQ accordion (native details, minimal JS)
+ * - Animated statistics counters
  */
 
 (function () {
@@ -24,11 +21,8 @@
     initSmoothScroll();
     initScrollAnimations();
     initActiveNavHighlight();
-    initFormValidation();
-    initWhatsAppInteractions();
-    initScrollProgressIndicator();
-    initStatCounters();
     initFaqCloseOnOutside();
+    initStatCounters();
   });
 
   // ==============================================
@@ -55,6 +49,7 @@
     function openMenu() {
       isOpen = true;
       toggle.setAttribute('aria-expanded', 'true');
+      toggle.classList.add('active');
       nav.classList.add('active');
       overlay.classList.add('active');
       overlay.hidden = false;
@@ -67,6 +62,7 @@
     function closeMenu() {
       isOpen = false;
       toggle.setAttribute('aria-expanded', 'false');
+      toggle.classList.remove('active');
       nav.classList.remove('active');
       overlay.classList.remove('active');
       overlay.hidden = true;
@@ -206,136 +202,7 @@
   }
 
   // ==============================================
-  // 6. FORM VALIDATION
-  // ==============================================
-  function initFormValidation() {
-    const form = document.getElementById('contactForm');
-    if (!form) return;
-
-    const name = document.getElementById('name');
-    const email = document.getElementById('email');
-    const message = document.getElementById('message');
-    const submitBtn = form.querySelector('.btn-submit');
-
-    const inputs = [name, email, message].filter(Boolean);
-
-    inputs.forEach(function (input) {
-      input.addEventListener('blur', function () {
-        validateField(input, true);
-      });
-    });
-
-    function validateField(field, showError) {
-      const group = field.closest('.form-group');
-      if (!group) return true;
-
-      let errorSpan = group.querySelector('.field-error');
-      if (errorSpan) errorSpan.remove();
-
-      let isValid = true;
-      let errorMsg = '';
-
-      if (field.hasAttribute('required') && field.value.trim() === '') {
-        isValid = false;
-        errorMsg = 'This field is required.';
-      } else if (field.type === 'email' && field.value.trim() !== '') {
-        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!pattern.test(field.value.trim())) {
-          isValid = false;
-          errorMsg = 'Please enter a valid email address.';
-        }
-      }
-
-      if (!isValid && showError) {
-        group.classList.add('has-error');
-        field.setAttribute('aria-invalid', 'true');
-
-        errorSpan = document.createElement('span');
-        errorSpan.className = 'field-error';
-        errorSpan.setAttribute('role', 'alert');
-        errorSpan.id = field.id + '-error';
-        errorSpan.textContent = errorMsg;
-        group.appendChild(errorSpan);
-
-        // Set aria-describedby
-        field.setAttribute('aria-describedby', errorSpan.id);
-      } else {
-        group.classList.remove('has-error');
-        field.removeAttribute('aria-invalid');
-        field.removeAttribute('aria-describedby');
-        if (field.value.trim() !== '') {
-          group.classList.add('has-success');
-        } else {
-          group.classList.remove('has-success');
-        }
-      }
-
-      return isValid;
-    }
-
-    form.addEventListener('submit', function (e) {
-      let isValid = true;
-
-      inputs.forEach(function (input) {
-        if (!validateField(input, true)) {
-          isValid = false;
-        }
-      });
-
-      if (!isValid) {
-        e.preventDefault();
-        const firstInvalid = form.querySelector('.has-error input, .has-error textarea');
-        if (firstInvalid) firstInvalid.focus();
-      } else {
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = 'Sending...';
-          submitBtn.setAttribute('aria-busy', 'true');
-        }
-      }
-    });
-  }
-
-  // ==============================================
-  // 7. WHATSAPP BUTTON INTERACTIONS
-  // ==============================================
-  function initWhatsAppInteractions() {
-    const btn = document.querySelector('.whatsapp-float');
-    if (!btn) return;
-
-    function scaleUp() { btn.style.transform = 'scale(1.08)'; }
-    function scaleDown() { btn.style.transform = 'scale(1)'; }
-
-    btn.addEventListener('mouseenter', scaleUp);
-    btn.addEventListener('mouseleave', scaleDown);
-    btn.addEventListener('focus', scaleUp);
-    btn.addEventListener('blur', scaleDown);
-  }
-
-  // ==============================================
-  // 8. SCROLL PROGRESS INDICATOR
-  // ==============================================
-  function initScrollProgressIndicator() {
-    const progress = document.querySelector('.scroll-progress');
-    if (!progress) return;
-
-    let ticking = false;
-
-    window.addEventListener('scroll', function () {
-      if (!ticking) {
-        window.requestAnimationFrame(function () {
-          const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const scrolled = Math.min(100, (window.scrollY / scrollHeight) * 100);
-          progress.style.transform = 'scaleX(' + scrolled / 100 + ')';
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
-  }
-
-  // ==============================================
-  // 9. FAQ ACCORDION – Close others on click outside
+  // 6. FAQ ACCORDION – Close others on click outside
   // (native details handles open/close)
   // ==============================================
   function initFaqCloseOnOutside() {
@@ -360,7 +227,7 @@
   }
 
   // ==============================================
-  // 10. ANIMATED STATISTICS COUNTERS
+  // 7. ANIMATED STATISTICS COUNTERS
   // ==============================================
   function initStatCounters() {
     const statNumbers = document.querySelectorAll('.stat-number');
