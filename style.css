@@ -8,11 +8,11 @@
   --primary-blue: #0A2540;
   --primary-blue-light: #1B3A5C;
   --primary-blue-surface: #F0F4FA;
-  --gold-accent: #C9A43E;          /* for backgrounds, buttons */
-  --gold-dark: #8A6D1F;            /* for text on white */
+  --gold-accent: #C9A43E;
+  --gold-dark: #8A6D1F;
   --gold-light: #E7D09E;
   --gold-soft: #F9F3E3;
-  --purple-accent: #5B2D8E;        /* only for badge & special hover */
+  --purple-accent: #5B2D8E;
   --purple-light: #8E6BB8;
   --purple-soft: #F2ECF9;
   --white: #FFFFFF;
@@ -53,6 +53,8 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  max-width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll on html */
 }
 
 body {
@@ -63,13 +65,15 @@ body {
   background-color: var(--white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden; /* Prevent horizontal scroll on whole page */
+  overflow-x: hidden; /* Prevent horizontal scroll on body */
+  max-width: 100%;
 }
 
 img {
   max-width: 100%;
   height: auto;
   display: block;
+  max-height: 100%; /* Prevent vertical overflow issues */
 }
 
 a {
@@ -97,6 +101,20 @@ p, h1, h2, h3, h4, li, blockquote, span {
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
+}
+
+/* Prevent flex/grid children from expanding beyond container */
+.flex-item,
+.grid-item,
+.hero-content > div,
+.services-grid > *,
+.process-steps > *,
+.pricing-grid > *,
+.testimonials-grid > *,
+.footer-grid > *,
+.nav-links li,
+.trust-logos span {
+  min-width: 0;
 }
 
 .visually-hidden {
@@ -173,7 +191,7 @@ h3 {
 }
 
 .text-accent {
-  color: var(--gold-dark); /* darker for readability */
+  color: var(--gold-dark);
   background: none;
   -webkit-text-fill-color: initial;
 }
@@ -192,7 +210,10 @@ h3 {
   cursor: pointer;
   border: 2px solid transparent;
   letter-spacing: 0.01em;
-  white-space: nowrap;
+  max-width: 100%;              /* prevent overflow */
+  white-space: normal;          /* allow text to wrap */
+  line-height: 1.4;             /* comfortable reading */
+  word-break: break-word;
 }
 
 .btn-primary {
@@ -244,7 +265,6 @@ h3 {
   top: 0;
   z-index: 1000;
   background: rgba(255, 255, 255, 0.95);
-  /* Fallback for browsers without backdrop-filter */
   background: #ffffff;
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -435,6 +455,8 @@ h3 {
   color: var(--gray-300);
   letter-spacing: 0.02em;
   transition: color var(--transition-smooth);
+  word-break: break-word;
+  max-width: 100%;
 }
 .trust-logo:hover {
   color: var(--primary-blue);
@@ -490,7 +512,7 @@ h3 {
 
 .service-cta {
   font-weight: 600;
-  color: var(--gold-dark); /* dark gold for text */
+  color: var(--gold-dark);
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
@@ -684,12 +706,15 @@ h3 {
   transform: translateX(-50%);
   background: var(--purple-accent);
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  padding: 0.35rem 1.6rem;
+  padding: 0.3rem 1.2rem;
   border-radius: 30px;
   letter-spacing: 0.03em;
-  white-space: nowrap; /* Prevent badge from breaking */
+  white-space: nowrap;
+  max-width: 95%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .price {
