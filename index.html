@@ -16,7 +16,7 @@
   <meta property="og:title" content="Harrison Cheruiyot | Web Developer in Nairobi" />
   <meta property="og:description" content="I build websites that help Kenyan businesses get more customers. Simple, honest, and affordable." />
   <meta property="og:url" content="https://www.harrisoncheruiyot.dev" />
-  <meta property="og:image" content="https://www.harrisoncheruiyot.dev/og-image.jpg" />
+  <meta property="og:image" content="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png" />
   <meta property="og:locale" content="en_KE" />
   <meta name="twitter:card" content="summary_large_image" />
 
@@ -30,7 +30,25 @@
   
   <!-- External Stylesheet -->
   <link rel="stylesheet" href="style.css" />
-  
+
+  <!-- Critical Inline CSS for Hero Image (ensures perfect mobile scaling) -->
+  <style>
+    /* Prevent layout shift & scale hero image correctly */
+    .hero-image {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      display: block;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+    @media (max-width: 768px) {
+      .hero-image {
+        border-radius: 8px;
+      }
+    }
+  </style>
+
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
     {
@@ -95,16 +113,16 @@
       <div class="hero-content">
         <div class="hero-image-wrapper">
           <img 
-            src="https://i.ibb.co/pvgwZyWj/1783860572553.png" 
+            src="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png" 
             alt="Harrison Cheruiyot - Web Developer in Nairobi" 
             width="1200" 
             height="800" 
             loading="eager" 
             fetchpriority="high"
             class="hero-image"
-            srcset="https://i.ibb.co/pvgwZyWj/1783860572553.png 1200w,
-                    https://i.ibb.co/pvgwZyWj/1783860572553.png 800w,
-                    https://i.ibb.co/pvgwZyWj/1783860572553.png 480w"
+            srcset="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png 1200w,
+                    https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png 800w,
+                    https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png 480w"
             sizes="(max-width: 480px) 100vw, (max-width: 768px) 100vw, 1200px"
           />
         </div>
