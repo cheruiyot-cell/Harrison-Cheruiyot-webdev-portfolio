@@ -1087,6 +1087,7 @@ h3 {
     scroll-behavior: auto !important;
   }
 }
+
 /* ---------- HERO IMAGE ---------- */
 .hero-image-wrapper {
   margin-bottom: 2rem;
@@ -1103,35 +1104,26 @@ h3 {
 .hero-image {
   width: 100%;
   height: auto;
-  max-height: 600px;
-  object-fit: cover;
   display: block;
-  aspect-ratio: 1200 / 800;
+  /* No aspect-ratio or max-height restrictions – full image will always be visible */
 }
 
-/* Mobile-specific optimizations */
+/* Mobile-specific adjustments – just keep scaling natural */
 @media (max-width: 480px) {
   .hero-image-wrapper {
     margin-bottom: 1.5rem;
     border-radius: var(--radius-md);
   }
-  
-  .hero-image {
-    aspect-ratio: 480 / 360;
-    max-height: 300px;
-  }
+  /* No overrides needed for .hero-image */
 }
 
 @media (min-width: 481px) and (max-width: 768px) {
-  .hero-image {
-    aspect-ratio: 800 / 600;
-    max-height: 400px;
-  }
+  /* No overrides needed for .hero-image */
 }
 
-/* Reduce motion */
+/* Reduced motion – keep image responsive */
 @media (prefers-reduced-motion: reduce) {
   .hero-image {
-    aspect-ratio: auto;
+    /* Nothing special needed; just confirm no cropping */
   }
 }
