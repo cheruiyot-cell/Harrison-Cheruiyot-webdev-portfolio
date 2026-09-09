@@ -1229,3 +1229,77 @@ h3 {
     scroll-behavior: auto !important;
   }
 }
+/* ---------- ACTIVE NAV ---------- */
+.nav-links a.active-nav {
+  color: var(--gold-dark);
+}
+.nav-links a.active-nav::after {
+  width: 100%;
+  background-color: var(--gold-accent);
+}
+
+/* ---------- STAGGERED REVEAL ---------- */
+.stagger-parent > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.stagger-parent > *.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- HERO ENTRANCE ---------- */
+.hero .hero-text,
+.hero .hero-image-wrapper {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hero.hero-animate .hero-text,
+.hero.hero-animate .hero-image-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger hero text children */
+.hero.hero-animate .hero-text > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroChild 0.7s forwards;
+}
+.hero.hero-animate .hero-text > *:nth-child(1) { animation-delay: 0.2s; }
+.hero.hero-animate .hero-text > *:nth-child(2) { animation-delay: 0.4s; }
+.hero.hero-animate .hero-text > *:nth-child(3) { animation-delay: 0.6s; }
+.hero.hero-animate .hero-text > *:nth-child(4) { animation-delay: 0.8s; }
+
+@keyframes heroChild {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- MAGNETIC BUTTONS ---------- */
+.magnetic {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+
+/* ---------- REDUCED MOTION OVERRIDE ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .stagger-parent > *,
+  .hero .hero-text,
+  .hero .hero-image-wrapper,
+  .hero.hero-animate .hero-text > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+  .magnetic {
+    transition: none !important;
+  }
+}

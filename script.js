@@ -1,15 +1,6 @@
 /**
  * Harrison Cheruiyot – Premium Portfolio
- * Senior Web Developer | Nairobi, Kenya
- * Version 5.0.1 – Accessible, Optimized, Conversion-Focused
- *
- * Features:
- * - Mobile menu (button, ARIA, focus management)
- * - Smooth scrolling with offset
- * - Scroll-triggered animations
- * - Active navigation highlighting
- * - FAQ accordion (native details, minimal JS)
- * - Animated statistics counters
+ * Version 5.1 – Enhanced Animations & Fixes
  */
 
 (function () {
@@ -19,25 +10,21 @@
     initCurrentYear();
     initMobileMenu();
     initSmoothScroll();
-    initScrollAnimations();
+    initScrollAnimations();       // now includes staggered reveal
     initActiveNavHighlight();
     initFaqCloseOnOutside();
-    initStatCounters();
+    initStatCounters();           // fixed selector
+    initMagneticButtons();        // new
+    initHeroEntrance();           // new
   });
 
-  // ==============================================
-  // 1. DYNAMIC COPYRIGHT YEAR
-  // ==============================================
+  // ============ 1. DYNAMIC COPYRIGHT ============
   function initCurrentYear() {
     const yearSpan = document.getElementById('currentYear');
-    if (yearSpan) {
-      yearSpan.textContent = new Date().getFullYear();
-    }
+    if (yearSpan) yearSpan.textContent = new Date().getFullYear();
   }
 
-  // ==============================================
-  // 2. MOBILE MENU (accessible button)
-  // ==============================================
+  // ============ 2. MOBILE MENU ============
   function initMobileMenu() {
     const toggle = document.getElementById('menu-toggle');
     const nav = document.getElementById('primary-navigation');
@@ -54,7 +41,6 @@
       overlay.classList.add('active');
       overlay.hidden = false;
       document.body.style.overflow = 'hidden';
-      // Focus first link
       const firstLink = nav.querySelector('a');
       if (firstLink) firstLink.focus();
     }
@@ -75,23 +61,17 @@
       else openMenu();
     });
 
-    // Close on Escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && isOpen) closeMenu();
     });
 
-    // Close on overlay click
     overlay.addEventListener('click', closeMenu);
-
-    // Close on nav link click
     nav.addEventListener('click', function (e) {
       if (e.target.tagName === 'A') closeMenu();
     });
   }
 
-  // ==============================================
-  // 3. SMOOTH SCROLL (with header offset)
-  // ==============================================
+  // ============ 3. SMOOTH SCROLL ============
   function initSmoothScroll() {
     const header = document.querySelector('.site-header');
     const headerHeight = header ? header.offsetHeight : 76;
@@ -100,19 +80,12 @@
       anchor.addEventListener('click', function (e) {
         const targetId = this.getAttribute('href');
         if (targetId === '#' || targetId === '') return;
-
         const target = document.querySelector(targetId);
         if (target) {
           e.preventDefault();
           const position = target.getBoundingClientRect().top + window.pageYOffset;
           const offset = position - headerHeight - 24;
-
-          window.scrollTo({
-            top: offset,
-            behavior: 'smooth'
-          });
-
-          // Set focus for accessibility
+          window.scrollTo({ top: offset, behavior: 'smooth' });
           target.setAttribute('tabindex', '-1');
           target.focus({ preventScroll: true });
         }
@@ -120,18 +93,23 @@
     });
   }
 
-  // ==============================================
-  // 4. SCROLL-TRIGGERED ANIMATIONS
-  // ==============================================
+  // ============ 4. SCROLL ANIMATIONS + STAGGER ============
   function initScrollAnimations() {
-    const elements = document.querySelectorAll('.fade-up, .project-card, .service-card, .pricing-card, .step, .benefit-item');
+    const elements = document.querySelectorAll('.fade-up, .portfolio-card, .service-card, .pricing-card, .step, .testimonial-card');
 
     if (!('IntersectionObserver' in window)) {
-      elements.forEach(function (el) {
-        el.classList.add('is-visible');
-      });
+      elements.forEach(function (el) { el.classList.add('is-visible'); });
       return;
     }
+
+    // Staggered children inside .stagger-parent
+    const staggerParents = document.querySelectorAll('.stagger-parent');
+    staggerParents.forEach(function (parent) {
+      const children = parent.children;
+      for (let i = 0; i < children.length; i++) {
+        children[i].style.transitionDelay = (i * 80) + 'ms'; // 80ms between each
+      }
+    });
 
     const observer = new IntersectionObserver(
       function (entries) {
@@ -142,11 +120,7 @@
           }
         });
       },
-      {
-        root: null,
-        rootMargin: '0px 0px -50px 0px',
-        threshold: 0.1
-      }
+      { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 }
     );
 
     elements.forEach(function (el) {
@@ -154,9 +128,7 @@
     });
   }
 
-  // ==============================================
-  // 5. ACTIVE NAVIGATION HIGHLIGHT
-  // ==============================================
+  // ============ 5. ACTIVE NAV HIGHLIGHT ============
   function initActiveNavHighlight() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-links a:not(.btn)');
@@ -201,36 +173,27 @@
     highlightNav();
   }
 
-  // ==============================================
-  // 6. FAQ ACCORDION – Close others on click outside
-  // (native details handles open/close)
-  // ==============================================
+  // ============ 6. FAQ CLOSE ON OUTSIDE ============
   function initFaqCloseOnOutside() {
     const faqItems = document.querySelectorAll('.faq-item');
     if (!faqItems.length) return;
 
     document.addEventListener('click', function (e) {
       if (!e.target.closest('.faq-item')) {
-        faqItems.forEach(function (item) {
-          item.open = false;
-        });
+        faqItems.forEach(function (item) { item.open = false; });
       }
     });
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        faqItems.forEach(function (item) {
-          item.open = false;
-        });
+        faqItems.forEach(function (item) { item.open = false; });
       }
     });
   }
 
-  // ==============================================
-  // 7. ANIMATED STATISTICS COUNTERS
-  // ==============================================
+  // ============ 7. ANIMATED STATISTICS (fixed) ============
   function initStatCounters() {
-    const statNumbers = document.querySelectorAll('.stat-number');
+    const statNumbers = document.querySelectorAll('.about-stat .number');
     if (!statNumbers.length || !('IntersectionObserver' in window)) return;
 
     const observer = new IntersectionObserver(
@@ -242,20 +205,16 @@
           }
         });
       },
-      {
-        root: null,
-        rootMargin: '0px 0px -80px 0px',
-        threshold: 0.15
-      }
+      { root: null, rootMargin: '0px 0px -80px 0px', threshold: 0.15 }
     );
 
-    statNumbers.forEach(function (el) {
-      observer.observe(el);
-    });
+    statNumbers.forEach(function (el) { observer.observe(el); });
   }
 
   function animateCounter(el) {
-    const target = parseInt(el.getAttribute('data-target') || el.textContent.replace(/,/g, ''), 10);
+    // Remove non-numeric characters and parse
+    const raw = el.textContent.replace(/[^0-9]/g, '');
+    const target = parseInt(raw, 10) || 0;
     const duration = 1800;
     const startTime = performance.now();
 
@@ -264,22 +223,55 @@
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = Math.floor(eased * target);
-
       el.textContent = current.toLocaleString();
       el.style.opacity = Math.min(1, eased * 1.5);
-
       if (progress < 1) {
         requestAnimationFrame(update);
       } else {
         el.textContent = target.toLocaleString();
         el.style.opacity = '1';
         el.classList.add('pulse-complete');
-        setTimeout(function () {
-          el.classList.remove('pulse-complete');
-        }, 2000);
+        setTimeout(function () { el.classList.remove('pulse-complete'); }, 2000);
       }
     }
-
     requestAnimationFrame(update);
+  }
+
+  // ============ 8. MAGNETIC BUTTONS (new) ============
+  function initMagneticButtons() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const magneticElements = document.querySelectorAll('.magnetic');
+    if (!magneticElements.length) return;
+
+    magneticElements.forEach(function (btn) {
+      const strength = 0.3; // how far the button moves
+
+      btn.addEventListener('mousemove', function (e) {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+      });
+
+      btn.addEventListener('mouseleave', function () {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  // ============ 9. HERO ENTRANCE ANIMATION (new) ============
+  function initHeroEntrance() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      hero.classList.add('hero-animate'); // if reduced, just show instantly
+      return;
+    }
+
+    // Delay adding the class to allow initial render
+    setTimeout(function () {
+      hero.classList.add('hero-animate');
+    }, 100);
   }
 })();
