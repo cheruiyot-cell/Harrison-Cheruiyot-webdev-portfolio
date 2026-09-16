@@ -1,6 +1,6 @@
 /**
  * Harrison Cheruiyot – Premium Portfolio
- * Version 5.2 – Fixed stat counters to avoid unrealistic numbers
+ * Version 5.3 – WhatsApp float removed, Back-to-Top added
  */
 
 (function () {
@@ -13,9 +13,10 @@
     initScrollAnimations();
     initActiveNavHighlight();
     initFaqCloseOnOutside();
-    initStatCounters();           // fixed selector & animation guard
+    initStatCounters();
     initMagneticButtons();
     initHeroEntrance();
+    initBackToTop();        // ← NEW
   });
 
   // ============ 1. DYNAMIC COPYRIGHT ============
@@ -190,7 +191,7 @@
     });
   }
 
-  // ============ 7. ANIMATED STATISTICS (FIXED) ============
+  // ============ 7. ANIMATED STATISTICS ============
   function initStatCounters() {
     const statNumbers = document.querySelectorAll('.about-stat .number');
     if (!statNumbers.length || !('IntersectionObserver' in window)) return;
@@ -208,17 +209,13 @@
     );
 
     statNumbers.forEach(function (el) {
-      // Only animate if the text is purely numeric (allows decimals)
-      // This avoids mangling values like "23+", "4.9★", "3 days", "70%"
       if (/^\d+(\.\d+)?$/.test(el.textContent.trim())) {
         observer.observe(el);
       }
-      // Otherwise, leave the static text untouched
     });
   }
 
   function animateCounter(el) {
-    // Remove non-numeric characters and parse
     const raw = el.textContent.replace(/[^0-9]/g, '');
     const target = parseInt(raw, 10) || 0;
     const duration = 1800;
@@ -278,5 +275,43 @@
     setTimeout(function () {
       hero.classList.add('hero-animate');
     }, 100);
+  }
+
+  // ============ 10. BACK TO TOP ============
+  function initBackToTop() {
+    const btn = document.querySelector('.back-to-top');
+    if (!btn) return;
+
+    const SHOW_AFTER = 400; // px scrolled before showing the button
+
+    function updateVisibility() {
+      if (window.scrollY > SHOW_AFTER) {
+        btn.classList.add('is-visible');
+      } else {
+        btn.classList.remove('is-visible');
+      }
+    }
+
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Move focus to top for keyboard/screen-reader users
+      const skipLink = document.getElementById('skip-link');
+      if (skipLink) {
+        skipLink.focus({ preventScroll: true });
+      }
+    });
+
+    let ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          updateVisibility();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    updateVisibility();
   }
 })();
