@@ -1,6 +1,6 @@
 /**
  * Harrison Cheruiyot – Premium Portfolio
- * Version 5.3 – WhatsApp float removed, Back-to-Top added
+ * Version 5.4 – FAQ accordion close-on-outside fix
  */
 
 (function () {
@@ -16,7 +16,7 @@
     initStatCounters();
     initMagneticButtons();
     initHeroEntrance();
-    initBackToTop();        // ← NEW
+    initBackToTop();
   });
 
   // ============ 1. DYNAMIC COPYRIGHT ============
@@ -67,6 +67,7 @@
     });
 
     overlay.addEventListener('click', closeMenu);
+
     nav.addEventListener('click', function (e) {
       if (e.target.tagName === 'A') closeMenu();
     });
@@ -81,30 +82,34 @@
       anchor.addEventListener('click', function (e) {
         const targetId = this.getAttribute('href');
         if (targetId === '#' || targetId === '') return;
+
         const target = document.querySelector(targetId);
-        if (target) {
-          e.preventDefault();
-          const position = target.getBoundingClientRect().top + window.pageYOffset;
-          const offset = position - headerHeight - 24;
-          window.scrollTo({ top: offset, behavior: 'smooth' });
-          target.setAttribute('tabindex', '-1');
-          target.focus({ preventScroll: true });
-        }
+        if (!target) return;
+
+        e.preventDefault();
+        const position = target.getBoundingClientRect().top + window.pageYOffset;
+        const offset = position - headerHeight - 24;
+
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+        target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
       });
     });
   }
 
   // ============ 4. SCROLL ANIMATIONS + STAGGER ============
   function initScrollAnimations() {
-    const elements = document.querySelectorAll('.fade-up, .portfolio-card, .service-card, .pricing-card, .step, .testimonial-card');
+    const elements = document.querySelectorAll(
+      '.fade-up, .portfolio-card, .service-card, .pricing-card, .step, .testimonial-card'
+    );
 
     if (!('IntersectionObserver' in window)) {
       elements.forEach(function (el) { el.classList.add('is-visible'); });
       return;
     }
 
-    const staggerParents = document.querySelectorAll('.stagger-parent');
-    staggerParents.forEach(function (parent) {
+    // Pre-compute stagger delays for children of .stagger-parent
+    document.querySelectorAll('.stagger-parent').forEach(function (parent) {
       const children = parent.children;
       for (let i = 0; i < children.length; i++) {
         children[i].style.transitionDelay = (i * 80) + 'ms';
@@ -123,9 +128,7 @@
       { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 }
     );
 
-    elements.forEach(function (el) {
-      observer.observe(el);
-    });
+    elements.forEach(function (el) { observer.observe(el); });
   }
 
   // ============ 5. ACTIVE NAV HIGHLIGHT ============
@@ -133,10 +136,10 @@
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-links a:not(.btn)');
     const header = document.querySelector('.site-header');
-    const offset = header ? header.offsetHeight + 50 : 120;
 
     if (!sections.length || !navLinks.length) return;
 
+    const offset = header ? header.offsetHeight + 50 : 120;
     let ticking = false;
 
     function highlightNav() {
@@ -173,20 +176,32 @@
     highlightNav();
   }
 
-  // ============ 6. FAQ CLOSE ON OUTSIDE ============
+  // ============ 6. FAQ ACCORDION — CLOSE ON OUTSIDE ============
   function initFaqCloseOnOutside() {
     const faqItems = document.querySelectorAll('.faq-item');
     if (!faqItems.length) return;
 
+    // Click anywhere:
+    // - Outside all FAQ items → close every FAQ.
+    // - On a different FAQ than the one currently open → close the others.
+    // - Inside an FAQ's own content/summary → leave it alone (native toggle handles it).
     document.addEventListener('click', function (e) {
-      if (!e.target.closest('.faq-item')) {
-        faqItems.forEach(function (item) { item.open = false; });
-      }
+      const target = e.target;
+
+      faqItems.forEach(function (item) {
+        // `contains` safely returns false for non-Node targets.
+        if (!item.contains(target)) {
+          item.open = false;
+        }
+      });
     });
 
+    // Escape key closes all FAQs.
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        faqItems.forEach(function (item) { item.open = false; });
+        faqItems.forEach(function (item) {
+          item.open = false;
+        });
       }
     });
   }
@@ -226,17 +241,22 @@
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = Math.floor(eased * target);
+
       el.textContent = current.toLocaleString();
       el.style.opacity = Math.min(1, eased * 1.5);
+
       if (progress < 1) {
         requestAnimationFrame(update);
       } else {
         el.textContent = target.toLocaleString();
         el.style.opacity = '1';
         el.classList.add('pulse-complete');
-        setTimeout(function () { el.classList.remove('pulse-complete'); }, 2000);
+        setTimeout(function () {
+          el.classList.remove('pulse-complete');
+        }, 2000);
       }
     }
+
     requestAnimationFrame(update);
   }
 
@@ -247,14 +267,14 @@
     const magneticElements = document.querySelectorAll('.magnetic');
     if (!magneticElements.length) return;
 
-    magneticElements.forEach(function (btn) {
-      const strength = 0.3;
+    const strength = 0.3;
 
+    magneticElements.forEach(function (btn) {
       btn.addEventListener('mousemove', function (e) {
         const rect = btn.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+        btn.style.transform = 'translate(' + (x * strength) + 'px, ' + (y * strength) + 'px)';
       });
 
       btn.addEventListener('mouseleave', function () {
@@ -267,6 +287,7 @@
   function initHeroEntrance() {
     const hero = document.querySelector('.hero');
     if (!hero) return;
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       hero.classList.add('hero-animate');
       return;
@@ -294,11 +315,10 @@
 
     btn.addEventListener('click', function () {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      // Move focus to top for keyboard/screen-reader users
+
+      // Move focus to top for keyboard / screen-reader users.
       const skipLink = document.getElementById('skip-link');
-      if (skipLink) {
-        skipLink.focus({ preventScroll: true });
-      }
+      if (skipLink) skipLink.focus({ preventScroll: true });
     });
 
     let ticking = false;
