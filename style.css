@@ -1,50 +1,63 @@
-/* ==============================================
-   CONVERSION-FOCUSED BUSINESS HOMEPAGE STYLES
-   Harrison Cheruiyot | Senior Web Developer
-   ============================================== */
+/* ==========================================================================
+   Harrison Cheruiyot — Portfolio Stylesheet
+   Production build
+   Mobile-first readable typography, WCAG AA contrast, generous spacing
+   ========================================================================== */
 
-/* ---------- CSS Custom Properties ---------- */
+/* ---------- 1. DESIGN TOKENS ---------- */
 :root {
-  --primary-blue: #0A2540;
-  --primary-blue-light: #1B3A5C;
+  /* Brand colors */
+  --primary-blue:         #0A2540;
+  --primary-blue-light:   #1B3A5C;
   --primary-blue-surface: #F0F4FA;
-  --gold-accent: #C9A43E;
-  --gold-dark: #8A6D1F;
-  --gold-light: #E7D09E;
-  --gold-soft: #F9F3E3;
-  --purple-accent: #5B2D8E;
-  --purple-light: #8E6BB8;
-  --purple-soft: #F2ECF9;
-  --white: #FFFFFF;
-  --gray-50: #F8F9FC;
+  --gold-accent:          #C9A43E;
+  --gold-dark:            #8A6D1F;   /* 5.2:1 on white — AA text */
+  --gold-light:           #E7D09E;
+  --gold-soft:            #F9F3E3;
+  --purple-accent:        #5B2D8E;
+  --purple-light:         #8E6BB8;
+  --purple-soft:          #F2ECF9;
+
+  /* Neutrals */
+  --white:    #FFFFFF;
+  --gray-50:  #F8F9FC;
   --gray-100: #EDF1F7;
   --gray-200: #D9DFE8;
   --gray-300: #C5CDD8;
   --gray-600: #4A5568;
   --gray-800: #1A202C;
 
-  --font-display: 'Manrope', sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Typography */
+  --font-display: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
+  /* Layout */
   --container-max: 1200px;
-  --radius-sm: 8px;
+  --gutter:        24px;
+
+  /* Radii */
+  --radius-sm:  8px;
   --radius-md: 14px;
   --radius-lg: 24px;
   --radius-xl: 32px;
 
-  --shadow-sm: 0 2px 8px rgba(10, 37, 64, 0.06);
-  --shadow-md: 0 8px 24px rgba(10, 37, 64, 0.08);
-  --shadow-lg: 0 20px 40px rgba(10, 37, 64, 0.1);
-  --shadow-xl: 0 28px 56px rgba(10, 37, 64, 0.14);
+  /* Shadows */
+  --shadow-sm:   0 2px 8px rgba(10, 37, 64, 0.06);
+  --shadow-md:   0 8px 24px rgba(10, 37, 64, 0.08);
+  --shadow-lg:   0 20px 40px rgba(10, 37, 64, 0.10);
+  --shadow-xl:   0 28px 56px rgba(10, 37, 64, 0.14);
   --shadow-gold: 0 10px 28px rgba(201, 164, 62, 0.22);
 
-  --transition-fast: 180ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Motion */
+  --ease-fast:   180ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ---------- RESET & BASE ---------- */
-*, *::before, *::after {
+/* ---------- 2. RESET & BASE ---------- */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -60,7 +73,8 @@ html {
 body {
   font-family: var(--font-body);
   font-weight: 400;
-  line-height: 1.6;
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.0625rem); /* 16 → 17px fluid */
+  line-height: 1.65;
   color: var(--gray-800);
   background-color: var(--white);
   -webkit-font-smoothing: antialiased;
@@ -79,7 +93,7 @@ img {
 a {
   text-decoration: none;
   color: inherit;
-  transition: color var(--transition-fast);
+  transition: color var(--ease-fast);
 }
 
 a:focus-visible,
@@ -96,13 +110,13 @@ ul[role="list"] {
   list-style: none;
 }
 
-/* Global overflow and word-break guards */
+/* Long-word safety — only break where it matters */
 p, h1, h2, h3, h4, li, blockquote, span {
   overflow-wrap: break-word;
   word-wrap: break-word;
-  word-break: break-word;
 }
 
+/* Prevent grid/flex overflow from wide children */
 .flex-item,
 .grid-item,
 .hero-content > div,
@@ -133,11 +147,11 @@ p, h1, h2, h3, h4, li, blockquote, span {
   max-width: var(--container-max);
   margin-left: auto;
   margin-right: auto;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
 }
 
-/* ---------- SKIP LINK ---------- */
+/* ---------- 3. SKIP LINK ---------- */
 #skip-link {
   position: absolute;
   top: -1000px;
@@ -153,67 +167,73 @@ p, h1, h2, h3, h4, li, blockquote, span {
   left: 1rem;
 }
 
-/* ---------- TYPOGRAPHY ---------- */
+/* ---------- 4. TYPOGRAPHY ---------- */
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.22;
   color: var(--primary-blue);
 }
 
 h1 {
-  font-size: clamp(2.4rem, 6vw, 3.8rem);
+  font-size: clamp(2.15rem, 5.5vw, 3.75rem);
   letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 h2 {
-  font-size: clamp(2rem, 4.5vw, 2.8rem);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
   letter-spacing: -0.01em;
+  line-height: 1.25;
 }
 
 h3 {
-  font-size: 1.25rem;
+  font-size: clamp(1.15rem, 1rem + 0.5vw, 1.3rem);
   font-weight: 600;
+  line-height: 1.35;
 }
 
 .section-title {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.65rem;
   position: relative;
 }
 
 .section-subtitle {
-  font-size: 1.15rem;
+  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.15rem);
   color: var(--gray-600);
   max-width: 650px;
-  margin: 0 auto 3rem auto;
+  margin: 0 auto 2.5rem auto;
   text-align: center;
+  line-height: 1.7;
 }
 
-/* FIX: Removed -webkit-text-fill-color:initial which caused
-   some browsers to lose the gold colour and render text as
-   invisible or default black. Now uses plain `color` only. */
 .text-accent {
   color: var(--gold-dark);
 }
 
-/* ---------- BUTTONS ---------- */
+/* ---------- 5. BUTTONS ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.85rem 2rem;
+  padding: 1rem 1.85rem;
+  min-height: 48px;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  line-height: 1.4;
   border-radius: var(--radius-md);
-  transition: all var(--transition-smooth);
-  cursor: pointer;
   border: 2px solid transparent;
+  cursor: pointer;
   letter-spacing: 0.01em;
   max-width: 100%;
   white-space: normal;
-  line-height: 1.4;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  transition: transform var(--ease-smooth),
+              box-shadow var(--ease-smooth),
+              background-color var(--ease-smooth),
+              border-color var(--ease-smooth),
+              color var(--ease-smooth);
 }
 
 .btn-primary {
@@ -236,7 +256,7 @@ h3 {
   box-shadow: var(--shadow-gold);
 }
 .btn-accent:hover {
-  background: linear-gradient(135deg, #D4B24C 0%, #C9A43E 100%);
+  background: linear-gradient(135deg, #D4B24C 0%, var(--gold-accent) 100%);
   transform: translateY(-3px);
   box-shadow: 0 16px 36px rgba(201, 164, 62, 0.35);
   color: var(--primary-blue);
@@ -255,20 +275,21 @@ h3 {
 }
 
 .btn-large {
-  padding: 1.2rem 3rem;
-  font-size: 1.15rem;
+  padding: 1.15rem 2.25rem;
+  font-size: 1.125rem;
+  min-height: 56px;
 }
 
-/* ---------- HEADER & NAVIGATION ---------- */
+/* ---------- 6. HEADER & NAV ---------- */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: #ffffff;
+  background: var(--white);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid rgba(10, 37, 64, 0.08);
-  transition: background var(--transition-smooth);
+  transition: background var(--ease-smooth);
 }
 
 .header-inner {
@@ -296,13 +317,14 @@ h3 {
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   background: none;
   border: none;
   cursor: pointer;
   z-index: 210;
   position: relative;
+  padding: 8px;
 }
 .hamburger-line {
   display: block;
@@ -333,7 +355,7 @@ h3 {
   width: 0;
   height: 2px;
   background-color: var(--gold-accent);
-  transition: width var(--transition-smooth);
+  transition: width var(--ease-smooth);
 }
 .nav-links a:not(.btn):hover {
   color: var(--primary-blue);
@@ -343,7 +365,8 @@ h3 {
 }
 
 .nav-cta {
-  padding: 0.65rem 1.6rem !important;
+  padding: 0.75rem 1.6rem !important;
+  min-height: 44px;
 }
 
 .nav-overlay {
@@ -361,7 +384,7 @@ h3 {
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* ---------- HERO ---------- */
+/* ---------- 7. HERO ---------- */
 .hero {
   padding: 5rem 0 4rem 0;
   text-align: left;
@@ -394,42 +417,43 @@ h3 {
 }
 
 .hero-subtitle {
-  font-size: 1.15rem;
+  font-size: clamp(1.05rem, 1rem + 0.4vw, 1.2rem);
   color: var(--gray-600);
   margin: 1.5rem 0 2.2rem 0;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .cta-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.2rem;
-  margin-bottom: 2.8rem;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
 }
 
 .hero-trust {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  font-size: 0.85rem;
+  gap: 1.25rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--gray-600);
   background: var(--gray-50);
-  padding: 0.8rem 1.8rem;
+  padding: 1rem 1.6rem;
   border-radius: 50px;
   max-width: 100%;
   margin: 0 auto;
   border: 1px solid var(--gray-200);
+  line-height: 1.55;
 }
 
-/* ---------- TRUST BANNER ---------- */
+/* ---------- 8. TRUST BANNER ---------- */
 .trust-banner {
   padding: 2rem 0 3rem 0;
   text-align: center;
 }
 
 .trust-label {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--gray-600);
   letter-spacing: 0.05em;
@@ -441,23 +465,25 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.5rem 2.5rem;
+  gap: 1.25rem 2rem;
   align-items: center;
 }
 
 .trust-logo {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--gray-600);
   letter-spacing: 0.01em;
-  transition: color var(--transition-smooth);
-  word-break: break-word;
+  transition: color var(--ease-smooth),
+              background-color var(--ease-smooth),
+              border-color var(--ease-smooth);
+  overflow-wrap: break-word;
   max-width: 100%;
   background: var(--gray-50);
-  padding: 0.6rem 1.2rem;
+  padding: 0.75rem 1.25rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--gray-200);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 .trust-logo:hover {
   color: var(--primary-blue);
@@ -465,7 +491,78 @@ h3 {
   background: var(--gold-soft);
 }
 
-/* ---------- SERVICES ---------- */
+/* ---------- 9. PORTFOLIO ---------- */
+.portfolio {
+  padding: 4rem 0 5rem 0;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.portfolio-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  border: 1px solid var(--gray-100);
+  transition: transform var(--ease-smooth),
+              box-shadow var(--ease-smooth),
+              border-color var(--ease-smooth);
+  display: flex;
+  flex-direction: column;
+}
+.portfolio-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--gold-light);
+}
+
+.portfolio-image {
+  overflow: hidden;
+  background: var(--gray-50);
+  aspect-ratio: 3 / 2;
+}
+.portfolio-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.portfolio-content {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.portfolio-content h3 {
+  margin-bottom: 0.35rem;
+}
+
+.portfolio-subtitle {
+  font-size: 0.95rem;
+  color: var(--gold-dark);
+  font-weight: 600;
+  margin-bottom: 0.9rem;
+}
+
+.portfolio-content > p:not(.portfolio-subtitle) {
+  color: var(--gray-600);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.portfolio-link {
+  align-self: flex-start;
+}
+
+/* ---------- 10. SERVICES ---------- */
 .services {
   padding: 4rem 0 5rem 0;
   background: var(--primary-blue-surface);
@@ -483,13 +580,15 @@ h3 {
 
 .service-card {
   background: var(--white);
-  padding: 2rem 1.8rem;
+  padding: 2rem 1.85rem;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-smooth);
   border: 1px solid transparent;
   display: flex;
   flex-direction: column;
+  transition: transform var(--ease-smooth),
+              box-shadow var(--ease-smooth),
+              border-color var(--ease-smooth);
 }
 .service-card:hover {
   transform: translateY(-6px);
@@ -508,12 +607,12 @@ h3 {
 
 .service-card p {
   color: var(--gray-600);
-  font-size: 0.95rem;
-  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  line-height: 1.7;
   flex: 1;
 }
 
-/* ---------- ABOUT ---------- */
+/* ---------- 11. ABOUT ---------- */
 .about {
   padding: 4rem 0;
 }
@@ -521,9 +620,8 @@ h3 {
 .about-content {
   max-width: 800px;
   margin: 0 auto;
-  text-align: center;
-  font-size: 1.1rem;
-  line-height: 1.7;
+  font-size: 1.05rem;
+  line-height: 1.75;
   color: var(--gray-600);
 }
 
@@ -535,7 +633,7 @@ h3 {
   margin-bottom: 0;
 }
 
-/* ---------- PROCESS ---------- */
+/* ---------- 12. PROCESS ---------- */
 .process {
   padding: 4rem 0 5rem 0;
   background: var(--white);
@@ -550,7 +648,7 @@ h3 {
 
 .step {
   text-align: center;
-  padding: 1.5rem 1rem;
+  padding: 1.75rem 1rem;
 }
 
 .step-number {
@@ -570,14 +668,15 @@ h3 {
 }
 
 .step h3 {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
 }
 .step p {
   color: var(--gray-600);
-  font-size: 0.95rem;
+  font-size: 1rem;
+  line-height: 1.7;
 }
 
-/* ---------- TESTIMONIALS ---------- */
+/* ---------- 13. TESTIMONIALS ---------- */
 .testimonials {
   padding: 4rem 0 5rem 0;
   background: var(--gray-50);
@@ -594,13 +693,15 @@ h3 {
 
 .testimonial-card {
   background: var(--white);
-  padding: 2rem 2rem 1.8rem 2rem;
+  padding: 2rem;
   border-radius: var(--radius-lg);
   border-left: 5px solid var(--gold-accent);
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-smooth);
   margin: 0;
   position: relative;
+  transition: transform var(--ease-smooth),
+              box-shadow var(--ease-smooth),
+              border-color var(--ease-smooth);
 }
 .testimonial-card::before {
   content: '"';
@@ -610,7 +711,7 @@ h3 {
   font-family: var(--font-display);
   font-size: 4rem;
   color: var(--gold-light);
-  opacity: 0.6; /* FIX: raised from 0.4 for visibility */
+  opacity: 0.6;
   line-height: 1;
 }
 .testimonial-card:hover {
@@ -620,10 +721,10 @@ h3 {
 }
 
 .testimonial-card p {
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 1.05rem;
+  line-height: 1.75;
   color: var(--gray-800);
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.25rem;
   position: relative;
   z-index: 1;
   font-style: italic;
@@ -639,19 +740,19 @@ h3 {
   font-style: normal;
   font-weight: 600;
   color: var(--primary-blue);
-  font-size: 0.95rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  line-height: 1.5;
 }
-/* FIX: darkened from gold-accent (#C9A43E) to gold-dark (#8A6D1F) for accessibility */
 .testimonial-card cite::before {
   content: "—";
   color: var(--gold-dark);
   font-weight: 700;
 }
 
-/* ---------- PRICING ---------- */
+/* ---------- 14. PRICING ---------- */
 .pricing {
   padding: 4rem 0 5rem 0;
   background: var(--white);
@@ -667,13 +768,13 @@ h3 {
 
 .pricing-card {
   background: var(--white);
-  padding: 2.2rem 2rem;
+  padding: 2.25rem 2rem;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--gray-100);
   text-align: center;
   position: relative;
-  transition: all var(--transition-smooth);
+  transition: transform var(--ease-smooth), box-shadow var(--ease-smooth);
 }
 .pricing-card:hover {
   transform: translateY(-6px);
@@ -682,7 +783,6 @@ h3 {
 
 .pricing-card.featured {
   border: 2px solid var(--gold-accent);
-  background: var(--white);
   box-shadow: var(--shadow-gold);
   transform: scale(1.02);
 }
@@ -696,10 +796,10 @@ h3 {
   left: 50%;
   transform: translateX(-50%);
   background: var(--purple-accent);
-  color: white;
-  font-size: 0.75rem;
+  color: var(--white);
+  font-size: 0.8rem;
   font-weight: 700;
-  padding: 0.3rem 1.2rem;
+  padding: 0.35rem 1.2rem;
   border-radius: 30px;
   letter-spacing: 0.03em;
   white-space: nowrap;
@@ -710,38 +810,40 @@ h3 {
 
 .price {
   font-family: var(--font-display);
-  font-size: 2.6rem;
+  font-size: 2.5rem;
   font-weight: 800;
   color: var(--primary-blue);
   margin: 1rem 0 0.6rem;
+  line-height: 1.1;
 }
 .price span {
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--gray-600);
 }
 
 .pricing-card ul {
-  margin: 1.8rem 0 2rem;
+  margin: 1.75rem 0 2rem;
   text-align: left;
   padding-left: 0.5rem;
 }
 .pricing-card li {
-  padding: 0.45rem 0;
-  font-size: 0.95rem;
+  padding: 0.55rem 0;
+  font-size: 1rem;
+  line-height: 1.6;
   color: var(--gray-800);
   border-bottom: 1px solid var(--gray-100);
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 0.6rem;
 }
-/* FIX: darkened checkmark from gold-accent to gold-dark for contrast */
 .pricing-card li::before {
   content: "✓";
   color: var(--gold-dark);
   font-weight: 700;
   flex-shrink: 0;
+  line-height: 1.6;
 }
 
 .pricing-card .btn {
@@ -749,7 +851,7 @@ h3 {
   white-space: normal;
 }
 
-/* ---------- FAQ ---------- */
+/* ---------- 15. FAQ ---------- */
 .faq {
   padding: 4rem 0 5rem 0;
   background: var(--primary-blue-surface);
@@ -770,8 +872,8 @@ h3 {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--gray-100);
-  transition: all var(--transition-smooth);
   overflow: hidden;
+  transition: box-shadow var(--ease-smooth), border-color var(--ease-smooth);
 }
 .faq-item:hover {
   box-shadow: var(--shadow-md);
@@ -779,9 +881,10 @@ h3 {
 }
 
 .faq-item summary {
-  padding: 1.2rem 1.8rem;
+  padding: 1.35rem 1.75rem;
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 1.075rem;
+  line-height: 1.5;
   color: var(--primary-blue);
   cursor: pointer;
   display: flex;
@@ -790,19 +893,18 @@ h3 {
   gap: 1rem;
   list-style: none;
   position: relative;
-  transition: color var(--transition-fast);
   user-select: none;
+  transition: color var(--ease-fast);
 }
 .faq-item summary::-webkit-details-marker {
   display: none;
 }
-/* FIX: darkened + icon from gold-accent (#C9A43E, 2.7:1) to gold-dark (#8A6D1F, 5.2:1) */
 .faq-item summary::after {
   content: "+";
-  font-size: 1.8rem;
+  font-size: 1.75rem;
   font-weight: 300;
   color: var(--gold-dark);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.4s var(--ease-bounce);
   flex-shrink: 0;
   line-height: 1;
 }
@@ -814,16 +916,16 @@ h3 {
 }
 
 .faq-item p {
-  padding: 0 1.8rem 1.2rem 1.8rem;
+  padding: 0 1.75rem 1.35rem 1.75rem;
   color: var(--gray-600);
-  font-size: 0.98rem;
-  line-height: 1.7;
+  font-size: 1.05rem;
+  line-height: 1.75;
   margin: 0;
 }
 
-/* ---------- FINAL CTA ---------- */
+/* ---------- 16. FINAL CTA ---------- */
 .final-cta {
-  padding: 4rem 0 5rem 0;
+  padding: 4rem 1.5rem 5rem;
   text-align: center;
   background: var(--primary-blue);
   border-radius: var(--radius-xl);
@@ -842,8 +944,9 @@ h3 {
 }
 
 .final-cta p {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.92);
   font-size: 1.15rem;
+  line-height: 1.7;
   margin-bottom: 2rem;
 }
 
@@ -855,9 +958,10 @@ h3 {
   padding: 0;
 }
 .cta-list li {
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  word-break: break-word;
+  margin-bottom: 0.75rem;
+  font-size: 1.075rem;
+  line-height: 1.7;
+  overflow-wrap: break-word;
 }
 
 .final-cta .btn {
@@ -865,15 +969,13 @@ h3 {
 }
 
 .cta-guarantee {
-  font-size: 0.95rem !important;
+  font-size: 1rem !important;
+  line-height: 1.65;
   color: var(--gold-light) !important;
   font-weight: 500;
 }
 
-/* ---------- FOOTER ---------- */
-/* FIX: increased bottom padding from 1.8rem → 6rem so the fixed
-   back-to-top button never overlaps footer content (previously the
-   WhatsApp float was colliding with footer-contact text). */
+/* ---------- 17. FOOTER ---------- */
 .site-footer {
   background: var(--gray-50);
   padding: 3.5rem 0 6rem;
@@ -891,6 +993,7 @@ h3 {
 .footer-brand p {
   color: var(--gray-600);
   margin-top: 0.6rem;
+  line-height: 1.7;
 }
 
 .footer-links h4,
@@ -898,26 +1001,32 @@ h3 {
   font-family: var(--font-body);
   font-weight: 700;
   margin-bottom: 1rem;
-  font-size: 1rem;
+  font-size: 1.05rem;
 }
 
 .footer-links ul li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.7rem;
 }
 .footer-links a,
 .footer-contact a {
   color: var(--gray-600);
+  line-height: 1.6;
 }
 .footer-links a:hover,
 .footer-contact a:hover {
   color: var(--gold-dark);
 }
 
+.footer-contact p {
+  margin-bottom: 0.55rem;
+}
+
 .footer-bottom {
   border-top: 1px solid var(--gray-200);
   padding-top: 1.5rem;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.975rem;
+  line-height: 1.65;
   color: var(--gray-600);
 }
 .footer-bottom a {
@@ -925,9 +1034,7 @@ h3 {
   font-weight: 500;
 }
 
-/* ---------- BACK TO TOP BUTTON ---------- */
-/* Replaces the old WhatsApp float (removed to avoid overlap +
-   duplicate with the sticky WhatsApp banner). */
+/* ---------- 18. BACK TO TOP ---------- */
 .back-to-top {
   position: fixed;
   bottom: 28px;
@@ -947,12 +1054,12 @@ h3 {
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              background-color 0.2s ease,
-              color 0.2s ease,
-              visibility 0.3s ease;
   padding: 0;
+  transition: opacity var(--ease-smooth),
+              transform var(--ease-smooth),
+              background-color var(--ease-fast),
+              color var(--ease-fast),
+              visibility var(--ease-smooth);
 }
 .back-to-top.is-visible {
   opacity: 1;
@@ -973,34 +1080,80 @@ h3 {
   display: block;
 }
 
-/* ---------- MOBILE CALL BANNER (hidden by default) ---------- */
+/* ---------- 19. MOBILE CALL BANNER ---------- */
 .mobile-call-banner {
   display: none;
 }
 
-/* ---------- ANIMATIONS ---------- */
+/* ---------- 20. ANIMATIONS ---------- */
 .fade-up {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
 }
 .fade-up.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
+.stagger-parent > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease-smooth), transform 0.7s var(--ease-smooth);
+}
+.stagger-parent > *.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero entrance */
+.hero .hero-text,
+.hero .hero-image-wrapper {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s var(--ease-smooth), transform 0.9s var(--ease-smooth);
+}
+.hero.hero-animate .hero-text,
+.hero.hero-animate .hero-image-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero.hero-animate .hero-text > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroChild 0.7s forwards;
+}
+.hero.hero-animate .hero-text > *:nth-child(1) { animation-delay: 0.2s; }
+.hero.hero-animate .hero-text > *:nth-child(2) { animation-delay: 0.4s; }
+.hero.hero-animate .hero-text > *:nth-child(3) { animation-delay: 0.6s; }
+.hero.hero-animate .hero-text > *:nth-child(4) { animation-delay: 0.8s; }
+
+@keyframes heroChild {
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* ---------- RESPONSIVE ---------- */
+/* Magnetic buttons */
+.magnetic {
+  transition: transform 0.3s var(--ease-bounce);
+  will-change: transform;
+}
+
+/* Active nav */
+.nav-links a.active-nav {
+  color: var(--gold-dark);
+}
+.nav-links a.active-nav::after {
+  width: 100%;
+  background-color: var(--gold-accent);
+}
+
+/* ==========================================================================
+   21. RESPONSIVE — TABLET (≤ 900px)
+   ========================================================================== */
 @media (max-width: 900px) {
   .hero-content {
     grid-template-columns: 1fr;
@@ -1019,13 +1172,21 @@ h3 {
   }
 }
 
-/* ---------- MOBILE MENU ---------- */
+/* ==========================================================================
+   22. RESPONSIVE — MOBILE (≤ 768px)
+   Larger type, generous gutters, bigger tap targets, more air
+   ========================================================================== */
 @media (max-width: 768px) {
-  .container {
-    padding-left: 16px;
-    padding-right: 16px;
+  :root {
+    --gutter: 20px;
   }
 
+  body {
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  /* --- Mobile navigation --- */
   .hamburger {
     display: flex;
   }
@@ -1046,8 +1207,8 @@ h3 {
     z-index: 200;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
     pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
   }
 
   #primary-navigation.active {
@@ -1080,12 +1241,13 @@ h3 {
   }
   #primary-navigation .nav-links .nav-cta {
     margin-top: 0.5rem;
-    padding: 0.8rem 2.5rem;
+    padding: 1rem 2.5rem !important;
     font-size: 1.1rem;
     background: var(--gold-accent);
     color: var(--primary-blue);
     font-weight: 700;
     box-shadow: 0 4px 12px rgba(201, 164, 62, 0.3);
+    min-height: 52px;
   }
 
   .nav-overlay {
@@ -1110,116 +1272,169 @@ h3 {
     background: var(--white);
   }
 
-  .services-grid,
-  .process-steps,
-  .pricing-grid,
-  .testimonials-grid {
-    grid-template-columns: 1fr;
+  /* --- Section rhythm — more vertical air --- */
+  .hero          { padding: 3.5rem 0 3rem; }
+  .trust-banner  { padding: 1.5rem 0 2.5rem; }
+  .portfolio,
+  .services,
+  .process,
+  .pricing,
+  .faq,
+  .testimonials  { padding: 3.5rem 0 4rem; }
+  .final-cta     { padding: 3.5rem 1.5rem; }
+
+  /* --- Typography --- */
+  .section-subtitle { margin-bottom: 2.25rem; line-height: 1.7; }
+
+  /* --- Trust elements --- */
+  .trust-label  { font-size: 0.95rem; letter-spacing: 0.04em; }
+  .trust-logo   { font-size: 1rem; padding: 0.85rem 1.25rem; line-height: 1.5; }
+  .hero-trust   { font-size: 0.95rem; padding: 1rem 1.4rem; gap: 1.25rem; line-height: 1.6; }
+
+  .hero-subtitle { margin: 1.5rem 0 2rem; line-height: 1.75; }
+
+  /* --- Cards: bump internal padding --- */
+  .service-card   { padding: 2rem 1.6rem; }
+  .service-card p { font-size: 1.05rem; line-height: 1.7; }
+
+  .portfolio-content { padding: 1.75rem 1.5rem; }
+  .portfolio-content > p:not(.portfolio-subtitle) { font-size: 1.05rem; line-height: 1.7; }
+
+  .pricing-card    { padding: 2.25rem 1.75rem; }
+  .pricing-card li { font-size: 1.05rem; padding: 0.6rem 0; line-height: 1.6; }
+  .price           { font-size: 2.4rem; }
+  .price span      { font-size: 1rem; }
+  .popular-badge   { font-size: 0.85rem; padding: 0.4rem 1.2rem; }
+
+  .testimonial-card      { padding: 2rem 1.6rem; }
+  .testimonial-card p    { font-size: 1.08rem; line-height: 1.75; }
+  .testimonial-card cite { font-size: 1rem; }
+
+  .step    { padding: 1.75rem 1rem; }
+  .step h3 { font-size: 1.3rem; }
+  .step p  { font-size: 1.05rem; line-height: 1.7; }
+
+  /* --- FAQ --- */
+  .faq-item summary {
+    padding: 1.4rem 1.4rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
   }
+  .faq-item p {
+    padding: 0 1.4rem 1.4rem 1.4rem;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  /* --- Final CTA --- */
+  .final-cta p   { font-size: 1.15rem; line-height: 1.7; }
+  .cta-list li   { font-size: 1.08rem; line-height: 1.7; margin-bottom: 0.85rem; }
+  .cta-guarantee { font-size: 1rem !important; line-height: 1.6; }
+
+  /* --- Footer --- */
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  .trust-logos {
-    gap: 1rem;
+  .footer-brand p,
+  .footer-links a,
+  .footer-contact a { font-size: 1.05rem; line-height: 1.7; }
+  .footer-links li  { margin-bottom: 0.85rem; }
+  .footer-bottom    { font-size: 0.975rem; padding-top: 2rem; line-height: 1.65; }
+
+  /* --- Buttons --- */
+  .btn {
+    padding: 1rem 1.75rem;
+    font-size: 1.05rem;
+    min-height: 50px;
   }
-  .trust-logo {
-    font-size: 0.9rem;
+  .btn-large {
+    padding: 1.15rem 2rem;
+    font-size: 1.125rem;
+    min-height: 56px;
   }
+
+  /* --- Grid gaps --- */
+  .services-grid,
+  .pricing-grid,
+  .testimonials-grid,
+  .portfolio-grid,
+  .process-steps { gap: 1.75rem; }
 }
 
-/* ---------- EXTRA SMALL SCREENS ---------- */
+/* ==========================================================================
+   23. RESPONSIVE — SMALL PHONES (≤ 480px)
+   No shrinkage — everything stays readable, just stacked
+   ========================================================================== */
 @media (max-width: 480px) {
-  .container {
-    padding-left: 12px;
-    padding-right: 12px;
+  :root {
+    --gutter: 18px;
   }
 
-  h1 {
-    font-size: 2rem;
+  body {
+    font-size: 17px;
   }
 
-  h2 {
-    font-size: 1.7rem;
-  }
+  h1 { font-size: 2.1rem; line-height: 1.22; }
+  h2 { font-size: 1.8rem; line-height: 1.28; }
 
-  .section-subtitle {
+  .hero             { padding: 3rem 0 2.5rem; }
+  .hero-subtitle    { font-size: 1.1rem; line-height: 1.7; }
+  .section-subtitle { font-size: 1.05rem; margin-bottom: 2rem; line-height: 1.65; }
+
+  .hero-trust { font-size: 0.95rem; gap: 1rem; padding: 0.9rem 1.1rem; }
+  .trust-logo { font-size: 0.975rem; padding: 0.8rem 1.1rem; }
+
+  /* Cards keep their readability — no further shrinkage */
+  .service-card,
+  .pricing-card,
+  .testimonial-card { padding: 1.85rem 1.35rem; }
+
+  .faq-item summary {
+    padding: 1.25rem 1.2rem;
+    font-size: 1.05rem;
+  }
+  .faq-item p {
+    padding: 0 1.2rem 1.25rem;
     font-size: 1rem;
-    margin-bottom: 2rem;
+    line-height: 1.75;
   }
 
-  .hero {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
-    margin: 1.2rem 0 1.8rem;
-  }
-
-  .hero-trust {
-    font-size: 0.8rem;
-    gap: 1rem;
-    padding: 0.7rem 1rem;
-  }
-
+  /* --- CTA stacking --- */
   .cta-group {
     flex-direction: column;
     align-items: stretch;
+    gap: 1rem;
   }
-
-  .btn {
+  .cta-group .btn {
     width: 100%;
   }
 
-  .btn-large {
+  .btn {
+    font-size: 1.02rem;
     padding: 1rem 1.5rem;
-    font-size: 1.05rem;
   }
-
-  .services-grid,
-  .pricing-grid,
-  .testimonials-grid {
-    gap: 1.5rem;
-  }
-
-  .service-card,
-  .pricing-card,
-  .testimonial-card {
-    padding: 1.8rem 1.5rem;
-  }
-
-  .popular-badge {
-    white-space: nowrap;
-    font-size: 0.75rem;
-    padding: 0.3rem 1.2rem;
-  }
-
-  .price {
-    font-size: 2.2rem;
+  .btn-large {
+    padding: 1.1rem 1.5rem;
+    font-size: 1.075rem;
   }
 
   .final-cta {
-    padding: 2.5rem 1.2rem;
+    padding: 2.75rem 1.25rem;
   }
+  .final-cta p { font-size: 1.075rem; }
 
-  .final-cta p {
-    font-size: 1rem;
-  }
+  .footer-grid { gap: 1.75rem; }
 
-  .footer-grid {
-    gap: 1.5rem;
-  }
-
-  /* FIX: back-to-top repositions above the sticky WhatsApp banner */
+  /* Back-to-top sits above the sticky WhatsApp banner */
   .back-to-top {
-    width: 44px;
-    height: 44px;
-    bottom: 76px;
+    width: 46px;
+    height: 46px;
+    bottom: 78px;
     right: 16px;
   }
 
+  /* Sticky WhatsApp banner */
   .mobile-call-banner {
     display: block;
     position: fixed;
@@ -1227,13 +1442,21 @@ h3 {
     left: 0;
     right: 0;
     background: var(--white);
-    padding: 0.4rem;
-    box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+    padding: 0.5rem;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
     z-index: 100;
+  }
+  .mobile-call-banner .btn {
+    font-size: 1rem;
+    padding: 1rem 1rem;
+    min-height: 52px;
+    width: 100%;
   }
 }
 
-/* ---------- REDUCED MOTION ---------- */
+/* ==========================================================================
+   24. PREFERS-REDUCED-MOTION
+   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1243,68 +1466,7 @@ h3 {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
 
-/* ---------- ACTIVE NAV ---------- */
-.nav-links a.active-nav {
-  color: var(--gold-dark);
-}
-.nav-links a.active-nav::after {
-  width: 100%;
-  background-color: var(--gold-accent);
-}
-
-/* ---------- STAGGERED REVEAL ---------- */
-.stagger-parent > * {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.stagger-parent > *.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ---------- HERO ENTRANCE ---------- */
-.hero .hero-text,
-.hero .hero-image-wrapper {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.hero.hero-animate .hero-text,
-.hero.hero-animate .hero-image-wrapper {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.hero.hero-animate .hero-text > * {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: heroChild 0.7s forwards;
-}
-.hero.hero-animate .hero-text > *:nth-child(1) { animation-delay: 0.2s; }
-.hero.hero-animate .hero-text > *:nth-child(2) { animation-delay: 0.4s; }
-.hero.hero-animate .hero-text > *:nth-child(3) { animation-delay: 0.6s; }
-.hero.hero-animate .hero-text > *:nth-child(4) { animation-delay: 0.8s; }
-
-@keyframes heroChild {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ---------- MAGNETIC BUTTONS ---------- */
-.magnetic {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: transform;
-}
-
-/* ---------- REDUCED MOTION OVERRIDE ---------- */
-@media (prefers-reduced-motion: reduce) {
   .stagger-parent > *,
   .hero .hero-text,
   .hero .hero-image-wrapper,
@@ -1314,6 +1476,7 @@ h3 {
     transition: none !important;
     animation: none !important;
   }
+
   .magnetic {
     transition: none !important;
   }
