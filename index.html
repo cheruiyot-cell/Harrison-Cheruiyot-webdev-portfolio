@@ -3,12 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#0A2540" />
+
+  <!-- JS detection — set before CSS so we can scope animations -->
+  <script>document.documentElement.classList.add('js');</script>
 
   <title>Harrison Cheruiyot | Nairobi Web Developer – Get Found on Google, Get More Customers</title>
   <meta name="description" content="Nairobi web developer building fast, mobile-first websites that turn Google searches into booked appointments, paid orders, and phone calls. M-Pesa integration, local support, no jargon." />
   <meta name="keywords" content="web developer Nairobi, Kenya website design, SME websites Kenya, M-Pesa website integration, freelance web developer Kenya" />
   <meta name="author" content="Harrison Cheruiyot" />
   <meta name="robots" content="index, follow" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%230A2540'/%3E%3Ctext%20x='50'%20y='73'%20font-family='Arial,sans-serif'%20font-weight='800'%20font-size='68'%20fill='%23C9A43E'%20text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -20,14 +27,21 @@
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="canonical" href="https://www.harrisoncheruiyot.dev" />
+
+  <!-- Preconnect: fonts + image CDNs -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://i.ibb.co" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+  <link rel="dns-prefetch" href="https://i.ibb.co" />
+  <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Fonts: 7 weights (down from 9) -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 
-  <!-- JSON-LD -->
+  <!-- JSON-LD: ProfessionalService -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -46,16 +60,37 @@
       }
     }
   </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "How long does it take to build a website?", "acceptedAnswer": { "@type": "Answer", "text": "Most business websites take 3–7 days from our first call to launch. The exact timeline depends on how prepared you are with your content — but I'll give you a clear time frame during our first chat, and I'll stick to it." } },
+        { "@type": "Question", "name": "I don't know what I want. Can you help?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Most of my clients don't know exactly what their website needs. I'll ask you simple questions about your business, your customers, and your goals. Then I'll suggest exactly what you need — no pushy upsells, just practical advice." } },
+        { "@type": "Question", "name": "I'm really busy. How much time do I need to invest?", "acceptedAnswer": { "@type": "Answer", "text": "About 2–3 hours total. One 20-minute strategy chat. A 15-minute questionnaire. One design review (30 minutes). That's it. I handle everything else — you focus on running your business." } },
+        { "@type": "Question", "name": "Can I update the website myself?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. I'll give you a simple dashboard where you can change prices, add photos, and update text — no coding needed. Plus, I'll record a 10-minute video tutorial so you can always refer back. If you get stuck, just message me on WhatsApp." } },
+        { "@type": "Question", "name": "Why is your pricing lower than other developers?", "acceptedAnswer": { "@type": "Answer", "text": "I work remotely from Nairobi and keep my overheads low. I don't have a big office or a team of account managers to pay for. You work directly with me — the person who builds your site. That's why my rates are honest and affordable, without cutting corners on quality." } },
+        { "@type": "Question", "name": "Why should I pay for a custom site when I can use Wix?", "acceptedAnswer": { "@type": "Answer", "text": "Wix sites are slow, hard to customize, and they rank poorly on Google. Your website is your 24/7 salesperson — you don't want it sleeping on the job. I build custom, fast websites that actually get found on Google and convert visitors into customers. A custom site pays for itself by bringing in more business." } },
+        { "@type": "Question", "name": "How do you handle M-Pesa payments?", "acceptedAnswer": { "@type": "Answer", "text": "I integrate the official Lipa Na M-Pesa gateway. Your customer gets a pop-up on their phone, enters their M-Pesa PIN, and the payment completes in about 10 seconds. They never leave your website. You get notified instantly via SMS and in your dashboard." } },
+        { "@type": "Question", "name": "What happens after the website goes live?", "acceptedAnswer": { "@type": "Answer", "text": "Every project includes 30 days of free support. That means if something breaks, or you want a small change like updating your price list, I fix it within 24 hours — at no extra charge. After 30 days, you can choose a maintenance plan (from Ksh 2,500/month) or just message me when you need changes." } },
+        { "@type": "Question", "name": "Do you only work with businesses in Nairobi?", "acceptedAnswer": { "@type": "Answer", "text": "Not at all. I work with businesses all over Kenya — Mombasa, Kisumu, Eldoret, and everywhere in between. We do everything through WhatsApp, calls, and screen sharing. You don't need to be in Nairobi to get a world-class website." } },
+        { "@type": "Question", "name": "How do I know you're legit?", "acceptedAnswer": { "@type": "Answer", "text": "Before you pay anything, you'll see live websites I've built for Kenyan businesses — you can click through them right now. I'll also give you contact details of past clients if you want to verify my work. Payment is split: 50% upfront to start, 50% only when you're happy with the final website." } },
+        { "@type": "Question", "name": "What if I need changes after the 30 days?", "acceptedAnswer": { "@type": "Answer", "text": "After your 30-day support period, you can choose a maintenance plan starting at Ksh 2,500/month. This includes security updates, hosting, and small content changes. If you'd rather not commit, I can also do one-off changes for a small fee. You'll never be left stranded." } },
+        { "@type": "Question", "name": "What if your website doesn't bring me customers?", "acceptedAnswer": { "@type": "Answer", "text": "I build every website with conversion in mind — not just good looks. If your website doesn't generate measurable results within 30 days, I'll work with you for free to improve it. Your success is my reputation — I want you to refer me to other business owners." } }
+      ]
+    }
+  </script>
 </head>
 <body>
   <a id="skip-link" href="#main-content">Skip to main content</a>
 
-  <header class="site-header" role="banner">
+  <header class="site-header">
     <div class="container header-inner">
       <a href="index.html" class="logo" aria-label="Harrison Cheruiyot Home">Harrison<span class="logo-dot">.</span>Dev</a>
 
-      <!-- Mobile Menu Button -->
-      <button id="menu-toggle" class="hamburger" aria-label="Toggle navigation menu" aria-controls="primary-navigation" aria-expanded="false" aria-haspopup="true">
+      <button id="menu-toggle" class="hamburger" aria-label="Toggle navigation menu" aria-controls="primary-navigation" aria-expanded="false">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
@@ -71,7 +106,7 @@
           <li>
             <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20website%20strategy%20session"
                target="_blank" rel="noopener noreferrer"
-               class="btn btn-primary nav-cta magnetic">💬 WhatsApp Me</a>
+               class="btn btn-primary nav-cta magnetic"><span aria-hidden="true">💬</span> WhatsApp Me</a>
           </li>
         </ul>
       </nav>
@@ -80,19 +115,16 @@
   </header>
 
   <main id="main-content">
-    <!-- HERO -->
+    <!-- HERO — text first on mobile (CSS order), image second -->
     <section class="hero container" aria-labelledby="hero-title">
       <div class="hero-content">
         <div class="hero-image-wrapper">
-          <img 
-            src="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png" 
-            alt="Harrison Cheruiyot - Web Developer in Nairobi" 
+          <!-- TODO: Replace with self-hosted WebP/AVIF at 480w / 800w / 1200w + <picture> -->
+          <img
+            src="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png"
+            alt="Harrison Cheruiyot — Web Developer in Nairobi"
             width="1099" height="1431" loading="eager" fetchpriority="high"
             class="hero-image"
-            srcset="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png 1099w,
-                    https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png 800w,
-                    https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png 480w"
-            sizes="(max-width: 480px) 100vw, (max-width: 768px) 100vw, 1099px"
           />
         </div>
         <div class="hero-text">
@@ -103,14 +135,14 @@
           <div class="cta-group">
             <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20website%20strategy%20session"
                target="_blank" rel="noopener noreferrer"
-               class="btn btn-accent magnetic">💬 WhatsApp Me — Free 20-Minute Strategy Session</a>
+               class="btn btn-accent magnetic"><span aria-hidden="true">💬</span> WhatsApp Me — Free 20-Minute Strategy Session</a>
             <a href="#work" class="btn btn-outline">See Real Results from Kenyan Businesses →</a>
           </div>
           <div class="hero-trust">
-            <span>⭐ 4.9/5 from 23 verified Kenyan business owners</span>
-            <span>🇰🇪 Nairobi-based, serving all of Kenya</span>
-            <span>💰 M-Pesa integration built-in</span>
-            <span>🛡️ 30-Day Post-Launch Support Included</span>
+            <span><span aria-hidden="true">⭐</span> 4.9/5 from 23 verified Kenyan business owners</span>
+            <span><span aria-hidden="true">🇰🇪</span> Nairobi-based, serving all of Kenya</span>
+            <span><span aria-hidden="true">💰</span> M-Pesa integration built-in</span>
+            <span><span aria-hidden="true">🛡️</span> 30-Day Post-Launch Support Included</span>
           </div>
         </div>
       </div>
@@ -132,7 +164,7 @@
     <section id="work" class="portfolio container fade-up" aria-labelledby="portfolio-title">
       <h2 id="portfolio-title" class="section-title">Websites That Made These Kenyan Businesses Real Money — See the Proof</h2>
       <p class="section-subtitle">Every project below solved a specific business problem. Click through and see for yourself.</p>
-      
+
       <div class="portfolio-grid">
         <!-- Doom Pest Control -->
         <div class="portfolio-card">
@@ -147,10 +179,16 @@
           </div>
         </div>
 
-        <!-- Blackwood Furnitures -->
+        <!-- Blackwood Furnitures — real responsive srcset -->
         <div class="portfolio-card">
           <div class="portfolio-image">
-            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=400&fit=crop&crop=center&auto=format" alt="Blackwood Furnitures website preview" width="600" height="400" loading="lazy" />
+            <img
+              src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=400&fit=crop&crop=center&auto=format"
+              srcset="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=267&fit=crop&crop=center&auto=format 400w,
+                      https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=400&fit=crop&crop=center&auto=format 600w,
+                      https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=900&h=600&fit=crop&crop=center&auto=format 900w"
+              sizes="(max-width: 480px) 100vw, (max-width: 900px) 50vw, 300px"
+              alt="Blackwood Furnitures website preview" width="600" height="400" loading="lazy" />
           </div>
           <div class="portfolio-content">
             <h3>Blackwood Furnitures</h3>
@@ -160,10 +198,16 @@
           </div>
         </div>
 
-        <!-- Heirloom Logistics -->
+        <!-- Heirloom Logistics — real responsive srcset -->
         <div class="portfolio-card">
           <div class="portfolio-image">
-            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=400&fit=crop&crop=center&auto=format" alt="Heirloom Logistics website preview" width="600" height="400" loading="lazy" />
+            <img
+              src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=400&fit=crop&crop=center&auto=format"
+              srcset="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=267&fit=crop&crop=center&auto=format 400w,
+                      https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=400&fit=crop&crop=center&auto=format 600w,
+                      https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=900&h=600&fit=crop&crop=center&auto=format 900w"
+              sizes="(max-width: 480px) 100vw, (max-width: 900px) 50vw, 300px"
+              alt="Heirloom Logistics website preview" width="600" height="400" loading="lazy" />
           </div>
           <div class="portfolio-content">
             <h3>Heirloom Logistics</h3>
@@ -228,7 +272,7 @@
           </ul>
           <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27m%20interested%20in%20the%20Starter%20package"
              target="_blank" rel="noopener noreferrer"
-             class="btn btn-outline">💬 WhatsApp for a Free Consultation</a>
+             class="btn btn-outline"><span aria-hidden="true">💬</span> WhatsApp for a Free Consultation</a>
         </div>
         <div class="pricing-card featured">
           <span class="popular-badge">Most Popular</span>
@@ -244,7 +288,7 @@
           </ul>
           <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27m%20interested%20in%20the%20Business%20Growth%20package"
              target="_blank" rel="noopener noreferrer"
-             class="btn btn-accent magnetic">💬 WhatsApp Me to Start</a>
+             class="btn btn-accent magnetic"><span aria-hidden="true">💬</span> WhatsApp Me to Start</a>
         </div>
         <div class="pricing-card">
           <h3>E‑Commerce</h3>
@@ -258,7 +302,7 @@
           </ul>
           <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27m%20interested%20in%20the%20E-Commerce%20package"
              target="_blank" rel="noopener noreferrer"
-             class="btn btn-outline">💬 WhatsApp for Your E‑Commerce Plan</a>
+             class="btn btn-outline"><span aria-hidden="true">💬</span> WhatsApp for Your E‑Commerce Plan</a>
         </div>
       </div>
     </section>
@@ -386,13 +430,12 @@
         </ul>
         <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20website%20strategy%20session"
            target="_blank" rel="noopener noreferrer"
-           class="btn btn-accent btn-large magnetic">💬 WhatsApp Me Now — Get Your Free Website Strategy Session</a>
-        <p class="cta-guarantee">💬 100% no-obligation. Even if we don't work together, you'll leave with a clear plan for growing your business online.</p>
+           class="btn btn-accent btn-large magnetic"><span aria-hidden="true">💬</span> WhatsApp Me Now — Get Your Free Website Strategy Session</a>
+        <p class="cta-guarantee"><span aria-hidden="true">💬</span> 100% no-obligation. Even if we don't work together, you'll leave with a clear plan for growing your business online.</p>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
@@ -415,17 +458,16 @@
         <p><a href="mailto:harrisoncheruiyot04@gmail.com">harrisoncheruiyot04@gmail.com</a></p>
         <p>
           <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20website%20strategy%20session"
-             target="_blank" rel="noopener noreferrer">💬 WhatsApp: +254 702 555 093</a>
+             target="_blank" rel="noopener noreferrer"><span aria-hidden="true">💬</span> WhatsApp: +254 702 555 093</a>
         </p>
-        <p><a href="tel:+254702555093">📞 Prefer to call? +254 702 555 093</a></p>
+        <p><a href="tel:+254702555093"><span aria-hidden="true">📞</span> Prefer to call? +254 702 555 093</a></p>
       </div>
     </div>
     <div class="container footer-bottom">
-      <p>&copy; <span id="currentYear"></span> Harrison Cheruiyot. All rights reserved. | Built with dedication in Nairobi ❤️.</p>
+      <p>&copy; <span id="currentYear"></span> Harrison Cheruiyot. All rights reserved. | Built with dedication in Nairobi <span aria-hidden="true">❤️</span>.</p>
     </div>
   </footer>
 
-  <!-- Back to Top Button -->
   <button class="back-to-top" type="button" aria-label="Back to top">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -433,12 +475,11 @@
     </svg>
   </button>
 
-  <!-- Mobile Sticky WhatsApp Banner -->
   <div class="mobile-call-banner">
     <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20website%20strategy%20session"
        target="_blank" rel="noopener noreferrer"
        class="btn btn-accent" style="width:100%; padding:0.8rem;">
-      💬 WhatsApp Me – Free Strategy Session
+      <span aria-hidden="true">💬</span> WhatsApp Me – Free Strategy Session
     </a>
   </div>
 

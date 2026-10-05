@@ -1,12 +1,30 @@
 /**
- * Harrison Cheruiyot – Premium Portfolio
- * Version 5.4 – FAQ accordion close-on-outside fix
+ * Harrison Cheruiyot — Portfolio
+ * Production build v6.0
+ * --------------------------------------------------------------------------
+ * CHANGES IN v6.0
+ *  - Stat counters now handle prefix/suffix formats: "23+", "4.9★", "3 days", "70%"
+ *  - Hardened null/undefined checks
+ *  - Preserved: mobile menu, smooth scroll, scroll animations, active nav,
+ *    FAQ close-on-outside, magnetic buttons, hero entrance, back-to-top
+ *  - No-JS fallback is handled via the .js class (see <head> inline script + CSS)
+ *  - Respects prefers-reduced-motion throughout
+ * --------------------------------------------------------------------------
  */
 
 (function () {
   'use strict';
 
-  document.addEventListener('DOMContentLoaded', function () {
+  /* ----------------------------------------------------------------
+     BOOTSTRAP
+     ---------------------------------------------------------------- */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  function init() {
     initCurrentYear();
     initMobileMenu();
     initSmoothScroll();
@@ -17,18 +35,30 @@
     initMagneticButtons();
     initHeroEntrance();
     initBackToTop();
-  });
+  }
 
-  // ============ 1. DYNAMIC COPYRIGHT ============
+  /* ----------------------------------------------------------------
+     HELPERS
+     ---------------------------------------------------------------- */
+  const prefersReducedMotion = function () {
+    return window.matchMedia &&
+           window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  };
+
+  /* ----------------------------------------------------------------
+     1. DYNAMIC COPYRIGHT YEAR
+     ---------------------------------------------------------------- */
   function initCurrentYear() {
     const yearSpan = document.getElementById('currentYear');
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
   }
 
-  // ============ 2. MOBILE MENU ============
+  /* ----------------------------------------------------------------
+     2. MOBILE MENU
+     ---------------------------------------------------------------- */
   function initMobileMenu() {
-    const toggle = document.getElementById('menu-toggle');
-    const nav = document.getElementById('primary-navigation');
+    const toggle  = document.getElementById('menu-toggle');
+    const nav     = document.getElementById('primary-navigation');
     const overlay = document.getElementById('nav-overlay');
     if (!toggle || !nav || !overlay) return;
 
@@ -42,8 +72,12 @@
       overlay.classList.add('active');
       overlay.hidden = false;
       document.body.style.overflow = 'hidden';
+
       const firstLink = nav.querySelector('a');
-      if (firstLink) firstLink.focus();
+      if (firstLink) {
+        // Defer focus until the transition starts, so it doesn't fight with scroll restoration
+        requestAnimationFrame(function () { firstLink.focus(); });
+      }
     }
 
     function closeMenu() {
@@ -62,18 +96,31 @@
       else openMenu();
     });
 
+    // Close on Escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && isOpen) closeMenu();
     });
 
+    // Close on overlay click
     overlay.addEventListener('click', closeMenu);
 
+    // Close when a nav link is clicked
     nav.addEventListener('click', function (e) {
       if (e.target.tagName === 'A') closeMenu();
     });
+
+    // Auto-close if the viewport grows past mobile breakpoint
+    const mq = window.matchMedia('(min-width: 769px)');
+    const handleResize = function (e) {
+      if (e.matches && isOpen) closeMenu();
+    };
+    if (mq.addEventListener) mq.addEventListener('change', handleResize);
+    else if (mq.addListener) mq.addListener(handleResize);
   }
 
-  // ============ 3. SMOOTH SCROLL ============
+  /* ----------------------------------------------------------------
+     3. SMOOTH SCROLL FOR IN-PAGE ANCHORS
+     ---------------------------------------------------------------- */
   function initSmoothScroll() {
     const header = document.querySelector('.site-header');
     const headerHeight = header ? header.offsetHeight : 76;
@@ -87,22 +134,31 @@
         if (!target) return;
 
         e.preventDefault();
-        const position = target.getBoundingClientRect().top + window.pageYOffset;
-        const offset = position - headerHeight - 24;
 
-        window.scrollTo({ top: offset, behavior: 'smooth' });
+        const position = target.getBoundingClientRect().top + window.pageYOffset;
+        const offset   = position - headerHeight - 24;
+
+        window.scrollTo({
+          top: offset,
+          behavior: prefersReducedMotion() ? 'auto' : 'smooth'
+        });
+
         target.setAttribute('tabindex', '-1');
         target.focus({ preventScroll: true });
       });
     });
   }
 
-  // ============ 4. SCROLL ANIMATIONS + STAGGER ============
+  /* ----------------------------------------------------------------
+     4. SCROLL ANIMATIONS + STAGGER
+     ---------------------------------------------------------------- */
   function initScrollAnimations() {
     const elements = document.querySelectorAll(
       '.fade-up, .portfolio-card, .service-card, .pricing-card, .step, .testimonial-card'
     );
+    if (!elements.length) return;
 
+    // No IntersectionObserver? Show everything.
     if (!('IntersectionObserver' in window)) {
       elements.forEach(function (el) { el.classList.add('is-visible'); });
       return;
@@ -131,12 +187,13 @@
     elements.forEach(function (el) { observer.observe(el); });
   }
 
-  // ============ 5. ACTIVE NAV HIGHLIGHT ============
+  /* ----------------------------------------------------------------
+     5. ACTIVE NAV HIGHLIGHT
+     ---------------------------------------------------------------- */
   function initActiveNavHighlight() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-links a:not(.btn)');
-    const header = document.querySelector('.site-header');
-
+    const header   = document.querySelector('.site-header');
     if (!sections.length || !navLinks.length) return;
 
     const offset = header ? header.offsetHeight + 50 : 120;
@@ -147,7 +204,7 @@
       const scrollY = window.scrollY + offset;
 
       sections.forEach(function (section) {
-        const top = section.offsetTop;
+        const top    = section.offsetTop;
         const height = section.offsetHeight;
         if (scrollY >= top && scrollY < top + height) {
           currentId = section.getAttribute('id');
@@ -176,40 +233,43 @@
     highlightNav();
   }
 
-  // ============ 6. FAQ ACCORDION — CLOSE ON OUTSIDE ============
+  /* ----------------------------------------------------------------
+     6. FAQ — CLOSE ON OUTSIDE CLICK / ESCAPE
+     ---------------------------------------------------------------- */
   function initFaqCloseOnOutside() {
     const faqItems = document.querySelectorAll('.faq-item');
     if (!faqItems.length) return;
 
-    // Click anywhere:
-    // - Outside all FAQ items → close every FAQ.
-    // - On a different FAQ than the one currently open → close the others.
-    // - Inside an FAQ's own content/summary → leave it alone (native toggle handles it).
     document.addEventListener('click', function (e) {
       const target = e.target;
-
       faqItems.forEach(function (item) {
-        // `contains` safely returns false for non-Node targets.
-        if (!item.contains(target)) {
-          item.open = false;
-        }
+        if (!item.contains(target)) item.open = false;
       });
     });
 
-    // Escape key closes all FAQs.
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        faqItems.forEach(function (item) {
-          item.open = false;
-        });
+        faqItems.forEach(function (item) { item.open = false; });
       }
     });
   }
 
-  // ============ 7. ANIMATED STATISTICS ============
+  /* ----------------------------------------------------------------
+     7. ANIMATED STATISTICS
+     Handles:
+       "23"      → 0 → 23
+       "23+"     → 0 → 23, preserves "+"
+       "4.9"     → 0.0 → 4.9
+       "4.9★"    → 0.0 → 4.9, preserves "★"
+       "3 days"  → 0 → 3, preserves " days"
+       "70%"     → 0 → 70, preserves "%"
+     ---------------------------------------------------------------- */
   function initStatCounters() {
     const statNumbers = document.querySelectorAll('.about-stat .number');
-    if (!statNumbers.length || !('IntersectionObserver' in window)) return;
+    if (!statNumbers.length) return;
+
+    // No IntersectionObserver? Leave the original text alone.
+    if (!('IntersectionObserver' in window)) return;
 
     const observer = new IntersectionObserver(
       function (entries) {
@@ -223,33 +283,49 @@
       { root: null, rootMargin: '0px 0px -80px 0px', threshold: 0.15 }
     );
 
-    statNumbers.forEach(function (el) {
-      if (/^\d+(\.\d+)?$/.test(el.textContent.trim())) {
-        observer.observe(el);
-      }
-    });
+    statNumbers.forEach(function (el) { observer.observe(el); });
   }
 
   function animateCounter(el) {
-    const raw = el.textContent.replace(/[^0-9]/g, '');
-    const target = parseInt(raw, 10) || 0;
-    const duration = 1800;
+    const original = el.textContent.trim();
+
+    // Match: [prefix (non-digits)][number][suffix (anything)]
+    const match = original.match(/^([^\d]*)(\d+(?:\.\d+)?)(.*)$/);
+    if (!match) return;
+
+    const prefix    = match[1];
+    const targetNum = parseFloat(match[2]);
+    const suffix    = match[3];
+    const isDecimal = match[2].indexOf('.') !== -1;
+
+    if (!isFinite(targetNum)) return;
+
+    // Respect reduced motion: snap to final value instantly.
+    if (prefersReducedMotion()) {
+      el.textContent = original;
+      return;
+    }
+
+    const duration  = 1800;
     const startTime = performance.now();
 
     function update(currentTime) {
-      const elapsed = currentTime - startTime;
+      const elapsed  = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = Math.floor(eased * target);
+      const eased    = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      const current  = eased * targetNum;
 
-      el.textContent = current.toLocaleString();
-      el.style.opacity = Math.min(1, eased * 1.5);
+      const displayValue = isDecimal
+        ? current.toFixed(1)
+        : Math.round(current).toString();
+
+      el.textContent = prefix + displayValue + suffix;
 
       if (progress < 1) {
         requestAnimationFrame(update);
       } else {
-        el.textContent = target.toLocaleString();
-        el.style.opacity = '1';
+        // Snap to the exact original string to preserve any formatting
+        el.textContent = original;
         el.classList.add('pulse-complete');
         setTimeout(function () {
           el.classList.remove('pulse-complete');
@@ -260,9 +336,11 @@
     requestAnimationFrame(update);
   }
 
-  // ============ 8. MAGNETIC BUTTONS ============
+  /* ----------------------------------------------------------------
+     8. MAGNETIC BUTTONS
+     ---------------------------------------------------------------- */
   function initMagneticButtons() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (prefersReducedMotion()) return;
 
     const magneticElements = document.querySelectorAll('.magnetic');
     if (!magneticElements.length) return;
@@ -274,7 +352,8 @@
         const rect = btn.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = 'translate(' + (x * strength) + 'px, ' + (y * strength) + 'px)';
+        btn.style.transform =
+          'translate(' + (x * strength) + 'px, ' + (y * strength) + 'px)';
       });
 
       btn.addEventListener('mouseleave', function () {
@@ -283,22 +362,27 @@
     });
   }
 
-  // ============ 9. HERO ENTRANCE ANIMATION ============
+  /* ----------------------------------------------------------------
+     9. HERO ENTRANCE ANIMATION
+     ---------------------------------------------------------------- */
   function initHeroEntrance() {
     const hero = document.querySelector('.hero');
     if (!hero) return;
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (prefersReducedMotion()) {
       hero.classList.add('hero-animate');
       return;
     }
 
+    // Small delay so the class is added after the first paint
     setTimeout(function () {
       hero.classList.add('hero-animate');
     }, 100);
   }
 
-  // ============ 10. BACK TO TOP ============
+  /* ----------------------------------------------------------------
+     10. BACK TO TOP
+     ---------------------------------------------------------------- */
   function initBackToTop() {
     const btn = document.querySelector('.back-to-top');
     if (!btn) return;
@@ -314,9 +398,12 @@
     }
 
     btn.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({
+        top: 0,
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth'
+      });
 
-      // Move focus to top for keyboard / screen-reader users.
+      // Move focus for keyboard / screen-reader users
       const skipLink = document.getElementById('skip-link');
       if (skipLink) skipLink.focus({ preventScroll: true });
     });
@@ -334,4 +421,5 @@
 
     updateVisibility();
   }
+
 })();

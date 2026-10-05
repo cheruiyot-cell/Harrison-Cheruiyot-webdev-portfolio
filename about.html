@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#0A2540" />
+
+  <script>document.documentElement.classList.add('js');</script>
 
   <title>About Harrison Cheruiyot | Web Developer in Nairobi, Kenya</title>
   <meta name="description" content="Meet Harrison Cheruiyot – a Nairobi-based web developer with a mission to help Kenyan SMEs get online, get found, and get more customers. Learn about his experience, philosophy, and results." />
@@ -10,7 +13,8 @@
   <meta name="author" content="Harrison Cheruiyot" />
   <meta name="robots" content="index, follow" />
 
-  <!-- Open Graph -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%230A2540'/%3E%3Ctext%20x='50'%20y='73'%20font-family='Arial,sans-serif'%20font-weight='800'%20font-size='68'%20fill='%23C9A43E'%20text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E" />
+
   <meta property="og:type" content="website" />
   <meta property="og:title" content="About Harrison Cheruiyot | Web Developer in Nairobi" />
   <meta property="og:description" content="Nairobi web developer helping Kenyan businesses thrive online. Learn about Harrison's journey, approach, and testimonials." />
@@ -20,83 +24,18 @@
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="canonical" href="https://www.harrisoncheruiyot.dev/about.html" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://i.ibb.co" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+  <link rel="dns-prefetch" href="https://i.ibb.co" />
+  <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 
-  <style>
-    .about-content h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    .about-content h2 {
-      font-size: 1.75rem;
-      margin-top: 2rem;
-    }
-    .about-content p {
-      font-size: 1.1rem;
-      line-height: 1.7;
-      margin-bottom: 1.2rem;
-    }
-    .about-content .highlight {
-      background: #f0f7ff;
-      border-left: 4px solid #2c7a3f;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      margin: 2rem 0;
-    }
-    .about-content .highlight p {
-      margin-bottom: 0;
-    }
-    .about-stats {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      margin: 2rem 0;
-      text-align: center;
-    }
-    .about-stat {
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 10px;
-      padding: 1.2rem 2rem;
-      width: 200px;
-      margin: 0.5rem;
-    }
-    .about-stat .number {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #2c7a3f;
-    }
-    .about-stat .label {
-      font-size: 0.9rem;
-      color: #555;
-    }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-    .about-grid img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
-    @media (max-width: 768px) {
-      .about-grid {
-        grid-template-columns: 1fr;
-      }
-      .about-content h1 {
-        font-size: 2rem;
-      }
-    }
-  </style>
-
-  <!-- JSON-LD -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -113,15 +52,26 @@
       }
     }
   </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.harrisoncheruiyot.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://www.harrisoncheruiyot.dev/about.html" }
+      ]
+    }
+  </script>
 </head>
 <body>
   <a id="skip-link" href="#main-content">Skip to main content</a>
 
-  <header class="site-header" role="banner">
+  <header class="site-header">
     <div class="container header-inner">
       <a href="index.html" class="logo" aria-label="Harrison Cheruiyot Home">Harrison<span class="logo-dot">.</span>Dev</a>
 
-      <button id="menu-toggle" class="hamburger" aria-label="Toggle navigation menu" aria-controls="primary-navigation" aria-expanded="false" aria-haspopup="true">
+      <button id="menu-toggle" class="hamburger" aria-label="Toggle navigation menu" aria-controls="primary-navigation" aria-expanded="false">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
@@ -137,7 +87,7 @@
           <li>
             <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20website%20strategy%20session"
                target="_blank" rel="noopener noreferrer"
-               class="btn btn-primary nav-cta magnetic">💬 WhatsApp Me</a>
+               class="btn btn-primary nav-cta magnetic"><span aria-hidden="true">💬</span> WhatsApp Me</a>
           </li>
         </ul>
       </nav>
@@ -150,15 +100,11 @@
     <section class="hero container" aria-labelledby="about-hero-title">
       <div class="hero-content">
         <div class="hero-image-wrapper">
-          <img 
-            src="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png" 
-            alt="Harrison Cheruiyot - Web Developer in Nairobi" 
+          <img
+            src="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png"
+            alt="Harrison Cheruiyot — Web Developer in Nairobi"
             width="1099" height="1431" loading="eager" fetchpriority="high"
             class="hero-image"
-            srcset="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png 1099w,
-                    https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png 800w,
-                    https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png 480w"
-            sizes="(max-width: 480px) 100vw, (max-width: 768px) 100vw, 1099px"
           />
         </div>
         <div class="hero-text">
@@ -169,7 +115,7 @@
           <div class="cta-group">
             <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20to%20talk%20about%20a%20website"
                target="_blank" rel="noopener noreferrer"
-               class="btn btn-accent magnetic">💬 WhatsApp Me — Let's Talk</a>
+               class="btn btn-accent magnetic"><span aria-hidden="true">💬</span> WhatsApp Me — Let's Talk</a>
             <a href="index.html#work" class="btn btn-outline">See Real Results from Kenyan Businesses →</a>
           </div>
         </div>
@@ -242,7 +188,11 @@
           </p>
         </div>
         <div>
-          <img src="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png" alt="Harrison working on a laptop" loading="lazy" />
+          <img
+            src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop"
+            alt="A developer's workspace — the kind of setup used to build fast, mobile-first websites for Kenyan businesses"
+            width="800" height="600" loading="lazy"
+          />
         </div>
       </div>
 
@@ -261,10 +211,10 @@
       </p>
       <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20consultation"
          target="_blank" rel="noopener noreferrer"
-         class="btn btn-accent magnetic" style="margin-top:1rem;">💬 WhatsApp Me – Free Consultation</a>
+         class="btn btn-accent magnetic" style="margin-top:1rem;"><span aria-hidden="true">💬</span> WhatsApp Me – Free Consultation</a>
     </section>
 
-    <!-- TESTIMONIALS (short excerpt) -->
+    <!-- TESTIMONIALS -->
     <section class="testimonials container fade-up" aria-labelledby="about-testimonials-title">
       <h2 id="about-testimonials-title" class="section-title">What Clients Say</h2>
       <div class="testimonials-grid stagger-parent">
@@ -289,13 +239,12 @@
         <p>Your business deserves a website that brings in customers. I'll make it happen.</p>
         <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20to%20start%20a%20website%20project"
            target="_blank" rel="noopener noreferrer"
-           class="btn btn-accent btn-large magnetic">💬 WhatsApp Me – Start Your Project</a>
-        <p class="cta-guarantee">💬 100% no-obligation. Even if we don't work together, you'll get honest, practical advice.</p>
+           class="btn btn-accent btn-large magnetic"><span aria-hidden="true">💬</span> WhatsApp Me – Start Your Project</a>
+        <p class="cta-guarantee"><span aria-hidden="true">💬</span> 100% no-obligation. Even if we don't work together, you'll get honest, practical advice.</p>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
@@ -318,17 +267,16 @@
         <p><a href="mailto:harrisoncheruiyot04@gmail.com">harrisoncheruiyot04@gmail.com</a></p>
         <p>
           <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20website%20strategy%20session"
-             target="_blank" rel="noopener noreferrer">💬 WhatsApp: +254 702 555 093</a>
+             target="_blank" rel="noopener noreferrer"><span aria-hidden="true">💬</span> WhatsApp: +254 702 555 093</a>
         </p>
-        <p><a href="tel:+254702555093">📞 Prefer to call? +254 702 555 093</a></p>
+        <p><a href="tel:+254702555093"><span aria-hidden="true">📞</span> Prefer to call? +254 702 555 093</a></p>
       </div>
     </div>
     <div class="container footer-bottom">
-      <p>&copy; <span id="currentYear"></span> Harrison Cheruiyot. All rights reserved. | Built with dedication in Nairobi ❤️.</p>
+      <p>&copy; <span id="currentYear"></span> Harrison Cheruiyot. All rights reserved. | Built with dedication in Nairobi <span aria-hidden="true">❤️</span>.</p>
     </div>
   </footer>
 
-  <!-- Back to Top Button -->
   <button class="back-to-top" type="button" aria-label="Back to top">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -336,12 +284,11 @@
     </svg>
   </button>
 
-  <!-- Mobile Sticky WhatsApp Banner -->
   <div class="mobile-call-banner">
     <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20website%20strategy%20session"
        target="_blank" rel="noopener noreferrer"
        class="btn btn-accent" style="width:100%; padding:0.8rem;">
-      💬 WhatsApp Me – Free Strategy Session
+      <span aria-hidden="true">💬</span> WhatsApp Me – Free Strategy Session
     </a>
   </div>
 
