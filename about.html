@@ -5,7 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <meta name="theme-color" content="#0A2540" />
 
-  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.add('js');
+      setTimeout(function () {
+        if (!root.classList.contains('js-ready')) {
+          root.classList.remove('js');
+        }
+      }, 2500);
+    })();
+  </script>
 
   <title>About Harrison Cheruiyot | Web Developer in Nairobi, Kenya</title>
   <meta name="description" content="Meet Harrison Cheruiyot – a Nairobi-based web developer with a mission to help Kenyan SMEs get online, get found, and get more customers. Learn about his experience, philosophy, and results." />
@@ -25,6 +35,10 @@
 
   <link rel="canonical" href="https://www.harrisoncheruiyot.dev/about.html" />
 
+  <link rel="preload" as="image"
+        href="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png"
+        fetchpriority="high" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://i.ibb.co" crossorigin />
@@ -32,7 +46,7 @@
   <link rel="dns-prefetch" href="https://i.ibb.co" />
   <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 
@@ -69,7 +83,7 @@
 
   <header class="site-header">
     <div class="container header-inner">
-      <a href="index.html" class="logo" aria-label="Harrison Cheruiyot Home">Harrison<span class="logo-dot">.</span>Dev</a>
+      <a href="/" class="logo" aria-label="Harrison Cheruiyot Home">Harrison<span class="logo-dot">.</span>Dev</a>
 
       <button id="menu-toggle" class="hamburger" aria-label="Toggle navigation menu" aria-controls="primary-navigation" aria-expanded="false">
         <span class="hamburger-line"></span>
@@ -79,11 +93,11 @@
 
       <nav id="primary-navigation" aria-label="Main navigation">
         <ul class="nav-links" role="list">
-          <li><a href="index.html#work">Portfolio</a></li>
-          <li><a href="index.html#services">Services</a></li>
-          <li><a href="index.html#pricing">Pricing</a></li>
+          <li><a href="/#work">Portfolio</a></li>
+          <li><a href="/#services">Services</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
           <li><a href="about.html" aria-current="page">About</a></li>
-          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="/#faq">FAQ</a></li>
           <li>
             <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20website%20strategy%20session"
                target="_blank" rel="noopener noreferrer"
@@ -96,14 +110,13 @@
   </header>
 
   <main id="main-content">
-    <!-- ABOUT HERO -->
     <section class="hero container" aria-labelledby="about-hero-title">
       <div class="hero-content">
         <div class="hero-image-wrapper">
           <img
             src="https://i.ibb.co/bMgrVBZZ/file-0000000021a482118599a272c9a6de7a.png"
             alt="Harrison Cheruiyot — Web Developer in Nairobi"
-            width="1099" height="1431" loading="eager" fetchpriority="high"
+            width="1099" height="1431" loading="eager" fetchpriority="high" decoding="async"
             class="hero-image"
           />
         </div>
@@ -116,13 +129,12 @@
             <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20to%20talk%20about%20a%20website"
                target="_blank" rel="noopener noreferrer"
                class="btn btn-accent magnetic"><span aria-hidden="true">💬</span> WhatsApp Me — Let's Talk</a>
-            <a href="index.html#work" class="btn btn-outline">See Real Results from Kenyan Businesses →</a>
+            <a href="/#work" class="btn btn-outline">See Real Results from Kenyan Businesses →</a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT BODY -->
     <section class="about-content container fade-up" aria-labelledby="about-main-title">
       <h2 id="about-main-title">My Story &amp; Mission</h2>
       <p>
@@ -131,7 +143,7 @@
       <p>
         My mission is simple: help Kenyan SMEs get a website that <strong>works as hard as they do</strong>. That means:
       </p>
-      <ul style="margin-left:1.5rem; line-height:1.8;">
+      <ul class="about-list">
         <li>Fast, mobile-first design that loads even on slow networks</li>
         <li>Built-in M‑Pesa payments so customers can pay in seconds</li>
         <li>SEO‑friendly structure so Google finds you and sends you customers</li>
@@ -175,14 +187,14 @@
           <p>
             Every project I take on is designed to deliver tangible business outcomes – not just a pretty page. Here's a snapshot of what I've helped clients achieve:
           </p>
-          <ul style="margin-left:1.5rem; line-height:1.8;">
+          <ul class="about-list">
             <li>A gym that went from zero to 34 online bookings per month</li>
             <li>A courier company that reduced phone‑based quotes by 70% and tripled requests</li>
             <li>A restaurant that saw 60% more table reservations in 2 weeks</li>
             <li>An IT consultancy that established credibility and won higher‑value contracts</li>
           </ul>
           <p>
-            But don't just take my word for it — <a href="index.html#testimonials">read their testimonials</a> or
+            But don't just take my word for it — <a href="/#testimonials">read their testimonials</a> or
             <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20to%20verify%20your%20work%20with%20a%20referral%20call"
                target="_blank" rel="noopener noreferrer">message me and I'll introduce you directly</a> to any of these clients.
           </p>
@@ -191,7 +203,7 @@
           <img
             src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop"
             alt="A developer's workspace — the kind of setup used to build fast, mobile-first websites for Kenyan businesses"
-            width="800" height="600" loading="lazy"
+            width="800" height="600" loading="lazy" decoding="async"
           />
         </div>
       </div>
@@ -200,39 +212,37 @@
       <p>
         No jargon, no confusing tech talk. I walk you through every step in plain English. I believe a website should be simple for you and simple for your customers. I focus on:
       </p>
-      <ul style="margin-left:1.5rem; line-height:1.8;">
+      <ul class="about-list">
         <li><strong>Speed:</strong> Fast-loading sites that don't lose visitors.</li>
         <li><strong>Clarity:</strong> Clear calls‑to‑action so visitors know exactly what to do.</li>
         <li><strong>Results:</strong> Every design decision is made with conversion in mind.</li>
       </ul>
 
-      <p style="margin-top:2rem;">
+      <p class="mt-2">
         Ready to work with someone who genuinely cares about your business? Let's talk.
       </p>
       <a href="https://wa.me/254702555093?text=Hi%20Harrison%2C%20I%27d%20like%20a%20free%20consultation"
          target="_blank" rel="noopener noreferrer"
-         class="btn btn-accent magnetic" style="margin-top:1rem;"><span aria-hidden="true">💬</span> WhatsApp Me – Free Consultation</a>
+         class="btn btn-accent magnetic mt-1"><span aria-hidden="true">💬</span> WhatsApp Me – Free Consultation</a>
     </section>
 
-    <!-- TESTIMONIALS -->
     <section class="testimonials container fade-up" aria-labelledby="about-testimonials-title">
       <h2 id="about-testimonials-title" class="section-title">What Clients Say</h2>
       <div class="testimonials-grid stagger-parent">
         <blockquote class="testimonial-card">
           <p>"Harrison's website transformed our gym's online presence. Bookings jumped from zero to 34 per month within weeks."</p>
-          <footer><cite>— Joseph M., Flesh &amp; Bones Gym</cite></footer>
+          <footer><cite>Joseph M., Flesh &amp; Bones Gym</cite></footer>
         </blockquote>
         <blockquote class="testimonial-card">
           <p>"He's honest, fast, and delivers exactly what he promises. Our courier company now gets 3x more delivery requests."</p>
-          <footer><cite>— Kibet K., Marindany Boda Boda</cite></footer>
+          <footer><cite>Kibet K., Marindany Boda Boda</cite></footer>
         </blockquote>
       </div>
-      <p style="text-align:center; margin-top:2rem;">
-        <a href="index.html#testimonials">Read more testimonials →</a>
+      <p class="text-center mt-2">
+        <a href="/#testimonials">Read more testimonials →</a>
       </p>
     </section>
 
-    <!-- FINAL CTA -->
     <section class="final-cta container fade-up" aria-labelledby="about-cta-title">
       <div class="final-cta-content">
         <h2 id="about-cta-title">Let's Build Something Great Together</h2>
@@ -248,17 +258,17 @@
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="logo">Harrison<span class="logo-dot">.</span>Dev</a>
+        <a href="/" class="logo">Harrison<span class="logo-dot">.</span>Dev</a>
         <p>Nairobi web developer building websites that turn Kenyan businesses into online customer magnets.</p>
       </div>
       <div class="footer-links">
         <h4>Quick Links</h4>
         <ul role="list">
-          <li><a href="index.html#work">Portfolio</a></li>
-          <li><a href="index.html#services">Services</a></li>
-          <li><a href="index.html#pricing">Pricing</a></li>
+          <li><a href="/#work">Portfolio</a></li>
+          <li><a href="/#services">Services</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
           <li><a href="about.html">About</a></li>
-          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="/#faq">FAQ</a></li>
         </ul>
       </div>
       <div class="footer-contact">

@@ -1,19 +1,28 @@
 /**
  * Harrison Cheruiyot — Portfolio
- * Production build v6.1
+ * Production build v6.2
+ * --------------------------------------------------------------------------
+ * CHANGES IN v6.2
+ *  - [FIX]  Added js-ready handshake. On init, documentElement gets the
+ *           .js-ready class. If script.js fails to run, the inline head
+ *           script removes .js after 2.5s, revealing all content. This
+ *           eliminates the "blank sections under JS failure" risk while
+ *           keeping zero-flash behavior on success.
+ *  - [FIX]  Removed initFaqCloseOnOutside() — it force-closed all open
+ *           <details> on any outside click, which is hostile to users
+ *           comparing answers. Native <details> gives the user full control.
+ *  - [FIX]  Magnetic buttons now gated behind matchMedia for
+ *           (hover: hover) and (pointer: fine), matching the CSS gate.
+ *           Also removed will-change reliance from the CSS side.
  * --------------------------------------------------------------------------
  * CHANGES IN v6.1
- *  - [FIX 2b] Removed initHeroEntrance() and its call site entirely.
- *             The hero is now always visible on first paint — no JS-driven
- *             reveal, no .hero-animate class, no failure mode where a broken
- *             script leaves the hero hidden. Also improves LCP.
+ *  - Removed initHeroEntrance() entirely. Hero is always visible on first
+ *    paint (Fix 2b). Improves LCP and eliminates a failure mode.
  * --------------------------------------------------------------------------
  * CHANGES IN v6.0
- *  - Stat counters handle prefix/suffix formats: "23+", "4.9★", "3 days", "70%"
+ *  - Stat counters handle prefix/suffix ("23+", "4.9★", "3 days", "70%")
  *  - Hardened null/undefined checks
- *  - Preserved: mobile menu, smooth scroll, scroll animations, active nav,
- *    FAQ close-on-outside, magnetic buttons, back-to-top
- *  - No-JS fallback is handled via the .js class (see <head> inline script + CSS)
+ *  - No-JS fallback via the .js class (see <head> + CSS)
  *  - Respects prefers-reduced-motion throughout
  * --------------------------------------------------------------------------
  */
@@ -21,9 +30,6 @@
 (function () {
   'use strict';
 
-  /* ----------------------------------------------------------------
-     BOOTSTRAP
-     ---------------------------------------------------------------- */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
@@ -31,17 +37,18 @@
   }
 
   function init() {
+    // [v6.2] Confirm to the head script that we actually ran.
+    // If this never fires, the head script's 2.5s timer removes .js.
+    document.documentElement.classList.add('js-ready');
+
     initCurrentYear();
     initMobileMenu();
     initSmoothScroll();
     initScrollAnimations();
     initActiveNavHighlight();
-    initFaqCloseOnOutside();
     initStatCounters();
     initMagneticButtons();
     initBackToTop();
-    // Note: hero entrance animation intentionally removed (Fix 2b).
-    // The hero is visible from first paint — no JS needed.
   }
 
   /* ----------------------------------------------------------------
@@ -50,6 +57,11 @@
   const prefersReducedMotion = function () {
     return window.matchMedia &&
            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  };
+
+  const hasFinePointer = function () {
+    if (!window.matchMedia) return false;
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   };
 
   /* ----------------------------------------------------------------
@@ -82,7 +94,6 @@
 
       const firstLink = nav.querySelector('a');
       if (firstLink) {
-        // Defer focus until the transition starts, so it doesn't fight with scroll restoration
         requestAnimationFrame(function () { firstLink.focus(); });
       }
     }
@@ -103,20 +114,16 @@
       else openMenu();
     });
 
-    // Close on Escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && isOpen) closeMenu();
     });
 
-    // Close on overlay click
     overlay.addEventListener('click', closeMenu);
 
-    // Close when a nav link is clicked
     nav.addEventListener('click', function (e) {
       if (e.target.tagName === 'A') closeMenu();
     });
 
-    // Auto-close if the viewport grows past mobile breakpoint
     const mq = window.matchMedia('(min-width: 769px)');
     const handleResize = function (e) {
       if (e.matches && isOpen) closeMenu();
@@ -158,7 +165,6 @@
 
   /* ----------------------------------------------------------------
      4. SCROLL ANIMATIONS + STAGGER
-     Below-the-fold sections only. The hero is never animated in.
      ---------------------------------------------------------------- */
   function initScrollAnimations() {
     const elements = document.querySelectorAll(
@@ -166,13 +172,11 @@
     );
     if (!elements.length) return;
 
-    // No IntersectionObserver? Show everything.
     if (!('IntersectionObserver' in window)) {
       elements.forEach(function (el) { el.classList.add('is-visible'); });
       return;
     }
 
-    // Pre-compute stagger delays for children of .stagger-parent
     document.querySelectorAll('.stagger-parent').forEach(function (parent) {
       const children = parent.children;
       for (let i = 0; i < children.length; i++) {
@@ -242,41 +246,14 @@
   }
 
   /* ----------------------------------------------------------------
-     6. FAQ — CLOSE ON OUTSIDE CLICK / ESCAPE
-     ---------------------------------------------------------------- */
-  function initFaqCloseOnOutside() {
-    const faqItems = document.querySelectorAll('.faq-item');
-    if (!faqItems.length) return;
-
-    document.addEventListener('click', function (e) {
-      const target = e.target;
-      faqItems.forEach(function (item) {
-        if (!item.contains(target)) item.open = false;
-      });
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
-        faqItems.forEach(function (item) { item.open = false; });
-      }
-    });
-  }
-
-  /* ----------------------------------------------------------------
-     7. ANIMATED STATISTICS
-     Handles:
-       "23"      → 0 → 23
-       "23+"     → 0 → 23, preserves "+"
-       "4.9"     → 0.0 → 4.9
-       "4.9★"    → 0.0 → 4.9, preserves "★"
-       "3 days"  → 0 → 3, preserves " days"
-       "70%"     → 0 → 70, preserves "%"
+     6. ANIMATED STATISTICS
+     Handles: "23" → 23, "23+" → 23+, "4.9★" → 4.9★,
+              "3 days" → 3 days, "70%" → 70%
      ---------------------------------------------------------------- */
   function initStatCounters() {
     const statNumbers = document.querySelectorAll('.about-stat .number');
     if (!statNumbers.length) return;
 
-    // No IntersectionObserver? Leave the original text alone.
     if (!('IntersectionObserver' in window)) return;
 
     const observer = new IntersectionObserver(
@@ -297,7 +274,6 @@
   function animateCounter(el) {
     const original = el.textContent.trim();
 
-    // Match: [prefix (non-digits)][number][suffix (anything)]
     const match = original.match(/^([^\d]*)(\d+(?:\.\d+)?)(.*)$/);
     if (!match) return;
 
@@ -308,7 +284,6 @@
 
     if (!isFinite(targetNum)) return;
 
-    // Respect reduced motion: snap to final value instantly.
     if (prefersReducedMotion()) {
       el.textContent = original;
       return;
@@ -320,7 +295,7 @@
     function update(currentTime) {
       const elapsed  = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const eased    = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      const eased    = 1 - Math.pow(1 - progress, 3);
       const current  = eased * targetNum;
 
       const displayValue = isDecimal
@@ -332,7 +307,6 @@
       if (progress < 1) {
         requestAnimationFrame(update);
       } else {
-        // Snap to the exact original string to preserve any formatting
         el.textContent = original;
         el.classList.add('pulse-complete');
         setTimeout(function () {
@@ -345,10 +319,14 @@
   }
 
   /* ----------------------------------------------------------------
-     8. MAGNETIC BUTTONS
+     7. MAGNETIC BUTTONS
+     [v6.2] Gated to fine-pointer devices with hover capability.
+     Touch devices never fire mousemove, so this is a no-op there and
+     we avoid attaching useless listeners.
      ---------------------------------------------------------------- */
   function initMagneticButtons() {
     if (prefersReducedMotion()) return;
+    if (!hasFinePointer()) return;
 
     const magneticElements = document.querySelectorAll('.magnetic');
     if (!magneticElements.length) return;
@@ -371,13 +349,13 @@
   }
 
   /* ----------------------------------------------------------------
-     9. BACK TO TOP
+     8. BACK TO TOP
      ---------------------------------------------------------------- */
   function initBackToTop() {
     const btn = document.querySelector('.back-to-top');
     if (!btn) return;
 
-    const SHOW_AFTER = 400; // px scrolled before showing the button
+    const SHOW_AFTER = 400;
 
     function updateVisibility() {
       if (window.scrollY > SHOW_AFTER) {
@@ -393,7 +371,6 @@
         behavior: prefersReducedMotion() ? 'auto' : 'smooth'
       });
 
-      // Move focus for keyboard / screen-reader users
       const skipLink = document.getElementById('skip-link');
       if (skipLink) skipLink.focus({ preventScroll: true });
     });
