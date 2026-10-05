@@ -1,7 +1,12 @@
 /* ==========================================================================
    Harrison Cheruiyot — Portfolio Stylesheet
-   Production build v6.0
+   Production build v6.1
    Mobile-first · WCAG AA contrast · No-JS safe · Reduced-motion friendly
+   --------------------------------------------------------------------------
+   CHANGES IN v6.1
+   - [FIX 2b] Hero (above-the-fold) is NEVER hidden by JS. Renders on first paint.
+              Removed .hero-animate scoping, heroChild keyframe, and all related
+              animation delays. Below-the-fold sections still animate in.
    --------------------------------------------------------------------------
    CHANGES IN v6.0
    - Animations scoped behind .js class → visible by default (no-JS fallback)
@@ -404,6 +409,8 @@ h3 {
 }
 
 /* ---------- 7. HERO ---------- */
+/* The hero renders instantly — no JS-driven reveal, no opacity: 0 default.
+   This keeps LCP fast and eliminates a class of "invisible hero" bugs. */
 .hero {
   padding: 5rem 0 4rem 0;
   text-align: left;
@@ -1202,7 +1209,12 @@ h3 {
   display: none;
 }
 
-/* ---------- 20. ANIMATIONS (scoped behind .js — visible by default) ---------- */
+/* ---------- 20. ANIMATIONS (scoped behind .js — visible by default) ----------
+   The HERO is intentionally NOT in this list. Above-the-fold content must
+   render on first paint; animating it delays LCP and creates a failure mode
+   where a blocked/failed script leaves the hero invisible.
+   Only below-the-fold sections animate in.
+   --------------------------------------------------------------------------- */
 
 /* Without .js on <html>, all animated elements stay visible.
    Only hide them when JS is confirmed present. */
@@ -1224,36 +1236,6 @@ h3 {
 .js .stagger-parent > *.is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* Hero entrance */
-.js .hero .hero-text,
-.js .hero .hero-image-wrapper {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.9s var(--ease-smooth), transform 0.9s var(--ease-smooth);
-}
-.js .hero.hero-animate .hero-text,
-.js .hero.hero-animate .hero-image-wrapper {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.js .hero.hero-animate .hero-text > * {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: heroChild 0.7s forwards;
-}
-.js .hero.hero-animate .hero-text > *:nth-child(1) { animation-delay: 0.2s; }
-.js .hero.hero-animate .hero-text > *:nth-child(2) { animation-delay: 0.4s; }
-.js .hero.hero-animate .hero-text > *:nth-child(3) { animation-delay: 0.6s; }
-.js .hero.hero-animate .hero-text > *:nth-child(4) { animation-delay: 0.8s; }
-
-@keyframes heroChild {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Magnetic buttons */
@@ -1617,11 +1599,9 @@ h3 {
     scroll-behavior: auto !important;
   }
 
+  /* Hero is not in this list — it was never hidden, so nothing to override. */
   .js .stagger-parent > *,
-  .js .fade-up,
-  .js .hero .hero-text,
-  .js .hero .hero-image-wrapper,
-  .js .hero.hero-animate .hero-text > * {
+  .js .fade-up {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;

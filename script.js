@@ -1,12 +1,18 @@
 /**
  * Harrison Cheruiyot — Portfolio
- * Production build v6.0
+ * Production build v6.1
+ * --------------------------------------------------------------------------
+ * CHANGES IN v6.1
+ *  - [FIX 2b] Removed initHeroEntrance() and its call site entirely.
+ *             The hero is now always visible on first paint — no JS-driven
+ *             reveal, no .hero-animate class, no failure mode where a broken
+ *             script leaves the hero hidden. Also improves LCP.
  * --------------------------------------------------------------------------
  * CHANGES IN v6.0
- *  - Stat counters now handle prefix/suffix formats: "23+", "4.9★", "3 days", "70%"
+ *  - Stat counters handle prefix/suffix formats: "23+", "4.9★", "3 days", "70%"
  *  - Hardened null/undefined checks
  *  - Preserved: mobile menu, smooth scroll, scroll animations, active nav,
- *    FAQ close-on-outside, magnetic buttons, hero entrance, back-to-top
+ *    FAQ close-on-outside, magnetic buttons, back-to-top
  *  - No-JS fallback is handled via the .js class (see <head> inline script + CSS)
  *  - Respects prefers-reduced-motion throughout
  * --------------------------------------------------------------------------
@@ -33,8 +39,9 @@
     initFaqCloseOnOutside();
     initStatCounters();
     initMagneticButtons();
-    initHeroEntrance();
     initBackToTop();
+    // Note: hero entrance animation intentionally removed (Fix 2b).
+    // The hero is visible from first paint — no JS needed.
   }
 
   /* ----------------------------------------------------------------
@@ -151,6 +158,7 @@
 
   /* ----------------------------------------------------------------
      4. SCROLL ANIMATIONS + STAGGER
+     Below-the-fold sections only. The hero is never animated in.
      ---------------------------------------------------------------- */
   function initScrollAnimations() {
     const elements = document.querySelectorAll(
@@ -363,25 +371,7 @@
   }
 
   /* ----------------------------------------------------------------
-     9. HERO ENTRANCE ANIMATION
-     ---------------------------------------------------------------- */
-  function initHeroEntrance() {
-    const hero = document.querySelector('.hero');
-    if (!hero) return;
-
-    if (prefersReducedMotion()) {
-      hero.classList.add('hero-animate');
-      return;
-    }
-
-    // Small delay so the class is added after the first paint
-    setTimeout(function () {
-      hero.classList.add('hero-animate');
-    }, 100);
-  }
-
-  /* ----------------------------------------------------------------
-     10. BACK TO TOP
+     9. BACK TO TOP
      ---------------------------------------------------------------- */
   function initBackToTop() {
     const btn = document.querySelector('.back-to-top');
